@@ -1,9 +1,13 @@
 import {WebView} from 'react-native-webview';
 
-const CustomWebView = () => {
+interface CustomWebViewProps {
+  uri?: string;
+}
+
+const CustomWebView = ({uri}: CustomWebViewProps) => {
   return (
     <WebView
-      source={{uri: 'https://naver.com'}}
+      source={{uri: uri ?? 'https://naver.com'}}
       originWhitelist={['https://*', 'http://*']}
     />
   );
