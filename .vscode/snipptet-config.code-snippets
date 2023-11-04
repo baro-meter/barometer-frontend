@@ -1,0 +1,37 @@
+{
+  "reactPageFunction": {
+    "prefix": "rpf",
+    "body": [
+      "import React from 'react';",
+      "",
+      "interface ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageViewProps {}",
+      "",
+      "const ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageView = ({}: ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageViewProps) => {",
+      "  return <></>;",
+      "};",
+      "",
+      "interface ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageProps {}",
+      "",
+      "const ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Page = ({}: ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageProps) => {",
+      "  const viewProps = {};",
+      "",
+      "  return <${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}PageView {...viewProps} />;",
+      "};",
+      "",
+      "export const getServerSideProps = () => {",
+      "  return {",
+      "    props: {}, // will be passed to the page component as props",
+      "  };",
+      "};",
+      "",
+      "export default ${TM_DIRECTORY/^.+\\/(.*)$/${1:/capitalize}/}${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Page;",
+      ""
+    ],
+    "description": ""
+  },
+  "reactComponentFunction": {
+    "prefix": "rcf",
+    "body": "import React from 'react';\n\ninterface ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}ViewProps {}\n\nconst ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}View = ({}: ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}ViewProps) => {\n  return <></>;\n};\n\ninterface ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Props {}\n\nexport default function ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}({}: ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Props) {\n  const viewProps = {};\n\n  return <${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}View {...viewProps} />;\n}\n",
+    "description": "Creates a React TS Function component"
+  }
+}
