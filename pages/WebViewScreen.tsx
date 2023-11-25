@@ -10,15 +10,21 @@ import {
 import CustomWebView from '../components/CustomWebView';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../utils/routerType';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import AppleHealthKit from '../utils/AppleHealthKit';
-import {ReceiveDataEventsType} from '../types/CommunicateDataType';
+import {
+  CommunicateDataType,
+  ReceiveDataEventsType,
+} from '../types/CommunicateDataType';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'WebView'>;
 
 const WebViewScreen = ({route}: Props) => {
   const {uri} = route.params;
   const isDarkMode = useColorScheme() === 'dark';
+  const [requestData, setRequestData] = useState<
+    CommunicateDataType | undefined
+  >(); // post요청을 하고 싶을 때 해당 값의 상태를 변경하여 부모에게 알린다.
 
   const handlePressDailyStepCount = () => {
     let options = {
@@ -32,7 +38,8 @@ const WebViewScreen = ({route}: Props) => {
         if (err) {
           console.error(`getDailyStepCountSamples error: ${err}`);
         } else {
-          Alert.alert(JSON.stringify(results[0]));
+          // Alert.alert(JSON.stringify(results[0]));
+          setRequestData({eventKey: 'dailyStepCount', data: results});
         }
       },
     );
@@ -40,6 +47,13 @@ const WebViewScreen = ({route}: Props) => {
 
   const receiveDataEventsType = {
     requestStepCount: handlePressDailyStepCount,
+  };
+
+  const postEventHandler = (postedData: CommunicateDataType) => {
+    // 전송이 성공되었으면 requestData를 초기화 한다.
+    if (postedData === requestData) {
+      setRequestData(undefined);
+    }
   };
 
   return (
@@ -50,6 +64,8 @@ const WebViewScreen = ({route}: Props) => {
           uri={uri}
           initSendData="request하셔서 보내유"
           receiveDataEvents={receiveDataEventsType}
+          requestData={requestData}
+          postEventHandler={postEventHandler}
         />
       </SafeAreaView>
     </>

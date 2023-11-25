@@ -1,4 +1,4 @@
-import {useCallback, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {WebView, WebViewMessageEvent} from 'react-native-webview';
 import {
   CommunicateDataType,
@@ -12,7 +12,8 @@ interface CustomWebViewProps {
   injectedJavaScript?: string; // // 처음에 실행해야할 코드들 있으면 직접 제어 가능
   initSendData?: any; // 초기에 보내야 할 데이터 정보
   receiveDataEvents: ReceiveDataEventsType; // 웹 -> 앱 전송 이벤트 핸들러 처리
-  // TODO postDataToWeb도 여러개라서 이것도 받아서 정의해야됨
+  requestData?: CommunicateDataType;
+  postEventHandler?: (data: CommunicateDataType) => void;
 }
 
 const CustomWebView = ({
@@ -20,14 +21,34 @@ const CustomWebView = ({
   injectedJavaScript,
   initSendData,
   receiveDataEvents,
+  requestData,
+  postEventHandler,
 }: CustomWebViewProps) => {
   const webViewRef = useRef<WebView>(null);
 
-  const postDataToWeb = useCallback(() => {
-    if (webViewRef.current && !!initSendData) {
-      webViewRef.current.postMessage(initSendData);
+  useEffect(() => {
+    if (requestData && isCommunicateDataType(requestData)) {
+      postDataToWeb(requestData);
     }
-  }, []);
+  }, [requestData]);
+
+  const postDataToWeb = useCallback(
+    (data: CommunicateDataType) => {
+      if (webViewRef.current && !!data) {
+        webViewRef.current.postMessage(JSON.stringify(data));
+        if (!!postEventHandler) {
+          postEventHandler(data);
+        }
+      }
+    },
+    [postEventHandler],
+  );
+
+  const initPostDataToWeb = useCallback(() => {
+    if (!!initSendData) {
+      postDataToWeb(initSendData);
+    }
+  }, [initSendData]);
 
   const handleReceiveEvent = useCallback(
     (data: string) => {
@@ -61,14 +82,14 @@ const CustomWebView = ({
       if (data === 'request') {
         //  앱 -> 웹 데이터를 요청할 때 호출
         if (webViewRef.current) {
-          postDataToWeb();
+          initPostDataToWeb();
         }
       } else {
         // 웹 -> 앱 데이터 전송 시 호출
         handleReceiveEvent(data);
       }
     },
-    [postDataToWeb],
+    [initPostDataToWeb],
   );
 
   return (
