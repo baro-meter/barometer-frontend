@@ -1,5 +1,7 @@
 import {
   Alert,
+  NativeEventEmitter,
+  NativeModules,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -8,6 +10,9 @@ import {
 import CustomWebView from '../components/CustomWebView';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../utils/routerType';
+import {useEffect, useState} from 'react';
+import AppleHealthKit from '../utils/AppleHealthKit';
+import {ReceiveDataEventsType} from '../types/CommunicateDataType';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'WebView'>;
 
@@ -15,8 +20,26 @@ const WebViewScreen = ({route}: Props) => {
   const {uri} = route.params;
   const isDarkMode = useColorScheme() === 'dark';
 
-  const handleReceiveData = (data: any) => {
-    Alert.alert(data.test);
+  const handlePressDailyStepCount = () => {
+    let options = {
+      startDate: new Date(2016, 1, 1).toISOString(), // required
+      endDate: new Date().toISOString(), // optional; default now
+    };
+
+    AppleHealthKit.getDailyStepCountSamples(
+      options,
+      (err: Object, results: Array<Object>) => {
+        if (err) {
+          console.error(`getDailyStepCountSamples error: ${err}`);
+        } else {
+          Alert.alert(JSON.stringify(results[0]));
+        }
+      },
+    );
+  };
+
+  const receiveDataEventsType = {
+    requestStepCount: handlePressDailyStepCount,
   };
 
   return (
@@ -26,7 +49,7 @@ const WebViewScreen = ({route}: Props) => {
         <CustomWebView
           uri={uri}
           initSendData="request하셔서 보내유"
-          onReceiveData={handleReceiveData}
+          receiveDataEvents={receiveDataEventsType}
         />
       </SafeAreaView>
     </>
@@ -45,3 +68,6 @@ const styles = StyleSheet.create({
 });
 
 export default WebViewScreen;
+function setDailySteps(results: Object[]) {
+  throw new Error('Function not implemented.');
+}

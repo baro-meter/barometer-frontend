@@ -1,19 +1,25 @@
 import {useCallback, useRef} from 'react';
-import {Alert} from 'react-native';
 import {WebView, WebViewMessageEvent} from 'react-native-webview';
+import {
+  CommunicateDataType,
+  ReceiveDataEventsType,
+  isCommunicateDataType,
+} from '../types/CommunicateDataType';
+import {Alert} from 'react-native';
 
 interface CustomWebViewProps {
   uri?: string;
   injectedJavaScript?: string; // // 처음에 실행해야할 코드들 있으면 직접 제어 가능
   initSendData?: any; // 초기에 보내야 할 데이터 정보
-  onReceiveData?: (data: any) => void;
+  receiveDataEvents: ReceiveDataEventsType; // 웹 -> 앱 전송 이벤트 핸들러 처리
+  // TODO postDataToWeb도 여러개라서 이것도 받아서 정의해야됨
 }
 
 const CustomWebView = ({
   uri,
   injectedJavaScript,
   initSendData,
-  onReceiveData,
+  receiveDataEvents,
 }: CustomWebViewProps) => {
   const webViewRef = useRef<WebView>(null);
 
@@ -24,16 +30,24 @@ const CustomWebView = ({
   }, []);
 
   const handleReceiveEvent = useCallback(
-    (data: any) => {
-      if (!!onReceiveData) {
-        let result = data;
+    (data: string) => {
+      if (!!receiveDataEvents) {
         try {
-          result = JSON.parse(data);
-        } catch {}
-        onReceiveData(result);
+          // json인 경우 = type CommunicateDataType
+          const json = JSON.parse(data) as CommunicateDataType;
+          if (isCommunicateDataType(json)) {
+            const {eventKey, data} = json;
+            receiveDataEvents[eventKey](data);
+          } else {
+            throw Error('no CommunicateDataType type');
+          }
+        } catch {
+          // json 이외의 타입인 경우는 없어야 한다.
+          Alert.alert('적절치 않은 웹 -> 앱 데이터가 전송되었습니다.');
+        }
       }
     },
-    [onReceiveData],
+    [receiveDataEvents],
   );
 
   const handleMessage = useCallback(

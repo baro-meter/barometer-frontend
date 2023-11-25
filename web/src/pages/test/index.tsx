@@ -62,7 +62,9 @@ const TestHealthTestPagePage = ({}: TestHealthTestPagePageProps) => {
   const handleClickBtn = () => {
     // NEXT -> RN DATA 전송
     //@ts-ignore
-    window.ReactNativeWebView.postMessage(JSON.stringify({test: 'test'}));
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({eventKey: 'requestStepCount'}),
+    );
   };
 
   const viewProps = {testData, handleClickBtn};
