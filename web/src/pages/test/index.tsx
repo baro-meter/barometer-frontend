@@ -27,7 +27,7 @@ const TestHealthTestPagePage = ({}: TestHealthTestPagePageProps) => {
   useEffect(() => {
     // 타이밍 시점을 맞추기 위하여 로드가 다 되었다는걸 RN에 알린다.
     //@ts-ignore
-    window.ReactNativeWebView.postMessage('onload');
+    window.ReactNativeWebView.postMessage('request');
 
     const onMessageEvent = async (e: MessageEvent | any) => {
       // e.stopPropagation();
@@ -52,16 +52,17 @@ const TestHealthTestPagePage = ({}: TestHealthTestPagePageProps) => {
       setTestData(result);
     };
 
+    // android는 document / ios는 window로 받아야 한다 함
     document.addEventListener('message', onMessageEvent);
     window.addEventListener('message', onMessageEvent);
 
-    return () => window.removeEventListener('message', onMessageEvent);
+    return () => document.removeEventListener('message', onMessageEvent);
   }, []);
 
   const handleClickBtn = () => {
     // NEXT -> RN DATA 전송
     //@ts-ignore
-    window.ReactNativeWebView.postMessage('request');
+    window.ReactNativeWebView.postMessage(JSON.stringify({test: 'test'}));
   };
 
   const viewProps = {testData, handleClickBtn};
