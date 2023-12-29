@@ -1,0 +1,26 @@
+@mixin center {
+  text-align: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.day_component {
+  display: inline-flex;
+  width: 50px;
+  @include center();
+}
+
+.day_header {
+  display: flex;
+  width: 50px;
+  @include center();
+}
+
+.rowgroup,
+.row {
+  display: flex;
+}
