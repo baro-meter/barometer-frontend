@@ -7,7 +7,7 @@ import {
 import CustomWebView from '../components/CustomWebView';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../utils/routerType';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import AppleHealthKit from '../utils/AppleHealthKit';
 import {CommunicateDataType} from '../types/CommunicateDataType';
 
@@ -32,7 +32,6 @@ const WebViewScreen = ({route}: Props) => {
         if (err) {
           console.error(`getDailyStepCountSamples error: ${err}`);
         } else {
-          // Alert.alert(JSON.stringify(results[0]));
           setRequestData({eventKey: 'dailyStepCount', data: results});
         }
       },

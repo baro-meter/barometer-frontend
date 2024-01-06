@@ -56,7 +56,10 @@ const TestHealthTestPagePage = ({}: TestHealthTestPagePageProps) => {
     document.addEventListener('message', onMessageEvent);
     window.addEventListener('message', onMessageEvent);
 
-    return () => document.removeEventListener('message', onMessageEvent);
+    return () => {
+      document.removeEventListener('message', onMessageEvent);
+      window.removeEventListener('message', onMessageEvent);
+    };
   }, []);
 
   const handleClickBtn = () => {

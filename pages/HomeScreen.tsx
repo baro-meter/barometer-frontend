@@ -17,7 +17,7 @@ const HomeScreen = ({navigation}: Props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const onPressGoStorageViewPage = () => {
-    navigation.navigate('WebView', {uri: 'http://localhost:3000/test/storage'});
+    navigation.navigate('Storage', {uri: 'http://localhost:3000/test/storage'});
   };
   const onPressGoWebViewPage = () => {
     // navigation.navigate('WebView', {uri: 'https://www.google.com'});

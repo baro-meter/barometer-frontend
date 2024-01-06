@@ -46,6 +46,7 @@ const CustomWebView = ({
 
   const initPostDataToWeb = useCallback(() => {
     if (!!initSendData) {
+      console.log(`설정됨.... ${initSendData}`);
       postDataToWeb(initSendData);
     }
   }, [initSendData]);
@@ -58,6 +59,7 @@ const CustomWebView = ({
           const json = JSON.parse(data) as CommunicateDataType;
           if (isCommunicateDataType(json)) {
             const {eventKey, data} = json;
+            console.log(`${eventKey} - ${data}`);
             receiveDataEvents[eventKey](data);
           } else {
             throw Error('no CommunicateDataType type');

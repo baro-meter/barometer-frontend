@@ -2,23 +2,37 @@ import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {Button} from 'stories/Button';
 
 interface StoragePageViewProps {
-  data: string;
-  getSavedData: () => void;
+  localData: string;
+  asyncData: string;
+  getLocalStorageSavedData: () => void;
+  getAsyncStorageSavedData: () => void;
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-  handleSaveData: () => void;
+  handleSaveLocalStorageData: () => void;
+  handleSaveAsyncStorageData: () => void;
 }
 
 const StoragePageView = ({
-  data,
-  getSavedData,
+  localData,
+  asyncData,
+  getLocalStorageSavedData,
+  getAsyncStorageSavedData,
   handleChange,
-  handleSaveData,
+  handleSaveLocalStorageData,
+  handleSaveAsyncStorageData,
 }: StoragePageViewProps) => {
   return (
     <div>
       <div>
-        <div>{data}</div>
-        <Button label="데이터 불러오기" onClick={getSavedData} />
+        <div>{localData}</div>
+        <Button
+          label="localStorage 데이터 불러오기"
+          onClick={getLocalStorageSavedData}
+        />
+        <div>{asyncData}</div>
+        <Button
+          label="asyncStorage 데이터 불러오기"
+          onClick={getAsyncStorageSavedData}
+        />
       </div>
       <div>
         <h2>데이터 설정</h2>
@@ -35,7 +49,14 @@ const StoragePageView = ({
           </select>
         </label>
         <hr />
-        <Button label="데이터 저장하기" onClick={handleSaveData} />
+        <Button
+          label="localStoarge 데이터 저장하기"
+          onClick={handleSaveLocalStorageData}
+        />
+        <Button
+          label="asyncStoarge 데이터 저장하기"
+          onClick={handleSaveAsyncStorageData}
+        />
       </div>
     </div>
   );
@@ -45,30 +66,83 @@ interface StoragePageProps {}
 
 const StoragePage = ({}: StoragePageProps) => {
   const [emotion, setEmotion] = useState<string>('perfect');
-  const [data, setData] = useState<string>('');
+  const [localData, setLocalData] = useState<string>('');
+  const [asyncData, setAsyncData] = useState<string>('');
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
     setEmotion(e.target.value);
   };
 
-  const handleSaveData = useCallback(() => {
+  const handleSaveLocalStorageData = useCallback(() => {
     localStorage.setItem('data', emotion ?? '');
   }, [emotion]);
 
-  const getSavedData = () => {
+  const getLocalStorageSavedData = () => {
     const savedData = localStorage.getItem('data');
     if (!!savedData && savedData !== null) {
-      console.log(`has Data`);
-      setData(savedData);
+      setLocalData(savedData);
     }
   };
 
+  // TODO 자주쓰이니깐 hook으로 빼기
   useEffect(() => {
-    getSavedData();
+    // localStoarge
+    getLocalStorageSavedData();
+
+    // asyncStorage
+
+    // 타이밍 시점을 맞추기 위하여 로드가 다 되었다는걸 RN에 알린다.
+    //@ts-ignore
+    window.ReactNativeWebView.postMessage('request');
+
+    const onMessageEvent = async (e: MessageEvent | any) => {
+      // 데이터를 처리하거나 저장할 수 있음
+      try {
+        const result = JSON.parse(e.data) as {eventKey: string; data: any};
+        // 무조건 stringfy로 옴
+        if (result.eventKey === 'asyncData') {
+          setAsyncData(result.data);
+        }
+      } catch {
+        alert('error!');
+      }
+    };
+
+    // android는 document / ios는 window로 받아야 한다 함
+    document.addEventListener('message', onMessageEvent);
+    window.addEventListener('message', onMessageEvent);
+
+    return () => {
+      document.removeEventListener('message', onMessageEvent);
+      window.removeEventListener('message', onMessageEvent);
+    };
   }, []);
 
-  const viewProps = {getSavedData, handleChange, handleSaveData, data};
+  const handleSaveAsyncStorageData = () => {
+    // NEXT -> RN DATA 전송
+    //@ts-ignore
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({eventKey: 'setAsyncData', data: emotion}),
+    );
+  };
+
+  const getAsyncStorageSavedData = () => {
+    // NEXT -> RN DATA 전송
+    //@ts-ignore
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({eventKey: 'getAsyncData'}),
+    );
+  };
+
+  const viewProps = {
+    getAsyncStorageSavedData,
+    getLocalStorageSavedData,
+    handleChange,
+    handleSaveLocalStorageData,
+    handleSaveAsyncStorageData,
+    localData,
+    asyncData,
+  };
 
   return <StoragePageView {...viewProps} />;
 };
