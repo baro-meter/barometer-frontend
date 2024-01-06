@@ -16,6 +16,9 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 const HomeScreen = ({navigation}: Props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
+  const onPressGoStorageViewPage = () => {
+    navigation.navigate('WebView', {uri: 'http://localhost:3000/test/storage'});
+  };
   const onPressGoWebViewPage = () => {
     // navigation.navigate('WebView', {uri: 'https://www.google.com'});
     navigation.navigate('WebView', {uri: 'http://localhost:3000/test'});
@@ -39,6 +42,11 @@ const HomeScreen = ({navigation}: Props) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={onPressGoWebViewPage}>
           <Text>webview 테스트 페이지 이동</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onPressGoStorageViewPage}>
+          <Text>Storage 테스트 페이지 이동</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </>

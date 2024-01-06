@@ -1,5 +1,7 @@
 import React from 'react';
-import './button.css';
+import classNames from 'classnames/bind';
+import scss from 'styles/button.module.scss';
+const cn = classNames.bind(scss);
 
 interface ButtonProps {
   /**
@@ -34,13 +36,14 @@ export const Button = ({
   label,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  const mode = primary
+    ? 'storybook-button--primary'
+    : 'storybook-button--secondary';
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      {...props}
-    >
+      className={cn(['storybook-button', `storybook-button--${size}`, mode])}
+      {...props}>
       {label}
       <style jsx>{`
         button {

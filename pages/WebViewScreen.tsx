@@ -1,7 +1,4 @@
 import {
-  Alert,
-  NativeEventEmitter,
-  NativeModules,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -10,12 +7,9 @@ import {
 import CustomWebView from '../components/CustomWebView';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../utils/routerType';
-import {useEffect, useRef, useState} from 'react';
+import {useState} from 'react';
 import AppleHealthKit from '../utils/AppleHealthKit';
-import {
-  CommunicateDataType,
-  ReceiveDataEventsType,
-} from '../types/CommunicateDataType';
+import {CommunicateDataType} from '../types/CommunicateDataType';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'WebView'>;
 
@@ -84,6 +78,3 @@ const styles = StyleSheet.create({
 });
 
 export default WebViewScreen;
-function setDailySteps(results: Object[]) {
-  throw new Error('Function not implemented.');
-}

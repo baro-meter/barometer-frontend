@@ -12,6 +12,7 @@ import HomeScreen from './pages/HomeScreen';
 import AppleHealthTestScreen from './pages/AppleHealthTestScreen';
 import WebViewScreen from './pages/WebViewScreen';
 import {RootStackParamList} from './utils/routerType';
+import AsyncStorageScreenPage from './pages/AsyncStorageScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,6 +23,7 @@ function App(): JSX.Element {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Test" component={AppleHealthTestScreen} />
         <Stack.Screen name="WebView" component={WebViewScreen} />
+        <Stack.Screen name="Storage" component={AsyncStorageScreenPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
