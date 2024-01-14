@@ -1,0 +1,55 @@
+.date {
+  background: var(--surface, #141414);
+  align-items: center;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  display: inline-flex;
+  width: 50px;
+  @include center();
+
+  .group {
+    height: 26px;
+    position: relative;
+    width: 26px;
+  }
+
+  .vector {
+    height: 28px;
+    margin: -1px;
+    position: relative;
+    width: 28px;
+  }
+
+  .text-wrapper {
+    color: var(--color-system-gray-gray99);
+    font-family: 'Montserrat Alternates-SemiBold', Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+    width: calc(100% - 2px);
+    letter-spacing: 0;
+    line-height: 16px;
+    position: absolute;
+    text-align: center;
+    top: 4px;
+    white-space: nowrap;
+  }
+
+  .frame {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 2px;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ellipse {
+    background-color: var(--color-system-gray-gray5);
+    border-radius: 1.5px;
+    height: 3px;
+    position: relative;
+    width: 3px;
+  }
+}
