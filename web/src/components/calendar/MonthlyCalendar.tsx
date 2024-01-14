@@ -2,49 +2,37 @@ import React, {useEffect, useState} from 'react';
 import classNames from 'classnames/bind';
 import scss from 'styles/calendar.module.scss';
 import dayjs from 'dayjs';
+import DayHeader from './DayHeader';
+import Weekly from './Weekly';
 
 const cn = classNames.bind(scss);
 
-interface CalendarViewProps {
-  days: string[];
+interface MonthlyCalendarViewProps {
   calendarDates: number[][];
+  activeDate: number;
 }
 
-const CalendarView = ({days, calendarDates}: CalendarViewProps) => {
+const MonthlyCalendarView = ({calendarDates}: MonthlyCalendarViewProps) => {
   return (
     <div className={cn('container')} role="grid">
-      <div role="rowgroup" className={cn('rowgroup')}>
-        <div role="row" className={cn('row')}>
-          {days.map(day => (
-            <span role="columnheader" className={cn('day_header')} key={day}>
-              {day}
-            </span>
-          ))}
-        </div>
-      </div>
+      <DayHeader />
       <div role="rowgroup">
         {calendarDates.map((w, i) => (
-          <div role="row" key={i}>
-            {w.map((d, di) => (
-              <div className={cn('day_component')} key={i * 10 + di}>
-                {d >= 1 ? d : ''}
-              </div>
-            ))}
-          </div>
+          <Weekly weekIdx={i} weekDates={w} activeDate={0} />
         ))}
       </div>
     </div>
   );
 };
 
-interface CalendarProps {
+interface MonthlyCalendarProps {
   year?: number;
   month?: number;
 }
 
-export default function Calendar({year, month}: CalendarProps) {
+export default function Calendar({year, month}: MonthlyCalendarProps) {
+  const [activeDate, setActiveDate] = useState(dayjs().date()); // TODO today일수도 있어서 작업 안함
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(dayjs());
-  const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const [calendarDates, setCalendarDates] = useState<number[][]>(
     Array.from(Array(6), () => new Array(7)),
   );
@@ -83,7 +71,7 @@ export default function Calendar({year, month}: CalendarProps) {
     setCalendarDates(dates);
   }, [dayjsObject]);
 
-  const viewProps = {days, calendarDates};
+  const viewProps = {calendarDates, activeDate};
 
-  return <CalendarView {...viewProps} />;
+  return <MonthlyCalendarView {...viewProps} />;
 }

@@ -12,6 +12,10 @@
   display: inline-flex;
   width: 50px;
   @include center();
+
+  &.active {
+    font-weight: bold;
+  }
 }
 
 .day_header {
