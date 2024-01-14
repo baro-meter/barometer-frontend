@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import classNames from 'classnames/bind';
 import scss from 'styles/calendar.module.scss';
 import dayjs from 'dayjs';
@@ -10,15 +10,19 @@ const cn = classNames.bind(scss);
 interface MonthlyCalendarViewProps {
   calendarDates: number[][];
   activeDate: number;
+  layoutRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-const MonthlyCalendarView = ({calendarDates}: MonthlyCalendarViewProps) => {
+const MonthlyCalendarView = ({
+  calendarDates,
+  layoutRef,
+}: MonthlyCalendarViewProps) => {
   return (
     <div className={cn('container')} role="grid">
       <DayHeader />
-      <div role="rowgroup">
+      <div role="rowgroup" className={cn('calendar')} ref={layoutRef}>
         {calendarDates.map((w, i) => (
-          <Weekly weekIdx={i} weekDates={w} activeDate={0} />
+          <Weekly key={i} weekIdx={i} weekDates={w} activeDate={1} />
         ))}
       </div>
     </div>
@@ -36,6 +40,10 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
   const [calendarDates, setCalendarDates] = useState<number[][]>(
     Array.from(Array(6), () => new Array(7)),
   );
+  // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
+  // 우선은 해당 캘린더 내부에서만 스크롤 될 수 있게 한다.
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const layoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
@@ -71,7 +79,27 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
     setCalendarDates(dates);
   }, [dayjsObject]);
 
-  const viewProps = {calendarDates, activeDate};
+  useEffect(() => {
+    const handleScroll = () => {
+      if (calendarDates[5][0] > 0 && layoutRef.current) {
+        const scrollTop = layoutRef?.current?.scrollTop;
+        if (scrollTop > lastScrollTop) {
+          // 아래 방향
+          layoutRef.current.scrollTop = layoutRef.current.clientHeight;
+        } else {
+          layoutRef.current.scrollTop = 0;
+        }
+      }
+    };
+
+    if (layoutRef.current) {
+      layoutRef.current.addEventListener('scroll', handleScroll);
+      return () =>
+        layoutRef.current?.removeEventListener('scroll', handleScroll);
+    }
+  }, [calendarDates, layoutRef]);
+
+  const viewProps = {calendarDates, activeDate, layoutRef};
 
   return <MonthlyCalendarView {...viewProps} />;
 }

@@ -24,7 +24,15 @@
   @include center();
 }
 
-.rowgroup,
 .row {
   display: flex;
+}
+
+.calendar {
+  height: 97.5px;
+  overflow: scroll;
+
+  .calendar-row {
+    display: flex;
+  }
 }

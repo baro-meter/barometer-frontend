@@ -10,7 +10,7 @@ interface DayHeaderViewProps {
 
 const DayHeaderView = ({days}: DayHeaderViewProps) => {
   return (
-    <div role="rowgroup" className={cn('rowgroup')}>
+    <div role="rowgroup">
       <div role="row" className={cn('row')}>
         {days.map(day => (
           <span role="columnheader" className={cn('day_header')} key={day}>

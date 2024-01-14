@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import scss from 'styles/calendar.module.scss';
 
@@ -12,7 +12,7 @@ interface WeeklyViewProps {
 
 const WeeklyView = ({weekIdx, weekDates, activeDate}: WeeklyViewProps) => {
   return (
-    <div role="row" key={weekIdx}>
+    <div role="row" key={weekIdx} className={cn('row', 'calendar-row')}>
       {weekDates.map((d, di) => (
         <div
           className={cn('day_component', {active: activeDate === d})}
@@ -28,17 +28,20 @@ interface WeeklyProps {
   weekIdx?: number;
   weekDates: number[];
   activeDate?: number;
+  className?: string;
 }
 
 export default function Weekly({
   weekIdx = 0,
   weekDates,
   activeDate,
+  className,
 }: WeeklyProps) {
   const viewProps = {
     weekIdx,
     weekDates,
     activeDate,
+    className,
   };
   return <WeeklyView {...viewProps} />;
 }
