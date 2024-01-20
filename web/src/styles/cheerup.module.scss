@@ -1,0 +1,42 @@
+.frame {
+  align-items: center;
+  background-color: var(--color-system-gray-gray0);
+  border-radius: 12px;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  position: relative;
+  margin: 0 20px;
+}
+
+.frame .text-wrapper {
+  color: var(--color-system-gray-gray60);
+  font-family: 'Montserrat Alternates-Bold', Helvetica;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 16px;
+  margin-top: -0.5px;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.frame .div {
+  color: var(--color-system-gray-gray80);
+  flex: 1;
+  font-family: 'Apple SD Gothic Neo-Regular', Helvetica;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.3px;
+  line-height: 17px;
+  margin-top: -1px;
+  position: relative;
+}
+
+.frame .vector {
+  height: 16px;
+  position: relative;
+  width: 16px;
+}

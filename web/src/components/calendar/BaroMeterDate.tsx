@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import classNames from 'classnames/bind';
 import scss from 'styles/barometerDate.module.scss';
 import Image from 'next/image';

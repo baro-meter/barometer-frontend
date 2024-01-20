@@ -15,8 +15,9 @@
 }
 
 .calendar {
-  height: 321px;
+  height: 310px;
   overflow: scroll;
+  background: var(--surface, #141414);
 
   .calendar-row {
     display: flex;
