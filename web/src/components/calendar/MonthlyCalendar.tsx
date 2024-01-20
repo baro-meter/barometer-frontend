@@ -15,6 +15,7 @@ interface MonthlyCalendarViewProps {
 
 const MonthlyCalendarView = ({
   calendarDates,
+  activeDate,
   layoutRef,
 }: MonthlyCalendarViewProps) => {
   return (
@@ -22,7 +23,7 @@ const MonthlyCalendarView = ({
       <DayHeader />
       <div role="rowgroup" className={cn('calendar')} ref={layoutRef}>
         {calendarDates.map((w, i) => (
-          <Weekly key={i} weekIdx={i} weekDates={w} activeDate={1} />
+          <Weekly key={i} weekIdx={i} weekDates={w} activeDate={activeDate} />
         ))}
       </div>
     </div>
@@ -35,7 +36,7 @@ interface MonthlyCalendarProps {
 }
 
 export default function Calendar({year, month}: MonthlyCalendarProps) {
-  const [activeDate, setActiveDate] = useState(dayjs().date()); // TODO today일수도 있어서 작업 안함
+  const [activeDate, setActiveDate] = useState(dayjs().date()); // TODO 기준을 모르겠어서 일단 오늘로만 작업
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(dayjs());
   const [calendarDates, setCalendarDates] = useState<number[][]>(
     Array.from(Array(6), () => new Array(7)),
@@ -53,6 +54,14 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
     }
     if (month) {
       targetDate = targetDate.month(month - 1);
+    }
+
+    const today = dayjs();
+    // TODO 수정 필요
+    if (year === today.year() && month === today.month() + 1) {
+      setActiveDate(today.date());
+    } else {
+      setActiveDate(0);
     }
     setDayjsObject(targetDate);
   }, [month, year]);

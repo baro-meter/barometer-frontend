@@ -14,24 +14,15 @@ interface WeeklyViewProps {
 const WeeklyView = ({weekIdx, weekDates, activeDate}: WeeklyViewProps) => {
   return (
     <div role="row" key={weekIdx} className={cn('row', 'calendar-row')}>
-      {weekDates.map(
-        (d, di) =>
-          d >= 1 ? (
-            <BaroMeterDate
-              key={weekIdx * 10 + di}
-              date={d}
-              score={0}
-              successGoalCount={0}
-            />
-          ) : (
-            <></>
-          ),
-        // <div
-        //   className={cn('calendar-column', {active: activeDate === d})}
-        //   key={weekIdx * 10 + di}>
-        //   {d >= 1 ? d : ''}
-        // </div>
-      )}
+      {weekDates.map((d, di) => (
+        <BaroMeterDate
+          key={weekIdx * 10 + di}
+          date={d}
+          score={0}
+          successGoalCount={0}
+          isActive={d === activeDate}
+        />
+      ))}
     </div>
   );
 };

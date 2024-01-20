@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useMemo} from 'react';
 import classNames from 'classnames/bind';
 import scss from 'styles/barometerDate.module.scss';
 import Image from 'next/image';
@@ -10,32 +10,30 @@ type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
 
 interface BaroMeterDateViewProps {
   date: number;
-  score: scoreType;
   successGoalCount: succesGoalCountType;
+  imageUrl: string;
+  hasScore: boolean;
 }
 
 const BaroMeterDateView = ({
   date,
-  score,
   successGoalCount,
+  imageUrl,
+  hasScore,
 }: BaroMeterDateViewProps) => {
   return (
     <div className={cn('date', 'date-today', 'calendar-column')}>
       <div className={cn('group')}>
-        <Image
-          className={cn('vector')}
-          alt="Vector"
-          fill
-          src={'calendar/date-today.svg'}
-        />
-        <div className={cn('text-wrapper')}>{date}</div>
+        <Image className={cn('vector')} alt="Vector" fill src={imageUrl} />
+        {!hasScore && <div className={cn('text-wrapper')}>{date}</div>}
       </div>
+      {/* TODO 수정 필요 */}
       <div className={cn('frame')}>
-        <div className={cn('ellipse')} />
-        <div className={cn('ellipse')} />
-        <div className={cn('ellipse')} />
-        <div className={cn('ellipse')} />
-        <div className={cn('ellipse')} />
+        {[...Array(successGoalCount)].map(i => (
+          <div className={cn('ellipse')} key={i}>
+            {i}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -45,14 +43,45 @@ interface BaroMeterDateProps {
   date: number;
   score: scoreType;
   successGoalCount: succesGoalCountType;
+  isActive?: boolean;
 }
 
 export default function BaroMeterDate({
   date,
   score,
   successGoalCount,
+  isActive,
 }: BaroMeterDateProps) {
-  const viewProps = {date, score, successGoalCount};
+  if (date <= 0) {
+    return (
+      <div className={cn('date', 'date-today', 'calendar-column')}>
+        <div className={cn('group')}></div>
+      </div>
+    );
+  }
+
+  const imageUrl = useMemo(() => {
+    let imageName;
+    switch (score) {
+      case 1:
+        imageName = 'date_bad';
+        break;
+      case 2:
+        imageName = 'date_notgood';
+        break;
+      case 3:
+        imageName = 'date_good';
+        break;
+      case 4:
+        imageName = 'date_nice';
+        break;
+      default:
+        imageName = isActive ? 'date-today' : 'date-monthly';
+    }
+    return `calendar/${imageName}.svg`;
+  }, [isActive, score]);
+
+  const viewProps = {date, successGoalCount, imageUrl, hasScore: score > 0};
 
   return <BaroMeterDateView {...viewProps} />;
 }
