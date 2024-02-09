@@ -78,7 +78,7 @@ export default function BaroMeterDate({
       default:
         imageName = isActive ? 'date-today' : 'date-monthly';
     }
-    return `calendar/${imageName}.svg`;
+    return `/calendar/${imageName}.svg`;
   }, [isActive, score]);
 
   const viewProps = {date, successGoalCount, imageUrl, hasScore: score > 0};

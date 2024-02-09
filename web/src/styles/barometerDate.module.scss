@@ -24,7 +24,7 @@
   }
 
   .text-wrapper {
-    color: var(--color-system-gray-gray99);
+    color: $color-system-gray-gray99;
     font-family: 'Montserrat Alternates-SemiBold', Helvetica;
     font-size: 12px;
     font-weight: 600;
@@ -47,7 +47,7 @@
   }
 
   .ellipse {
-    background-color: var(--color-system-gray-gray5);
+    background-color: $color-system-gray-gray5;
     border-radius: 1.5px;
     height: 3px;
     position: relative;

@@ -5,30 +5,46 @@ import Image from 'next/image';
 
 const cn = classNames.bind(scss);
 
-interface MonthlyCheerUpViewProps {
+interface WeeklyCheerUpViewProps {
   text: string;
   btnImage?: string;
 }
 
-const MonthlyCheerUpView = ({text, btnImage}: MonthlyCheerUpViewProps) => {
+const WeeklyCheerUpView = ({text, btnImage}: WeeklyCheerUpViewProps) => {
   return (
+    // <div className={cn('frame')}>
+    //   <div className={cn('text-wrapper')}>BARO</div>
+    //   <div className={cn('div')}>{text}</div>
+    //   {btnImage && (
+    //     <Image
+    //       className={cn('vector')}
+    //       alt="btn"
+    //       src={btnImage}
+    //       width={16}
+    //       height={16}
+    //     />
+    //   )}
+    // </div>
     <div className={cn('frame')}>
-      <div className={cn('text-wrapper')}>BARO</div>
-      <div className={cn('div')}>{text}</div>
-      {btnImage && (
-        <Image
-          className={cn('vector')}
-          alt="btn"
-          src={btnImage}
-          width={16}
-          height={16}
-        />
-      )}
+      <div className={cn('div')}>
+        <div className={cn('div-2')}>
+          <p className={cn('text-wrapper')}>{text}</p>
+          <div className={cn('group')}>
+            <div className={cn('rectangle')} />
+          </div>
+        </div>
+        <div className={cn('element-wrapper')}>
+          <p className={cn('element')}>
+            <span className={cn('span')}>74</span>
+            <span className={cn('text-wrapper-2')}>%</span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
 
-interface MonthlyCheerUpProps {
+interface WeeklyCheerUpProps {
   state: 'init' | 'before' | 'increase' | 'finish';
 }
 
@@ -40,7 +56,7 @@ interface MonthlyCheerUpProps {
  * - [increase] 목표 개수 증감 안내: 좋은 습관이 생겼네요. 목표를 더 늘려볼까요?
  * - [finish] 리워드 제공: 축하해요! 목표달성 선물을 드릴게요
  */
-export default function MonthlyCheerUp({state = 'init'}: MonthlyCheerUpProps) {
+export default function WeeklyCheerUp({state = 'init'}: WeeklyCheerUpProps) {
   const text = useMemo(() => {
     switch (state) {
       case 'before':
@@ -63,5 +79,5 @@ export default function MonthlyCheerUp({state = 'init'}: MonthlyCheerUpProps) {
   }, [state]);
   const viewProps = {text, btnImage};
 
-  return <MonthlyCheerUpView {...viewProps} />;
+  return <WeeklyCheerUpView {...viewProps} />;
 }

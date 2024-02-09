@@ -24,15 +24,13 @@ const StoragePageView = ({
     <div>
       <div>
         <div>{localData}</div>
-        <Button
-          label="localStorage 데이터 불러오기"
-          onClick={getLocalStorageSavedData}
-        />
+        <button onClick={getLocalStorageSavedData}>
+          localStorage 데이터 불러오기
+        </button>
         <div>{asyncData}</div>
-        <Button
-          label="asyncStorage 데이터 불러오기"
-          onClick={getAsyncStorageSavedData}
-        />
+        <button onClick={getAsyncStorageSavedData}>
+          asyncStorage 데이터 불러오기
+        </button>
       </div>
       <div>
         <h2>데이터 설정</h2>
@@ -49,14 +47,12 @@ const StoragePageView = ({
           </select>
         </label>
         <hr />
-        <Button
-          label="localStoarge 데이터 저장하기"
-          onClick={handleSaveLocalStorageData}
-        />
-        <Button
-          label="asyncStoarge 데이터 저장하기"
-          onClick={handleSaveAsyncStorageData}
-        />
+        <button onClick={handleSaveLocalStorageData}>
+          localStoarge 데이터 저장하기
+        </button>
+        <button onClick={handleSaveAsyncStorageData}>
+          asyncStoarge 데이터 저장하기
+        </button>
       </div>
     </div>
   );

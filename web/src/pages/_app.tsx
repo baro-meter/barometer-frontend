@@ -1,4 +1,4 @@
-import 'styles/globals.css';
+// import '@/styles/common.scss';
 import type {AppProps} from 'next/app';
 import {Montserrat_Alternates} from 'next/font/google';
 
