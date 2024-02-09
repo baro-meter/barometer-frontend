@@ -2,6 +2,18 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
+## 프로젝트 환경
+
+react-native 기반으로 앱 개발을 하고 있으며, 모든 페이지들은 웹뷰로 표시됩니다.
+
+- 웹뷰 표시: [react-native-webview](https://github.com/react-native-webview/react-native-webview)
+- 모바일 앱 환경 구성을 위해 프로젝트의 root는 react-native cli로 초기화 되었습니다.
+
+웹 프로젝트는 `/web`에 mono repo 형식으로 구성되어 있습니다.
+
+> **Note**: 아래 내용은 react-native project의 document 내용입니다.
+> 웹에 관련된 [document는 이곳](./web#readme)을 참고해주세요.
+
 > **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 0: Install
@@ -11,6 +23,14 @@ pnpm을 사용하여 install 해주세요.
 
 ```bash
 pnpm i
+```
+
+모든 페이지는 앱 내부에 웹뷰로 표시됩니다.
+반드시 `/web` 폴더로 이동하여 웹 구동을 해주세요.
+
+```bash
+cd ./web
+pnpm dev
 ```
 
 ## Step 1: Start the Metro Server
