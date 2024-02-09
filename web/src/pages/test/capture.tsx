@@ -1,4 +1,4 @@
-import MonthlyCalendar from 'components/calendar/MonthlyCalendar';
+import MonthlyCalendar from '@/components/Calendar/MonthlyCalendar';
 import React, {useCallback} from 'react';
 
 interface CapturePageViewProps {

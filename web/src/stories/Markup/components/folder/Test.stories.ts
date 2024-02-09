@@ -1,11 +1,11 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import WeeklyCalendar from 'components/calendar/WeeklyCalendar';
+import Test from 'markup/components/Test';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Calendar/WeeklyCalendar',
-  component: WeeklyCalendar,
+  title: 'Markup/Components/folder/Test',
+  component: Test,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
@@ -14,7 +14,7 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {},
-} satisfies Meta<typeof WeeklyCalendar>;
+} satisfies Meta<typeof Test>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
