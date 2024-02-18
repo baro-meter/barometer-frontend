@@ -64,8 +64,10 @@ const CustomWebView = ({
           } else {
             throw Error('no CommunicateDataType type');
           }
-        } catch {
+        } catch (e) {
           // json 이외의 타입인 경우는 없어야 한다.
+          console.error(e);
+          console.info(receiveDataEvents);
           Alert.alert('적절치 않은 웹 -> 앱 데이터가 전송되었습니다.');
         }
       }
@@ -99,6 +101,8 @@ const CustomWebView = ({
       source={{uri: uri ?? 'https://naver.com'}}
       originWhitelist={['https://*', 'http://*']}
       injectedJavaScript={injectedJavaScript}
+      webviewDebuggingEnabled
+      allowsLinkPreview
       ref={webViewRef}
       onMessage={handleMessage}
     />

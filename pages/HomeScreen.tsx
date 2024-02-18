@@ -32,6 +32,10 @@ const HomeScreen = ({navigation}: Props) => {
     });
   };
 
+  const onPressGoCaptureTestPage = () => {
+    navigation.navigate('Capture', {uri: 'http://localhost:3000/test/capture'});
+  };
+
   return (
     <>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -47,6 +51,11 @@ const HomeScreen = ({navigation}: Props) => {
           style={styles.button}
           onPress={onPressGoStorageViewPage}>
           <Text>Storage 테스트 페이지 이동</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onPressGoCaptureTestPage}>
+          <Text>image capture 테스트 페이지 이동</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </>

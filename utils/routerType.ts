@@ -3,4 +3,6 @@ export type RootStackParamList = {
   Test: undefined;
   WebView: {uri: string};
   Storage: {uri: string};
+  Capture: {uri: string};
+  TestImage: {imageUrl: string};
 };
