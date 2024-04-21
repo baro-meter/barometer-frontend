@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import classNames from 'classnames/bind';
-import scss from 'styles/cheerup.module.scss';
+import scss from 'styles/components/cheerup.module.scss';
 import Image from 'next/image';
 
 const cn = classNames.bind(scss);
