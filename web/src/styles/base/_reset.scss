@@ -56,7 +56,10 @@ body,
 code,
 kbd,
 pre,
-samp {
+samp,
+button,
+input,
+select {
   font-family: $font-family;
 }
 
@@ -115,6 +118,10 @@ button,
 input {
   background: 0 0;
   border: 0;
+}
+
+button {
+  cursor: pointer;
 }
 
 .blind {
