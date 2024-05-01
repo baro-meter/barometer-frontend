@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AppleHealthKit, {permissions} from '../utils/AppleHealthKit';
+import AppleHealthKit, {permissions} from '../../utils/AppleHealthKit';
 import {HealthObserver, HealthValue} from 'react-native-health';
 
 const AppleHealthTestScreen = () => {

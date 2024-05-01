@@ -1,68 +1,27 @@
-import {
-  Alert,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-} from 'react-native';
-import {hasHealthKitAuth} from '../utils/AppleHealthKit';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../utils/routerType';
+import {Text, View} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {HomeTabParamList} from '../utils/routerType';
+import MonthlyScreen from './tabs/CalendarScreen';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const HomeScreen = ({navigation}: Props) => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const onPressGoStorageViewPage = () => {
-    navigation.navigate('Storage', {uri: 'http://localhost:3000/test/storage'});
-  };
-  const onPressGoWebViewPage = () => {
-    // navigation.navigate('WebView', {uri: 'https://www.google.com'});
-    navigation.navigate('WebView', {uri: 'http://localhost:3000/test'});
-  };
-
-  const onPressGoToTestPage = () => {
-    hasHealthKitAuth(available => {
-      if (available) {
-        navigation.navigate('Test');
-      }
-    });
-  };
-
+function EmptyScreen() {
   return (
-    <>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <SafeAreaView style={styles.root}>
-        {/* <CustomWebView /> */}
-        <TouchableOpacity style={styles.button} onPress={onPressGoToTestPage}>
-          <Text>건강 데이터 테스트 페이지 이동</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onPressGoWebViewPage}>
-          <Text>webview 테스트 페이지 이동</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={onPressGoStorageViewPage}>
-          <Text>Storage 테스트 페이지 이동</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Test!</Text>
+    </View>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    marginBottom: 10,
-  },
-});
+const Tab = createBottomTabNavigator<HomeTabParamList>();
 
-export default HomeScreen;
+export default function HomeScreen() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        headerShown: false,
+      }}>
+      <Tab.Screen name="Calendar" component={MonthlyScreen} />
+      <Tab.Screen name="Test" component={EmptyScreen} />
+    </Tab.Navigator>
+  );
+}
