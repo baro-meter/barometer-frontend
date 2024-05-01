@@ -1,3 +1,64 @@
+.calendar {
+  &-header {
+    position: relative;
+    height: 63px;
+    color: var(--color-system-gray-gray95);
+    
+    .inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      padding: 0 24px;
+    }
+
+    .date {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      
+      span {
+        padding: 0 1px 0 2px;
+        font-family: $font-family;
+        font-size: 22px;
+        font-weight: 700;
+      }
+    }
+
+    .date-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      button {
+        width: 32px;
+        height: 27px;
+        &::before {
+          display: block;
+          width: 8px;
+          height: 15px;
+          margin: auto;
+          background-image: url("data:image/svg+xml,%0A%3Csvg width='8' height='15' viewBox='0 0 8 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L7 7.5L1 13.5' stroke='%23979A9E' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+          content: '';
+        }
+      }
+      .btn-prev {
+        &::before {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+
+    .btn-calendar-view {
+      position: absolute;
+      right: 4px;
+      top: 1px;
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
 .calendar-column {
   display: inline-flex;
   width: 50px;
