@@ -4,60 +4,42 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
-import CustomWebView from '../components/CustomWebView';
+import CustomWebView from '../../components/CustomWebView';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../utils/routerType';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {TestAppRootStackParamList} from '../../utils/routerType';
 import {useEffect, useState} from 'react';
-import {CommunicateDataType} from '../types/CommunicateDataType';
+import AppleHealthKit from '../../utils/AppleHealthKit';
+import {CommunicateDataType} from '../../types/CommunicateDataType';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Storage'>;
+type Props = NativeStackScreenProps<TestAppRootStackParamList, 'WebView'>;
 
-const AsyncStorageScreen = ({route}: Props) => {
+const WebViewScreen = ({route}: Props) => {
   const {uri} = route.params;
-  const [data, setData] = useState('');
   const isDarkMode = useColorScheme() === 'dark';
   const [requestData, setRequestData] = useState<
     CommunicateDataType | undefined
   >(); // post요청을 하고 싶을 때 해당 값의 상태를 변경하여 부모에게 알린다.
 
-  const storeData = async (value: string) => {
-    try {
-      await AsyncStorage.setItem('my-key', value);
-      console.log('save! ' + value);
-    } catch (e) {
-      // saving error
-    }
-  };
+  const handlePressDailyStepCount = () => {
+    let options = {
+      startDate: new Date(2016, 1, 1).toISOString(), // required
+      endDate: new Date().toISOString(), // optional; default now
+    };
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('my-key');
-      if (value !== null) {
-        // value previously stored
-        setData(value);
-        return value;
-      }
-    } catch (e) {
-      // error reading value
-    }
-    return undefined;
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const handleGetAsyncData = () => {
-    console.log('handleGetAsyncData');
-    getData().then(savedData => {
-      setRequestData({eventKey: 'asyncData', data: savedData});
-    });
+    AppleHealthKit.getDailyStepCountSamples(
+      options,
+      (err: Object, results: Array<Object>) => {
+        if (err) {
+          console.error(`getDailyStepCountSamples error: ${err}`);
+        } else {
+          setRequestData({eventKey: 'dailyStepCount', data: results});
+        }
+      },
+    );
   };
 
   const receiveDataEventsType = {
-    setAsyncData: storeData,
-    getAsyncData: handleGetAsyncData,
+    requestStepCount: handlePressDailyStepCount,
   };
 
   const postEventHandler = (postedData: CommunicateDataType) => {
@@ -73,8 +55,8 @@ const AsyncStorageScreen = ({route}: Props) => {
       <SafeAreaView style={styles.root}>
         <CustomWebView
           uri={uri}
+          initSendData="request하셔서 보내유"
           receiveDataEvents={receiveDataEventsType}
-          initSendData={data}
           requestData={requestData}
           postEventHandler={postEventHandler}
         />
@@ -94,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AsyncStorageScreen;
+export default WebViewScreen;
