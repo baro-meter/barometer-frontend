@@ -1,0 +1,128 @@
+@use '../abstracts/font';
+
+html,
+body {
+  height: 100%;
+  height: 100%;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: none;
+  user-select: none;
+  text-rendering: optimizeSpeed;
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+table,
+th,
+td,
+form,
+fieldset,
+legend,
+input,
+textarea,
+button,
+select {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+input,
+textarea,
+select,
+button,
+table {
+  outline: none !important;
+  font-family: inherit;
+}
+
+html,
+body,
+code,
+kbd,
+pre,
+samp {
+  font-family: $font-family;
+}
+
+article,
+aside,
+dialog,
+footer,
+header,
+section,
+nav,
+figure,
+main {
+  display: block;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+em,
+address {
+  font-style: normal;
+}
+
+img,
+fieldset {
+  border: 0;
+}
+
+img {
+  vertical-align: top;
+}
+
+ul,
+ol,
+dl {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  line-height: normal;
+}
+
+button,
+input {
+  background: 0 0;
+  border: 0;
+}
+
+.blind {
+  margin: -1px !important;
+  padding: 0 !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+}

@@ -6,8 +6,9 @@
 
 .day_header {
   display: flex;
-  width: 50px;
   @include center();
+  width: 50px;
+  font-weight: 300;
 }
 
 .row {
