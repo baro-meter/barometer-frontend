@@ -1,10 +1,10 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import classNames from 'classnames/bind';
-import scss from 'styles/components/calendar.module.scss';
-import dayjs from 'dayjs';
-import DayHeader from './DayHeader';
-import Weekly from './Weekly';
-import MonthlyCheerUp from './MonthlyCheerUp';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import classNames from "classnames/bind";
+import scss from "styles/components/calendar.module.scss";
+import dayjs from "dayjs";
+import DayHeader from "./DayHeader";
+import Weekly from "./Weekly";
+import MonthlyCheerUp from "./MonthlyCheerUp";
 
 const cn = classNames.bind(scss);
 
@@ -24,9 +24,9 @@ const MonthlyCalendarView = ({
   isSixWeeks,
 }: MonthlyCalendarViewProps) => {
   return (
-    <div className={cn('container')} role="grid">
+    <div className={cn("container")} role="grid">
       <DayHeader />
-      <div role="rowgroup" className={cn('calendar')} ref={layoutRef}>
+      <div role="rowgroup" className={cn("calendar")} ref={layoutRef}>
         {calendarDates.map((w, i) =>
           !isSixWeeks && i === 5 ? (
             <></>
@@ -38,9 +38,9 @@ const MonthlyCalendarView = ({
                 weekDates={w}
                 activeDate={activeDate}
               />
-              {activeWeek === i && <MonthlyCheerUp state={'init'} />}
+              {activeWeek === i && <MonthlyCheerUp state={"init"} />}
             </>
-          ),
+          )
         )}
       </div>
     </div>
@@ -48,16 +48,26 @@ const MonthlyCalendarView = ({
 };
 
 interface MonthlyCalendarProps {
-  year?: number;
-  month?: number;
+  year: number;
+  month: number;
+  date?: number; // 필수??
 }
 
-export default function Calendar({year, month}: MonthlyCalendarProps) {
-  const [activeDate, setActiveDate] = useState(dayjs().date()); // TODO 기준을 모르겠어서 일단 오늘로만 작업
+export default function MonthlyCalendar({
+  year,
+  month,
+  date,
+}: MonthlyCalendarProps) {
+  const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
+  // TODO 주간 독려 삭제?
   const [activeWeek, setActiveWeek] = useState<number>(); // 주간 독려가 표시될 주 위치 구하기
-  const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(dayjs());
+  const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
+    dayjs()
+      .year(year)
+      .month(month - 1)
+  );
   const [calendarDates, setCalendarDates] = useState<number[][]>(
-    Array.from(Array(6), () => new Array(7)),
+    Array.from(Array(6), () => new Array(7))
   );
   // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
   // 우선은 해당 캘린더 내부에서만 스크롤 될 수 있게 한다.
@@ -69,7 +79,12 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
   }, [calendarDates]);
 
   useEffect(() => {
-    // 날짜가 바뀔 때 마다 달력이 초기화된다.
+    if (date) {
+      setActiveDate(date);
+    }
+  }, [date]);
+
+  useEffect(() => {
     let targetDate = dayjs(); // 현재 날짜 기준
     if (year) {
       targetDate = targetDate.year(year);
@@ -77,16 +92,32 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
     if (month) {
       targetDate = targetDate.month(month - 1);
     }
-
-    const today = dayjs();
-    // TODO 수정 필요
-    if (year === today.year() && month === today.month() + 1) {
-      setActiveDate(today.date());
-    } else {
-      setActiveDate(0);
-    }
     setDayjsObject(targetDate);
   }, [month, year]);
+
+  // useEffect(() => {
+  //   // 날짜가 바뀔 때 마다 달력이 초기화된다.
+  //   let targetDate = dayjs(); // 현재 날짜 기준
+  //   if (year) {
+  //     targetDate = targetDate.year(year);
+  //   }
+  //   if (month) {
+  //     targetDate = targetDate.month(month - 1);
+  //   }
+
+  //   if (date && date > 0) {
+  //     setActiveDate(date);
+  //   } else {
+  //     const today = dayjs();
+  //     if (year === today.year() && month === today.month() + 1) {
+  //       setActiveDate(today.date());
+  //     } else {
+  //       setActiveDate(0);
+  //     }
+  //   }
+
+  //   setDayjsObject(targetDate);
+  // }, [month, year]);
 
   useEffect(() => {
     console.log(`activeWeek: ${activeWeek}`);
@@ -137,9 +168,9 @@ export default function Calendar({year, month}: MonthlyCalendarProps) {
     };
 
     if (layoutRef.current) {
-      layoutRef.current.addEventListener('scroll', handleScroll);
+      layoutRef.current.addEventListener("scroll", handleScroll);
       return () =>
-        layoutRef.current?.removeEventListener('scroll', handleScroll);
+        layoutRef.current?.removeEventListener("scroll", handleScroll);
     }
   }, [calendarDates, layoutRef]);
 
