@@ -1,7 +1,7 @@
-import React, {useMemo} from 'react';
-import classNames from 'classnames/bind';
-import scss from 'styles/components/barometerDate.module.scss';
-import Image from 'next/image';
+import React, { useMemo } from "react";
+import classNames from "classnames/bind";
+import scss from "@/styles/components/barometerDate.module.scss";
+import Image from "next/image";
 
 const cn = classNames.bind(scss);
 
@@ -22,15 +22,15 @@ const BaroMeterDateView = ({
   hasScore,
 }: BaroMeterDateViewProps) => {
   return (
-    <div className={cn('date', 'date-today', 'calendar-column')}>
-      <div className={cn('group')}>
-        <Image className={cn('vector')} alt="Vector" fill src={imageUrl} />
-        {!hasScore && <div className={cn('text-wrapper')}>{date}</div>}
+    <div className={cn("date", "date-today", "calendar-column")}>
+      <div className={cn("group")}>
+        <Image className={cn("vector")} alt="Vector" fill src={imageUrl} />
+        {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
       </div>
       {/* TODO 수정 필요 */}
-      <div className={cn('frame')}>
-        {[...Array(successGoalCount)].map(i => (
-          <div className={cn('ellipse')} key={i}>
+      <div className={cn("frame")}>
+        {[...Array(successGoalCount)].map((i) => (
+          <div className={cn("ellipse")} key={i}>
             {i}
           </div>
         ))}
@@ -54,8 +54,8 @@ export default function BaroMeterDate({
 }: BaroMeterDateProps) {
   if (date <= 0) {
     return (
-      <div className={cn('date', 'date-today', 'calendar-column')}>
-        <div className={cn('group')}></div>
+      <div className={cn("date", "date-today", "calendar-column")}>
+        <div className={cn("group")}></div>
       </div>
     );
   }
@@ -64,24 +64,24 @@ export default function BaroMeterDate({
     let imageName;
     switch (score) {
       case 1:
-        imageName = 'date_bad';
+        imageName = "date_bad";
         break;
       case 2:
-        imageName = 'date_notgood';
+        imageName = "date_notgood";
         break;
       case 3:
-        imageName = 'date_good';
+        imageName = "date_good";
         break;
       case 4:
-        imageName = 'date_nice';
+        imageName = "date_nice";
         break;
       default:
-        imageName = isActive ? 'date-today' : 'date-monthly';
+        imageName = isActive ? "date-today" : "date-monthly";
     }
     return `/calendar/${imageName}.svg`;
   }, [isActive, score]);
 
-  const viewProps = {date, successGoalCount, imageUrl, hasScore: score > 0};
+  const viewProps = { date, successGoalCount, imageUrl, hasScore: score > 0 };
 
   return <BaroMeterDateView {...viewProps} />;
 }
