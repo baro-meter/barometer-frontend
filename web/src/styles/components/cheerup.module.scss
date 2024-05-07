@@ -1,6 +1,6 @@
 .frame {
   align-items: center;
-  background-color: var(--color-system-gray-gray0);
+  background-color: $color-system-gray-gray0;
   border-radius: 12px;
   display: flex;
   gap: 8px;
@@ -10,7 +10,7 @@
 }
 
 .frame .text-wrapper {
-  color: var(--color-system-gray-gray60);
+  color: $color-system-gray-gray60;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -23,7 +23,7 @@
 }
 
 .frame .div {
-  color: var(--color-system-gray-gray80);
+  color: $color-system-gray-gray80;
   flex: 1;
   font-size: 13px;
   font-weight: 400;
