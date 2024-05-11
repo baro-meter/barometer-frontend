@@ -24,8 +24,7 @@
       "  };",
       "};",
       "",
-      "export default ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Page;",
-      "Creates a React TS Function page"
+      "export default ${TM_FILENAME_BASE/(.*)/${1:/capitalize}/}Page;"
     ],
     "description": ""
   },
