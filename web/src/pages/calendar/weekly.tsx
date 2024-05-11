@@ -23,6 +23,7 @@ const WeeklyPageView = ({
   year,
   month,
   week,
+  date,
   handleChangeMonthlyView,
 }: WeeklyPageViewProps) => {
   return (
@@ -33,7 +34,7 @@ const WeeklyPageView = ({
         week={week}
         handleChangeMonthlyView={handleChangeMonthlyView}
       />
-      <WeeklyCalendar />
+      <WeeklyCalendar year={year} month={month} date={date} />
     </>
   );
 };
@@ -57,6 +58,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
     if (!!initDate) {
       setSelectedDate(dayjs(initDate));
+      console.log(`adfadsfasdfasdf: ${dayjs(initDate)}`);
     }
   }, [initDate]);
 
@@ -65,7 +67,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const viewProps = {
-    year: selectedDate.weekYear(),
+    year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     week: selectedDate.week(),
     date: selectedDate.date(),

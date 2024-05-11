@@ -47,7 +47,7 @@ const MonthlyCalendarView = ({
 interface MonthlyCalendarProps {
   year: number;
   month: number;
-  date?: number; // 필수??
+  date: number; // 선택된 날짜
 }
 
 export default function MonthlyCalendar({
@@ -60,6 +60,7 @@ export default function MonthlyCalendar({
     dayjs()
       .year(year)
       .month(month - 1)
+      .set("date", date)
   );
   const [calendarDates, setCalendarDates] = useState<number[][]>(
     Array.from(Array(6), () => new Array(7))
@@ -80,15 +81,13 @@ export default function MonthlyCalendar({
   }, [date]);
 
   useEffect(() => {
-    let targetDate = dayjs(); // 현재 날짜 기준
-    if (year) {
-      targetDate = targetDate.year(year);
-    }
-    if (month) {
-      targetDate = targetDate.month(month - 1);
-    }
-    setDayjsObject(targetDate);
-  }, [month, year]);
+    setDayjsObject(
+      dayjs()
+        .year(year)
+        .month(month - 1)
+        .set("date", date)
+    );
+  }, [month, year, date]);
 
   // useEffect(() => {
   //   // 날짜가 바뀔 때 마다 달력이 초기화된다.
