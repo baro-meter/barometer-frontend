@@ -2,6 +2,7 @@ import MonthlyCalendar from "@/components/Calendar/MonthlyCalendar";
 import dayjs from "dayjs";
 import MonthlyHeaderView from "markup/components/Calendar/MonthlyHeaderView";
 import React, { useEffect, useState } from "react";
+import { GetServerSidePropsContext } from "next";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -27,7 +28,6 @@ const MonthlyPageView = ({
     </>
   );
 };
-
 // Weekly -> Monthly 전환될 때 선택된 날짜를 전달 받는다.
 interface MonthlyPageProps {
   initDate?: number; // milliseconds
@@ -39,7 +39,8 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
 
   useEffect(() => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
-    if (initDate) {
+    console.log(`initDate: ${initDate}`);
+    if (!!initDate) {
       setSelectedDate(dayjs(initDate));
     }
   }, [initDate]);
@@ -51,6 +52,7 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
     } else {
       changedDate = changedDate.subtract(1, "month").set("date", 1);
     }
+    console.log(changedDate.week());
     setSelectedDate(changedDate);
   };
 
@@ -64,9 +66,12 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
   return <MonthlyPageView {...viewProps} />;
 };
 
-export const getServerSideProps = () => {
+export const getServerSideProps = (context: GetServerSidePropsContext) => {
+  const initDate = context.query?.initDate ?? "";
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      initDate,
+    },
   };
 };
 
