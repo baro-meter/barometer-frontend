@@ -2,9 +2,11 @@ import WeeklyCalendar from "@/components/Calendar/WeeklyCalendar";
 import dayjs from "dayjs";
 import WeeklyHeaderView from "markup/components/Calendar/WeeklyHeaderView";
 import { GetServerSidePropsContext } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
+import { useRouter } from "next/router";
+import { getFormatDayjs } from "utils/calendarUtil";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -14,19 +16,30 @@ interface WeeklyPageViewProps {
   month: number;
   week: number;
   date: number;
+  handleChangeMonthlyView: () => void;
 }
 
-const WeeklyPageView = ({ year, month, week }: WeeklyPageViewProps) => {
+const WeeklyPageView = ({
+  year,
+  month,
+  week,
+  handleChangeMonthlyView,
+}: WeeklyPageViewProps) => {
   return (
     <>
-      <WeeklyHeaderView year={year} month={month} week={week} />
+      <WeeklyHeaderView
+        year={year}
+        month={month}
+        week={week}
+        handleChangeMonthlyView={handleChangeMonthlyView}
+      />
       <WeeklyCalendar />
     </>
   );
 };
 
 interface WeeklyPageProps {
-  initDate?: number; // milliseconds
+  initDate?: string;
 }
 
 /**
@@ -36,6 +49,7 @@ interface WeeklyPageProps {
  */
 
 const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
+  const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
 
@@ -46,18 +60,23 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     }
   }, [initDate]);
 
+  const handleChangeMonthlyView = useCallback(() => {
+    router.push(`/calendar/monthly?initDate=${getFormatDayjs(selectedDate)}`);
+  }, [selectedDate]);
+
   const viewProps = {
     year: selectedDate.weekYear(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     week: selectedDate.week(),
     date: selectedDate.date(),
+    handleChangeMonthlyView,
   };
 
   return <WeeklyPageView {...viewProps} />;
 };
 
 export const getServerSideProps = (context: GetServerSidePropsContext) => {
-  const initDate = context.query?.initDate ?? "";
+  const initDate = context.query.initDate ?? "";
   return {
     props: {
       initDate,

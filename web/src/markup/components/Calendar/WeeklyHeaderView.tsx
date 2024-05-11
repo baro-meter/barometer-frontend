@@ -9,16 +9,26 @@ interface WeeklyHeaderViewProps {
   year: number;
   month: number;
   week: number;
+  handleChangeMonthlyView: () => void;
 }
 
-const WeeklyHeaderView = ({ year, month, week }: WeeklyHeaderViewProps) => {
+const WeeklyHeaderView = ({
+  year,
+  month,
+  week,
+  handleChangeMonthlyView,
+}: WeeklyHeaderViewProps) => {
   return (
     <div className={cn("calendar-header")}>
       <div className={cn("inner")}>
         <strong className={cn("date")}>
           <span>{year}</span>년 <span>{month}</span>월 <span>{week}</span>주
         </strong>
-        <button className={cn("btn-calendar-view")} aria-label="Monthly View">
+        <button
+          className={cn("btn-calendar-view")}
+          aria-label="Monthly View"
+          onClick={handleChangeMonthlyView}
+        >
           <Image
             src="/calendar/icon-monthly.svg"
             width={20}

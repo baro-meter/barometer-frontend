@@ -9,12 +9,14 @@ interface MonthlyHeaderViewProps {
   year: number;
   month: number;
   handleArrowClicked: (type: "next" | "prev") => void;
+  handleChangeWeeklyView: () => void;
 }
 
 const MonthlyHeaderView = ({
   year,
   month,
   handleArrowClicked,
+  handleChangeWeeklyView,
 }: MonthlyHeaderViewProps) => {
   return (
     <div className={cn("calendar-header")}>
@@ -34,7 +36,11 @@ const MonthlyHeaderView = ({
             onClick={() => handleArrowClicked("next")}
           ></button>
         </div>
-        <button className={cn("btn-calendar-view")} aria-label="Weekly View">
+        <button
+          className={cn("btn-calendar-view")}
+          aria-label="Weekly View"
+          onClick={handleChangeWeeklyView}
+        >
           <Image
             src="/calendar/icon-weekly.svg"
             width={20}
