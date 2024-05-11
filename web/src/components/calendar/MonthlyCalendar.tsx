@@ -12,7 +12,6 @@ interface MonthlyCalendarViewProps {
   calendarDates: number[][];
   activeDate: number;
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
-  activeWeek?: number;
   isSixWeeks: boolean;
 }
 
@@ -20,7 +19,6 @@ const MonthlyCalendarView = ({
   calendarDates,
   activeDate,
   layoutRef,
-  activeWeek,
   isSixWeeks,
 }: MonthlyCalendarViewProps) => {
   return (
@@ -38,7 +36,6 @@ const MonthlyCalendarView = ({
                 weekDates={w}
                 activeDate={activeDate}
               />
-              {activeWeek === i && <MonthlyCheerUp state={"init"} />}
             </>
           )
         )}
@@ -59,8 +56,6 @@ export default function MonthlyCalendar({
   date,
 }: MonthlyCalendarProps) {
   const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
-  // TODO 주간 독려 삭제?
-  const [activeWeek, setActiveWeek] = useState<number>(); // 주간 독려가 표시될 주 위치 구하기
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
@@ -118,11 +113,6 @@ export default function MonthlyCalendar({
 
   //   setDayjsObject(targetDate);
   // }, [month, year]);
-
-  useEffect(() => {
-    console.log(`activeWeek: ${activeWeek}`);
-  }, [activeWeek]);
-
   useEffect(() => {
     // 1일 기준으로 달력을 채운다.
     let day = dayjsObject.date(1).day();
@@ -130,22 +120,15 @@ export default function MonthlyCalendar({
 
     const dates = Array.from(Array(6), () => new Array(7).fill(0));
     const maxDate = dayjsObject.daysInMonth();
-    setActiveWeek(undefined);
 
     const today = dayjs();
     // 첫째 주
     while (day < 7) {
-      if (date === today.date() && month === today.month() + 1) {
-        setActiveWeek(0);
-      }
       dates[0][day++] = date++;
     }
     // 나머지
     for (let w = 1; w < 6; w++) {
       for (let d = 0; d < 7; d++) {
-        if (date === today.date() && month === today.month() + 1) {
-          setActiveWeek(w);
-        }
         dates[w][d] = date++;
         if (maxDate < date) break;
       }
@@ -178,7 +161,6 @@ export default function MonthlyCalendar({
     calendarDates,
     activeDate,
     layoutRef,
-    activeWeek,
     isSixWeeks,
   };
 
