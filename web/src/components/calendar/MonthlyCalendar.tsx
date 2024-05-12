@@ -4,7 +4,6 @@ import scss from "styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import DayHeader from "./DayHeader";
 import Weekly from "./Weekly";
-import MonthlyCheerUp from "./MonthlyCheerUp";
 
 const cn = classNames.bind(scss);
 
@@ -13,6 +12,7 @@ interface MonthlyCalendarViewProps {
   activeDate: number;
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
+  handleClickDate: (date: number) => void;
 }
 
 const MonthlyCalendarView = ({
@@ -20,6 +20,7 @@ const MonthlyCalendarView = ({
   activeDate,
   layoutRef,
   isSixWeeks,
+  handleClickDate,
 }: MonthlyCalendarViewProps) => {
   return (
     <div className={cn("container")} role="grid">
@@ -35,6 +36,7 @@ const MonthlyCalendarView = ({
                 weekIdx={i}
                 weekDates={w}
                 activeDate={activeDate}
+                onClickDate={handleClickDate}
               />
             </>
           )
@@ -48,14 +50,16 @@ interface MonthlyCalendarProps {
   year: number;
   month: number;
   date: number; // 선택된 날짜
+  onChangeDate?: (d: dayjs.Dayjs) => void;
 }
 
 export default function MonthlyCalendar({
   year,
   month,
   date,
+  onChangeDate,
 }: MonthlyCalendarProps) {
-  const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
+  // const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
@@ -75,12 +79,6 @@ export default function MonthlyCalendar({
   }, [calendarDates]);
 
   useEffect(() => {
-    if (date) {
-      setActiveDate(date);
-    }
-  }, [date]);
-
-  useEffect(() => {
     setDayjsObject(
       dayjs()
         .year(year)
@@ -89,29 +87,6 @@ export default function MonthlyCalendar({
     );
   }, [month, year, date]);
 
-  // useEffect(() => {
-  //   // 날짜가 바뀔 때 마다 달력이 초기화된다.
-  //   let targetDate = dayjs(); // 현재 날짜 기준
-  //   if (year) {
-  //     targetDate = targetDate.year(year);
-  //   }
-  //   if (month) {
-  //     targetDate = targetDate.month(month - 1);
-  //   }
-
-  //   if (date && date > 0) {
-  //     setActiveDate(date);
-  //   } else {
-  //     const today = dayjs();
-  //     if (year === today.year() && month === today.month() + 1) {
-  //       setActiveDate(today.date());
-  //     } else {
-  //       setActiveDate(0);
-  //     }
-  //   }
-
-  //   setDayjsObject(targetDate);
-  // }, [month, year]);
   useEffect(() => {
     // 1일 기준으로 달력을 채운다.
     let day = dayjsObject.date(1).day();
@@ -120,7 +95,6 @@ export default function MonthlyCalendar({
     const dates = Array.from(Array(6), () => new Array(7).fill(0));
     const maxDate = dayjsObject.daysInMonth();
 
-    const today = dayjs();
     // 첫째 주
     while (day < 7) {
       dates[0][day++] = date++;
@@ -156,11 +130,24 @@ export default function MonthlyCalendar({
     }
   }, [calendarDates, layoutRef]);
 
+  const handleClickDate = (d: number) => {
+    // setActiveDate(date);
+    if (onChangeDate) {
+      onChangeDate(
+        dayjs()
+          .year(year)
+          .set("month", month - 1)
+          .set("date", d)
+      );
+    }
+  };
+
   const viewProps = {
     calendarDates,
-    activeDate,
+    activeDate: date,
     layoutRef,
     isSixWeeks,
+    handleClickDate,
   };
 
   return <MonthlyCalendarView {...viewProps} />;
