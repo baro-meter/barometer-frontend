@@ -12,6 +12,7 @@ interface MonthlyPageViewProps {
   date: number;
   handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeWeeklyView: () => void;
+  handleChangeDate: (d: dayjs.Dayjs) => void;
 }
 
 const MonthlyPageView = ({
@@ -20,6 +21,7 @@ const MonthlyPageView = ({
   date,
   handleArrowClicked,
   handleChangeWeeklyView,
+  handleChangeDate,
 }: MonthlyPageViewProps) => {
   return (
     <>
@@ -29,7 +31,12 @@ const MonthlyPageView = ({
         handleArrowClicked={handleArrowClicked}
         handleChangeWeeklyView={handleChangeWeeklyView}
       />
-      <MonthlyCalendar year={year} month={month} date={date} />
+      <MonthlyCalendar
+        year={year}
+        month={month}
+        date={date}
+        onChangeDate={handleChangeDate}
+      />
     </>
   );
 };
@@ -67,12 +74,17 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
     router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
   }, [selectedDate]);
 
+  const handleChangeDate = (d: dayjs.Dayjs) => {
+    setSelectedDate(d);
+  };
+
   const viewProps = {
     year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     handleArrowClicked,
     handleChangeWeeklyView,
+    handleChangeDate,
   };
 
   return <MonthlyPageView {...viewProps} />;

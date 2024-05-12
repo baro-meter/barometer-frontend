@@ -31,5 +31,6 @@ export const Primary: Story = {
   args: {
     year: 2024,
     month: 1,
+    date: 1,
   },
 };

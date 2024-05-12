@@ -13,6 +13,7 @@ interface BaroMeterDateViewProps {
   successGoalCount: succesGoalCountType;
   imageUrl: string;
   hasScore: boolean;
+  handleClick: () => void;
 }
 
 const BaroMeterDateView = ({
@@ -20,9 +21,13 @@ const BaroMeterDateView = ({
   successGoalCount,
   imageUrl,
   hasScore,
+  handleClick,
 }: BaroMeterDateViewProps) => {
   return (
-    <div className={cn("date", "date-today", "calendar-column")}>
+    <div
+      className={cn("date", "date-today", "calendar-column")}
+      onClick={handleClick}
+    >
       <div className={cn("group")}>
         <Image className={cn("vector")} alt="Vector" fill src={imageUrl} />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
@@ -44,6 +49,7 @@ interface BaroMeterDateProps {
   score: scoreType;
   successGoalCount: succesGoalCountType;
   isActive?: boolean;
+  onClick?: () => void;
 }
 
 export default function BaroMeterDate({
@@ -51,6 +57,7 @@ export default function BaroMeterDate({
   score,
   successGoalCount,
   isActive,
+  onClick,
 }: BaroMeterDateProps) {
   if (date <= 0) {
     return (
@@ -81,7 +88,19 @@ export default function BaroMeterDate({
     return `/calendar/${imageName}.svg`;
   }, [isActive, score]);
 
-  const viewProps = { date, successGoalCount, imageUrl, hasScore: score > 0 };
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
+  const viewProps = {
+    date,
+    successGoalCount,
+    imageUrl,
+    hasScore: score > 0,
+    handleClick,
+  };
 
   return <BaroMeterDateView {...viewProps} />;
 }
