@@ -1,61 +1,91 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import classNames from "classnames/bind";
 import scss from "styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import DayHeader from "./DayHeader";
 import Weekly from "./Weekly";
-import MonthlyCheerUp from "./MonthlyCheerUp";
+import MonthlyHeaderView from "markup/components/Calendar/MonthlyHeaderView";
 
 const cn = classNames.bind(scss);
 
 interface MonthlyCalendarViewProps {
+  monthlyDayjs: dayjs.Dayjs;
   calendarDates: number[][];
-  activeDate: number;
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
+  isShowMoveTodayBtn: boolean;
+  handleClickDate: (date: number) => void;
+  handleArrowClicked: (type: "next" | "prev") => void;
+  handleChangeWeeklyView: () => void;
+  handleMoveToday: () => void;
 }
 
 const MonthlyCalendarView = ({
+  monthlyDayjs,
   calendarDates,
-  activeDate,
   layoutRef,
   isSixWeeks,
+  isShowMoveTodayBtn,
+  handleClickDate,
+  handleArrowClicked,
+  handleChangeWeeklyView,
+  handleMoveToday,
 }: MonthlyCalendarViewProps) => {
   return (
-    <div className={cn("container")} role="grid">
-      <DayHeader />
-      <div role="rowgroup" className={cn("calendar")} ref={layoutRef}>
-        {calendarDates.map((w, i) =>
-          !isSixWeeks && i === 5 ? (
-            <></>
-          ) : (
-            <>
-              <Weekly
-                key={i}
-                weekIdx={i}
-                weekDates={w}
-                activeDate={activeDate}
-              />
-            </>
-          )
-        )}
+    <>
+      <MonthlyHeaderView
+        year={monthlyDayjs.year()}
+        month={monthlyDayjs.month() + 1}
+        handleArrowClicked={handleArrowClicked}
+        handleChangeWeeklyView={handleChangeWeeklyView}
+        handleMoveToday={handleMoveToday}
+        isShowMoveTodayBtn={isShowMoveTodayBtn}
+      />
+      <div className={cn("container")} role="grid">
+        <DayHeader />
+        <div role="rowgroup" className={cn("calendar")} ref={layoutRef}>
+          {calendarDates.map((w, i) =>
+            !isSixWeeks && i === 5 ? (
+              <></>
+            ) : (
+              <>
+                <Weekly
+                  key={i}
+                  weekIdx={i}
+                  weekDates={w}
+                  activeDate={monthlyDayjs.date()}
+                  onClickDate={handleClickDate}
+                />
+              </>
+            )
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 interface MonthlyCalendarProps {
   year: number;
   month: number;
-  date: number; // 선택된 날짜
+  date: number; // 선택된 날짜가 있을 경우 넘어옴
+  onChangeDate?: (d: dayjs.Dayjs) => void;
+  onChangeViewMode: () => void;
 }
 
 export default function MonthlyCalendar({
   year,
   month,
   date,
+  onChangeDate,
+  onChangeViewMode,
 }: MonthlyCalendarProps) {
-  const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
@@ -68,17 +98,32 @@ export default function MonthlyCalendar({
   // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
   // 우선은 해당 캘린더 내부에서만 스크롤 될 수 있게 한다.
   const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [isShowMoveTodayBtn, setIsShowMoveTodayBtn] = useState(false);
   const layoutRef = useRef<HTMLDivElement>(null);
 
-  const isSixWeeks = useMemo(() => {
-    return calendarDates[5][0] > 0;
-  }, [calendarDates]);
-
+  // 캘린더 그려주는 부분에 date는 필요없어서 효율성을 위해 별도로 트리거링
   useEffect(() => {
-    if (date) {
-      setActiveDate(date);
+    // 1일 기준으로 달력을 채운다.
+    let day = dayjsObject.date(1).day();
+    let ndate = 1;
+
+    const dates = Array.from(Array(6), () => new Array(7).fill(0));
+    const maxDate = dayjsObject.daysInMonth();
+
+    // 첫째 주
+    while (day < 7) {
+      dates[0][day++] = ndate++;
     }
-  }, [date]);
+    // 나머지
+    for (let w = 1; w < 6; w++) {
+      for (let d = 0; d < 7; d++) {
+        dates[w][d] = ndate++;
+        if (maxDate < ndate) break;
+      }
+      if (maxDate < ndate) break;
+    }
+    setCalendarDates(dates);
+  }, [dayjsObject.year(), dayjsObject.month()]);
 
   useEffect(() => {
     setDayjsObject(
@@ -88,53 +133,6 @@ export default function MonthlyCalendar({
         .set("date", date)
     );
   }, [month, year, date]);
-
-  // useEffect(() => {
-  //   // 날짜가 바뀔 때 마다 달력이 초기화된다.
-  //   let targetDate = dayjs(); // 현재 날짜 기준
-  //   if (year) {
-  //     targetDate = targetDate.year(year);
-  //   }
-  //   if (month) {
-  //     targetDate = targetDate.month(month - 1);
-  //   }
-
-  //   if (date && date > 0) {
-  //     setActiveDate(date);
-  //   } else {
-  //     const today = dayjs();
-  //     if (year === today.year() && month === today.month() + 1) {
-  //       setActiveDate(today.date());
-  //     } else {
-  //       setActiveDate(0);
-  //     }
-  //   }
-
-  //   setDayjsObject(targetDate);
-  // }, [month, year]);
-  useEffect(() => {
-    // 1일 기준으로 달력을 채운다.
-    let day = dayjsObject.date(1).day();
-    let date = 1;
-
-    const dates = Array.from(Array(6), () => new Array(7).fill(0));
-    const maxDate = dayjsObject.daysInMonth();
-
-    const today = dayjs();
-    // 첫째 주
-    while (day < 7) {
-      dates[0][day++] = date++;
-    }
-    // 나머지
-    for (let w = 1; w < 6; w++) {
-      for (let d = 0; d < 7; d++) {
-        dates[w][d] = date++;
-        if (maxDate < date) break;
-      }
-      if (maxDate < date) break;
-    }
-    setCalendarDates(dates);
-  }, [dayjsObject, month]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -156,11 +154,56 @@ export default function MonthlyCalendar({
     }
   }, [calendarDates, layoutRef]);
 
+  useEffect(() => {
+    const diff = dayjsObject.diff(dayjs(), "days");
+    setIsShowMoveTodayBtn(
+      !(diff === 0 && dayjsObject.date() === dayjs().date())
+    );
+  }, [dayjsObject]);
+
+  const isSixWeeks = useMemo(() => {
+    return calendarDates[5][0] > 0;
+  }, [calendarDates]);
+
+  const handleClickDate = (d: number) => {
+    const changedDate = dayjsObject.set("date", d);
+    setDayjsObject(changedDate);
+    if (onChangeDate) {
+      onChangeDate(changedDate);
+    }
+  };
+
+  const handleArrowClicked = useCallback(
+    (type: "next" | "prev") => {
+      let changedDate = dayjsObject;
+      if (type === "next") {
+        changedDate = changedDate.add(1, "month").set("date", 1);
+      } else {
+        changedDate = changedDate.subtract(1, "month").set("date", 1);
+      }
+
+      setDayjsObject(changedDate);
+      if (onChangeDate) {
+        onChangeDate(changedDate);
+      }
+    },
+    [dayjsObject]
+  );
+
+  const handleMoveToday = () => {
+    setDayjsObject(dayjs());
+  };
+
   const viewProps = {
+    monthlyDayjs: dayjsObject,
     calendarDates,
-    activeDate,
     layoutRef,
     isSixWeeks,
+    isShowMoveTodayBtn,
+    handleClickDate,
+    handleArrowClicked,
+    handleChangeWeeklyView: onChangeViewMode,
+    handleMoveToday,
   };
 
   return <MonthlyCalendarView {...viewProps} />;

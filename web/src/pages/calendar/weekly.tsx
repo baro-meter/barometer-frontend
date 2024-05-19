@@ -17,6 +17,7 @@ interface WeeklyPageViewProps {
   week: number;
   date: number;
   handleChangeMonthlyView: () => void;
+  handleChangeSelectedDate: (d: number) => void;
 }
 
 const WeeklyPageView = ({
@@ -25,6 +26,7 @@ const WeeklyPageView = ({
   week,
   date,
   handleChangeMonthlyView,
+  handleChangeSelectedDate,
 }: WeeklyPageViewProps) => {
   return (
     <>
@@ -34,7 +36,12 @@ const WeeklyPageView = ({
         week={week}
         handleChangeMonthlyView={handleChangeMonthlyView}
       />
-      <WeeklyCalendar year={year} month={month} date={date} />
+      <WeeklyCalendar
+        year={year}
+        month={month}
+        date={date}
+        onChangeDate={handleChangeSelectedDate}
+      />
     </>
   );
 };
@@ -66,12 +73,17 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     router.push(`/calendar/monthly?initDate=${getFormatDayjs(selectedDate)}`);
   }, [selectedDate]);
 
+  const handleChangeSelectedDate = (d: number) => {
+    setSelectedDate(selectedDate.set("date", d));
+  };
+
   const viewProps = {
     year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     week: selectedDate.week(),
     date: selectedDate.date(),
     handleChangeMonthlyView,
+    handleChangeSelectedDate,
   };
 
   return <WeeklyPageView {...viewProps} />;
