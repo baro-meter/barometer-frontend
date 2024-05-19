@@ -9,7 +9,7 @@
       justify-content: space-between;
       align-items: center;
       height: 100%;
-      padding: 0 24px;
+      padding: 0 10px 0 24px;
     }
 
     .date {
@@ -50,36 +50,41 @@
       }
     }
 
+    .btn-calendar-today,
     .btn-calendar-view {
-      position: absolute;
-      right: 4px;
-      top: 1px;
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  &-column {
+    display: inline-flex;
+    width: 50px;
+    @include center();
+  }
+  
+  &-days {
+    height: 54px;
+    align-items: center;
+    color: $color-system-gray-gray70;
+    
+    .row {
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
   }
 }
 
-.calendar-column {
-  display: inline-flex;
-  width: 50px;
-  @include center();
-}
-
 .day_header {
-  display: flex;
-  @include center();
-  width: 50px;
+  flex: 1;
   font-weight: 300;
-}
-
-.row {
-  display: flex;
+  text-align: center;
 }
 
 .calendar {
   height: 310px;
-  overflow: scroll;
+  overflow: auto;
   background: var(--surface, #141414);
 
   .calendar-row {
