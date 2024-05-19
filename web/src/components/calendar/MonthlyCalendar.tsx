@@ -49,7 +49,7 @@ const MonthlyCalendarView = ({
 interface MonthlyCalendarProps {
   year: number;
   month: number;
-  date: number; // 선택된 날짜
+  date: number; // 선택된 날짜가 있을 경우 넘어옴
   onChangeDate?: (d: dayjs.Dayjs) => void;
 }
 
@@ -59,12 +59,12 @@ export default function MonthlyCalendar({
   date,
   onChangeDate,
 }: MonthlyCalendarProps) {
-  // const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
+  const [activeDate, setActiveDate] = useState(date); // 오늘보기 활성화를 위해 설정
+  // 캘린더 그려주는 부분에 date는 필요없어서 효율성을 위해 별도로 트리거링
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
       .month(month - 1)
-      .set("date", date)
   );
   const [calendarDates, setCalendarDates] = useState<number[][]>(
     Array.from(Array(6), () => new Array(7))
@@ -79,36 +79,39 @@ export default function MonthlyCalendar({
   }, [calendarDates]);
 
   useEffect(() => {
-    setDayjsObject(
-      dayjs()
-        .year(year)
-        .month(month - 1)
-        .set("date", date)
-    );
-  }, [month, year, date]);
-
-  useEffect(() => {
     // 1일 기준으로 달력을 채운다.
     let day = dayjsObject.date(1).day();
-    let date = 1;
+    let ndate = 1;
 
     const dates = Array.from(Array(6), () => new Array(7).fill(0));
     const maxDate = dayjsObject.daysInMonth();
 
     // 첫째 주
     while (day < 7) {
-      dates[0][day++] = date++;
+      dates[0][day++] = ndate++;
     }
     // 나머지
     for (let w = 1; w < 6; w++) {
       for (let d = 0; d < 7; d++) {
-        dates[w][d] = date++;
-        if (maxDate < date) break;
+        dates[w][d] = ndate++;
+        if (maxDate < ndate) break;
       }
-      if (maxDate < date) break;
+      if (maxDate < ndate) break;
     }
     setCalendarDates(dates);
-  }, [dayjsObject, month]);
+  }, [dayjsObject]);
+
+  useEffect(() => {
+    setDayjsObject(
+      dayjs()
+        .year(year)
+        .month(month - 1)
+    );
+  }, [month, year]);
+
+  useEffect(() => {
+    setActiveDate(date);
+  }, [date]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,7 +134,7 @@ export default function MonthlyCalendar({
   }, [calendarDates, layoutRef]);
 
   const handleClickDate = (d: number) => {
-    // setActiveDate(date);
+    setActiveDate(date);
     if (onChangeDate) {
       onChangeDate(
         dayjs()
@@ -144,7 +147,7 @@ export default function MonthlyCalendar({
 
   const viewProps = {
     calendarDates,
-    activeDate: date,
+    activeDate,
     layoutRef,
     isSixWeeks,
     handleClickDate,
