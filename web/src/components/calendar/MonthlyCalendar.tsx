@@ -19,9 +19,11 @@ interface MonthlyCalendarViewProps {
   calendarDates: number[][];
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
+  isShowMoveTodayBtn: boolean;
   handleClickDate: (date: number) => void;
   handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeWeeklyView: () => void;
+  handleMoveToday: () => void;
 }
 
 const MonthlyCalendarView = ({
@@ -29,9 +31,11 @@ const MonthlyCalendarView = ({
   calendarDates,
   layoutRef,
   isSixWeeks,
+  isShowMoveTodayBtn,
   handleClickDate,
   handleArrowClicked,
   handleChangeWeeklyView,
+  handleMoveToday,
 }: MonthlyCalendarViewProps) => {
   return (
     <>
@@ -40,6 +44,8 @@ const MonthlyCalendarView = ({
         month={monthlyDayjs.month() + 1}
         handleArrowClicked={handleArrowClicked}
         handleChangeWeeklyView={handleChangeWeeklyView}
+        handleMoveToday={handleMoveToday}
+        isShowMoveTodayBtn={isShowMoveTodayBtn}
       />
       <div className={cn("container")} role="grid">
         <DayHeader />
@@ -92,11 +98,11 @@ export default function MonthlyCalendar({
   // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
   // 우선은 해당 캘린더 내부에서만 스크롤 될 수 있게 한다.
   const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [isShowMoveTodayBtn, setIsShowMoveTodayBtn] = useState(false);
   const layoutRef = useRef<HTMLDivElement>(null);
 
   // 캘린더 그려주는 부분에 date는 필요없어서 효율성을 위해 별도로 트리거링
   useEffect(() => {
-    console.log("달력 채우기");
     // 1일 기준으로 달력을 채운다.
     let day = dayjsObject.date(1).day();
     let ndate = 1;
@@ -148,12 +154,18 @@ export default function MonthlyCalendar({
     }
   }, [calendarDates, layoutRef]);
 
+  useEffect(() => {
+    const diff = dayjsObject.diff(dayjs(), "days");
+    setIsShowMoveTodayBtn(
+      !(diff === 0 && dayjsObject.date() === dayjs().date())
+    );
+  }, [dayjsObject]);
+
   const isSixWeeks = useMemo(() => {
     return calendarDates[5][0] > 0;
   }, [calendarDates]);
 
   const handleClickDate = (d: number) => {
-    console.log("handleClickDate");
     const changedDate = dayjsObject.set("date", d);
     setDayjsObject(changedDate);
     if (onChangeDate) {
@@ -178,14 +190,20 @@ export default function MonthlyCalendar({
     [dayjsObject]
   );
 
+  const handleMoveToday = () => {
+    setDayjsObject(dayjs());
+  };
+
   const viewProps = {
     monthlyDayjs: dayjsObject,
     calendarDates,
     layoutRef,
     isSixWeeks,
+    isShowMoveTodayBtn,
     handleClickDate,
     handleArrowClicked,
     handleChangeWeeklyView: onChangeViewMode,
+    handleMoveToday,
   };
 
   return <MonthlyCalendarView {...viewProps} />;
