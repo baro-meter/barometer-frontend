@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
-import MonthlyHeader from "markup/components/Calendar/MonthlyHeaderView";
+import MonthlyHeaderView from "markup/components/Calendar/MonthlyHeaderView";
 
 const meta = {
-  title: "Markup/Components/Calendar/MonthlyHeader",
-  component: MonthlyHeader,
+  title: "Markup/Components/Calendar/Monthly/MonthlyHeader",
+  component: MonthlyHeaderView,
   argTypes: {},
-} satisfies Meta<typeof MonthlyHeader>;
+} satisfies Meta<typeof MonthlyHeaderView>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

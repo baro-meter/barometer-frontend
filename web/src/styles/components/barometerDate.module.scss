@@ -1,14 +1,8 @@
 .date {
-  background: var(--surface, #141414);
-  align-items: center;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 8px;
+  flex: 1;
   position: relative;
-  display: inline-flex;
-  width: 50px;
   padding: 14px 0;
-  @include center();
+  text-align: center;
 
   .group {
     height: 26px;

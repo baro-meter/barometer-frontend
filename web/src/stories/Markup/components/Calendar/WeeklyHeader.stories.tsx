@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
 import WeeklyHeaderView from "markup/components/Calendar/WeeklyHeaderView";
 
 const meta = {
-  title: "Markup/Components/Calendar/WeeklyHeader",
+  title: "Markup/Components/Calendar/Weekly/WeeklyHeader",
   component: WeeklyHeaderView,
   argTypes: {},
 } satisfies Meta<typeof WeeklyHeaderView>;
