@@ -9,11 +9,21 @@ export interface ProgressProps {
   count: string;
   width: number;
   isActive?: boolean;
+  onClick?: () => void;
 }
 
-const ProgressView = ({ task, width, count, isActive }: ProgressProps) => {
+const ProgressView = ({
+  task,
+  width,
+  count,
+  isActive,
+  onClick,
+}: ProgressProps) => {
   return (
-    <div className={cn("progress", { "is-active": isActive })}>
+    <div
+      className={cn("progress", { "is-active": isActive })}
+      onClick={onClick}
+    >
       <div
         className={cn("progress-bar")}
         role="progressbar"

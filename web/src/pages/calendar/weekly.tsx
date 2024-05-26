@@ -47,7 +47,7 @@ const WeeklyPageView = ({
         date={date}
         onChangeDate={handleChangeSelectedDate}
       />
-      <WeeklyList />
+      <WeeklyList year={year} month={month} date={date} />
     </>
   );
 };

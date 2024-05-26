@@ -1,12 +1,16 @@
 import ProgresListView from "markup/components/ProgressListView";
 import { ProgressProps } from "markup/components/ProgressView";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface WeeklyListViewProps {
   progressList: ProgressProps[];
+  handleActiveProgress: (item: ProgressProps) => void;
 }
 
-const WeeklyListView = ({ progressList }: WeeklyListViewProps) => {
+const WeeklyListView = ({
+  progressList,
+  handleActiveProgress,
+}: WeeklyListViewProps) => {
   return (
     <>
       <div
@@ -22,6 +26,7 @@ const WeeklyListView = ({ progressList }: WeeklyListViewProps) => {
         <ProgresListView
           alignment={"vertical"}
           progressList={progressList}
+          onActiveProgress={handleActiveProgress}
         ></ProgresListView>
         <button
           style={{
@@ -41,11 +46,14 @@ const WeeklyListView = ({ progressList }: WeeklyListViewProps) => {
   );
 };
 
-interface WeeklyListPageProps {}
+interface WeeklyListPageProps {
+  year: number;
+  month: number;
+  date: number;
+}
 
-const WeeklyList = ({}: WeeklyListPageProps) => {
-  // TODO api 조회
-  const progressList = [
+export default function WeeklyList({ year, month, date }: WeeklyListPageProps) {
+  const initData = [
     { task: "일이삼사오육칠팔", width: 70, count: "2번" },
     { task: "걸어서 회사가기", width: 10, count: "매일" },
     { task: "우유 한잔 마시기", width: 50, count: "4번" },
@@ -63,16 +71,27 @@ const WeeklyList = ({}: WeeklyListPageProps) => {
       isActive: true,
     },
   ];
-  const viewProps = { progressList };
+
+  const [progressList, setProgressList] = useState(initData);
+  const handleActiveProgress = (item: ProgressProps) => {
+    // TODO 나중에 VO 만들어서 task id로 비교
+    console.log(`클릭됨: ${item.task}`);
+    const findIndex = progressList.findIndex((_) => _ === item);
+    setProgressList((prev) => {
+      const changed = [...prev];
+      changed[findIndex].isActive = true;
+      // TODO api data 포맷 기획에 맞게 변경 후 api response값으로 계산 후 적용 필요
+      return changed;
+    });
+    // TODO 활성화 api 호출
+  };
+
+  useEffect(() => {
+    // TODO api 조회
+    setProgressList(initData);
+  }, [year, month, date]);
+
+  const viewProps = { progressList, handleActiveProgress };
 
   return <WeeklyListView {...viewProps} />;
-};
-
-export const getServerSideProps = () => {
-  // TODO api로 오늘 목표 조회
-  return {
-    props: {}, // will be passed to the page component as props
-  };
-};
-
-export default WeeklyList;
+}
