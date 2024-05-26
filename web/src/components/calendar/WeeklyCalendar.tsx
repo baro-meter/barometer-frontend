@@ -44,49 +44,42 @@ interface WeeklyCalendarProps {
   onChangeDate?: (d: number) => void;
 }
 
-// TODO 오늘 기준으로만 보여지는게 아니라 특정 일 기준으로 보여줘야 한다면 기능 수정 필요!!
 export default function WeeklyCalendar({
   year,
   month,
   date,
   onChangeDate,
 }: WeeklyCalendarProps) {
-  // const [activeDate, setActiveDate] = useState(dayjs().date()); // TODO today일수도 있어서 작업 안함
-  const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
+  const [week, setWeek] = useState(
     dayjs()
       .year(year)
-      .set("month", month - 1)
+      .month(month - 1)
+      .set("date", date)
+      .week()
   );
   const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
 
-  // 입력받은 날짜 기준으로 날짜 계산
   useEffect(() => {
-    console.log(dayjsObject);
-  }, [dayjsObject]);
-
-  useEffect(() => {
-    console.log(`year: ${year} / month: ${month} / date: ${date}`);
-
-    setDayjsObject(
+    setWeek(
       dayjs()
         .year(year)
-        .set("month", month - 1)
+        .month(month - 1)
         .set("date", date)
+        .week()
     );
   }, [year, month, date]);
 
   useEffect(() => {
     // weeklyView는 오늘 기준 일주일만 보여준다. 따라서, 이번주의 weekly date를 구한다.
     const dates = new Array(7);
-    let startDate = dayjsObject.day(0);
+    let startDate = dayjs().year(year).week(week).day(0);
     for (let i = 0; i < 7; i++) {
       dates.push(startDate.add(i, "day").date());
     }
     setCalendarDates(dates);
-  }, [dayjsObject]);
+  }, [year, week]);
 
   const handleClickDate = (d: number) => {
-    // setActiveDate(d);
     if (onChangeDate) {
       onChangeDate(d);
     }

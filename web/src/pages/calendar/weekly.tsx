@@ -5,12 +5,16 @@ import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "utils/calendarUtil";
 import WeeklyList from "@/components/Calendar/WeeklyList";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface WeeklyPageViewProps {
   year: number;
@@ -67,7 +71,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
     if (!!initDate) {
       setSelectedDate(dayjs(initDate));
-      console.log(`adfadsfasdfasdf: ${dayjs(initDate)}`);
     }
   }, [initDate]);
 
@@ -76,7 +79,13 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (d: number) => {
-    setSelectedDate(selectedDate.set("date", d));
+    // 다음 달 날짜가 클릭될 경우
+    const startDate = selectedDate.day(0);
+    if (startDate.date() > d) {
+      setSelectedDate(selectedDate.add(1, "month").set("date", d));
+    } else {
+      setSelectedDate(selectedDate.set("date", d));
+    }
   };
 
   const viewProps = {
@@ -95,7 +104,7 @@ export const getServerSideProps = (context: GetServerSidePropsContext) => {
   const initDate = context.query.initDate ?? "";
   return {
     props: {
-      initDate,
+      initDate: `${initDate}T00:00:00Z`,
     },
   };
 };
