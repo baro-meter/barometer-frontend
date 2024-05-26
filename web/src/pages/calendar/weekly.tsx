@@ -79,10 +79,18 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (d: number) => {
-    // 다음 달 날짜가 클릭될 경우
-    const startDate = selectedDate.day(0);
-    if (startDate.date() > d) {
-      setSelectedDate(selectedDate.add(1, "month").set("date", d));
+    const todayDate = selectedDate.date();
+
+    const diff = Math.abs(todayDate - d);
+    if (diff >= 7) {
+      // 다른 달
+      if (todayDate > d) {
+        // 다음 달 선택됨
+        setSelectedDate(selectedDate.add(1, "month").set("date", d));
+      } else if (todayDate < d) {
+        // 이전 달 선택됨
+        setSelectedDate(selectedDate.subtract(1, "month").set("date", d));
+      }
     } else {
       setSelectedDate(selectedDate.set("date", d));
     }
