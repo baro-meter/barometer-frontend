@@ -7,6 +7,7 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "utils/calendarUtil";
+import WeeklyList from "@/components/Calendar/WeeklyList";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -42,6 +43,7 @@ const WeeklyPageView = ({
         date={date}
         onChangeDate={handleChangeSelectedDate}
       />
+      <WeeklyList />
     </>
   );
 };
