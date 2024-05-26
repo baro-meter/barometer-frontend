@@ -4,8 +4,9 @@ import ProgressListView from "markup/components/ProgressListView";
 const meta = {
   title: "Markup/Components/ProgressList",
   component: ProgressListView,
-  argTypes: {
-  },
+  argTypes: {},
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
 } satisfies Meta<typeof ProgressListView>;
 
 export default meta;
@@ -13,12 +14,12 @@ type Story = StoryObj<typeof ProgressListView>;
 
 export const Vertical: Story = {
   args: {
-    alignment: "vertical"
+    alignment: "vertical",
   },
 };
 
 export const Horizontal: Story = {
   args: {
-    alignment: "horizontal"
+    alignment: "horizontal",
   },
 };
