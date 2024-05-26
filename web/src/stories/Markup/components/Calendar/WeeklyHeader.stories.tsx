@@ -5,6 +5,8 @@ const meta = {
   title: "Markup/Components/Calendar/Weekly/WeeklyHeader",
   component: WeeklyHeaderView,
   argTypes: {},
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
 } satisfies Meta<typeof WeeklyHeaderView>;
 
 export default meta;

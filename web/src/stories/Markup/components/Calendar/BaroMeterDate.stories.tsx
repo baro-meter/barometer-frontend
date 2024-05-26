@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import BaroMeterDateView from 'markup/components/Calendar/BaroMeterDateView';
+import type { Meta, StoryObj } from "@storybook/react";
+import BaroMeterDateView from "markup/components/Calendar/BaroMeterDateView";
 
 const meta = {
-  title: 'Markup/Components/Calendar/Common/BaroMeterDate',
+  title: "Markup/Components/Calendar/Common/BaroMeterDate",
   component: BaroMeterDateView,
-  argTypes: {
-  },
+  argTypes: {},
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
 } satisfies Meta<typeof BaroMeterDateView>;
 
 export default meta;
@@ -16,17 +17,47 @@ export const Showcase: Story = {
     <>
       <BaroMeterDateView date={10} score={0} successGoalCount={0} />
       <BaroMeterDateView date={10} score={0} successGoalCount={4} />
-      <BaroMeterDateView date={10} score={0} successGoalCount={3} isActive={true} />
+      <BaroMeterDateView
+        date={10}
+        score={0}
+        successGoalCount={3}
+        isActive={true}
+      />
       <BaroMeterDateView date={1} score={1} successGoalCount={1} />
-      <BaroMeterDateView date={1} score={1} successGoalCount={1} isActive={true} />
+      <BaroMeterDateView
+        date={1}
+        score={1}
+        successGoalCount={1}
+        isActive={true}
+      />
       <BaroMeterDateView date={2} score={2} successGoalCount={2} />
-      <BaroMeterDateView date={2} score={2} successGoalCount={2} isActive={true} />
+      <BaroMeterDateView
+        date={2}
+        score={2}
+        successGoalCount={2}
+        isActive={true}
+      />
       <BaroMeterDateView date={3} score={3} successGoalCount={3} />
-      <BaroMeterDateView date={3} score={3} successGoalCount={3} isActive={true} />
+      <BaroMeterDateView
+        date={3}
+        score={3}
+        successGoalCount={3}
+        isActive={true}
+      />
       <BaroMeterDateView date={3} score={4} successGoalCount={4} />
-      <BaroMeterDateView date={3} score={4} successGoalCount={4} isActive={true} />
+      <BaroMeterDateView
+        date={3}
+        score={4}
+        successGoalCount={4}
+        isActive={true}
+      />
       <BaroMeterDateView date={3} score={2} successGoalCount={5} />
-      <BaroMeterDateView date={3} score={2} successGoalCount={5} isActive={true} />
+      <BaroMeterDateView
+        date={3}
+        score={2}
+        successGoalCount={5}
+        isActive={true}
+      />
     </>
-  )
+  ),
 };

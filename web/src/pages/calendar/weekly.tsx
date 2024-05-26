@@ -5,11 +5,14 @@ import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
+import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "utils/calendarUtil";
+import WeeklyList from "@/components/Calendar/WeeklyList";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
+dayjs.extend(utc);
 
 interface WeeklyPageViewProps {
   year: number;
@@ -42,6 +45,7 @@ const WeeklyPageView = ({
         date={date}
         onChangeDate={handleChangeSelectedDate}
       />
+      <WeeklyList year={year} month={month} date={date} />
     </>
   );
 };
@@ -65,7 +69,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
     if (!!initDate) {
       setSelectedDate(dayjs(initDate));
-      console.log(`adfadsfasdfasdf: ${dayjs(initDate)}`);
     }
   }, [initDate]);
 
@@ -74,7 +77,21 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (d: number) => {
-    setSelectedDate(selectedDate.set("date", d));
+    const todayDate = selectedDate.date();
+
+    const diff = Math.abs(todayDate - d);
+    if (diff >= 7) {
+      // 다른 달
+      if (todayDate > d) {
+        // 다음 달 선택됨
+        setSelectedDate(selectedDate.add(1, "month").set("date", d));
+      } else if (todayDate < d) {
+        // 이전 달 선택됨
+        setSelectedDate(selectedDate.subtract(1, "month").set("date", d));
+      }
+    } else {
+      setSelectedDate(selectedDate.set("date", d));
+    }
   };
 
   const viewProps = {

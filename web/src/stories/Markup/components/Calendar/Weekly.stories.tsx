@@ -1,9 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import WeeklyView from 'markup/components/Calendar/WeeklyView';
+import type { Meta, StoryObj } from "@storybook/react";
+import WeeklyView from "markup/components/Calendar/WeeklyView";
 
 const meta = {
-  title: 'Markup/Components/Calendar/Weekly/Weekly',
+  title: "Markup/Components/Calendar/Weekly/Weekly",
   component: WeeklyView,
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  tags: ["autodocs"],
 } satisfies Meta<typeof WeeklyView>;
 
 export default meta;
