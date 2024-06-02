@@ -42,9 +42,9 @@ const MonthlyCalendarView = ({
       <MonthlyHeaderView
         year={monthlyDayjs.year()}
         month={monthlyDayjs.month() + 1}
-        handleArrowClicked={handleArrowClicked}
-        handleChangeWeeklyView={handleChangeWeeklyView}
-        handleMoveToday={handleMoveToday}
+        onClickArrow={handleArrowClicked}
+        onChangeWeeklyView={handleChangeWeeklyView}
+        onClickTodayMoveBtn={handleMoveToday}
         isToday={isToday}
       />
       <div className={cn("container")} role="grid">

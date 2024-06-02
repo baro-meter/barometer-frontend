@@ -22,6 +22,7 @@ interface WeeklyPageViewProps {
   isToday: boolean;
   handleChangeMonthlyView: () => void;
   handleChangeSelectedDate: (d: number) => void;
+  handleClickTodayMoveBtn: () => void;
 }
 
 const WeeklyPageView = ({
@@ -32,6 +33,7 @@ const WeeklyPageView = ({
   isToday,
   handleChangeMonthlyView,
   handleChangeSelectedDate,
+  handleClickTodayMoveBtn,
 }: WeeklyPageViewProps) => {
   return (
     <>
@@ -40,7 +42,8 @@ const WeeklyPageView = ({
         month={month}
         week={week}
         isToday={isToday}
-        handleChangeMonthlyView={handleChangeMonthlyView}
+        onChangeMonthlyView={handleChangeMonthlyView}
+        onClickTodayMoveBtn={handleClickTodayMoveBtn}
       />
       <WeeklyCalendar
         year={year}
@@ -103,6 +106,10 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     }
   };
 
+  const handleClickTodayMoveBtn = () => {
+    setSelectedDate(dayjs());
+  };
+
   const viewProps = {
     year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
@@ -111,6 +118,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     isToday,
     handleChangeMonthlyView,
     handleChangeSelectedDate,
+    handleClickTodayMoveBtn,
   };
 
   return <WeeklyPageView {...viewProps} />;

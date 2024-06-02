@@ -10,7 +10,8 @@ interface WeeklyHeaderViewProps {
   month: number;
   week: number;
   isToday?: boolean;
-  handleChangeMonthlyView: () => void;
+  onChangeMonthlyView: () => void;
+  onClickTodayMoveBtn: () => void;
 }
 
 const WeeklyHeaderView = ({
@@ -18,7 +19,8 @@ const WeeklyHeaderView = ({
   month,
   week,
   isToday = false,
-  handleChangeMonthlyView,
+  onChangeMonthlyView,
+  onClickTodayMoveBtn,
 }: WeeklyHeaderViewProps) => {
   return (
     <div className={cn("calendar-header")}>
@@ -28,7 +30,11 @@ const WeeklyHeaderView = ({
         </strong>
         <div className={cn("btn-area")}>
           {!isToday && (
-            <button className={cn("btn-calendar-today")} aria-label="Today">
+            <button
+              className={cn("btn-calendar-today")}
+              aria-label="Today"
+              onClick={onClickTodayMoveBtn}
+            >
               <Image
                 src="/calendar/icon-today.svg"
                 width={20}
@@ -40,7 +46,7 @@ const WeeklyHeaderView = ({
           <button
             className={cn("btn-calendar-view")}
             aria-label="Monthly View"
-            onClick={handleChangeMonthlyView}
+            onClick={onChangeMonthlyView}
           >
             <Image
               src="/calendar/icon-monthly.svg"
