@@ -19,6 +19,7 @@ interface WeeklyPageViewProps {
   month: number;
   week: number;
   date: number;
+  isToday: boolean;
   handleChangeMonthlyView: () => void;
   handleChangeSelectedDate: (d: number) => void;
 }
@@ -28,6 +29,7 @@ const WeeklyPageView = ({
   month,
   week,
   date,
+  isToday,
   handleChangeMonthlyView,
   handleChangeSelectedDate,
 }: WeeklyPageViewProps) => {
@@ -37,6 +39,7 @@ const WeeklyPageView = ({
         year={year}
         month={month}
         week={week}
+        isToday={isToday}
         handleChangeMonthlyView={handleChangeMonthlyView}
       />
       <WeeklyCalendar
@@ -63,6 +66,7 @@ interface WeeklyPageProps {
 const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
+  const [isToday, setIsToday] = useState(true);
   const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
 
   useEffect(() => {
@@ -71,6 +75,11 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
       setSelectedDate(dayjs(initDate));
     }
   }, [initDate]);
+
+  useEffect(() => {
+    const diff = selectedDate.diff(dayjs(), "days");
+    setIsToday(diff === 0 && selectedDate.date() === dayjs().date());
+  }, [selectedDate]);
 
   const handleChangeMonthlyView = useCallback(() => {
     router.push(`/calendar/monthly?initDate=${getFormatDayjs(selectedDate)}`);
@@ -99,6 +108,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     month: selectedDate.month() + 1, // 월은 0부터 시작
     week: selectedDate.week(),
     date: selectedDate.date(),
+    isToday,
     handleChangeMonthlyView,
     handleChangeSelectedDate,
   };

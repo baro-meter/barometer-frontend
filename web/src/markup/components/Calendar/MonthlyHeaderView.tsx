@@ -8,7 +8,7 @@ const cn = classNames.bind(scss);
 interface MonthlyHeaderViewProps {
   year: number;
   month: number;
-  isShowMoveTodayBtn: boolean;
+  isToday?: boolean;
   handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeWeeklyView: () => void;
   handleMoveToday: () => void;
@@ -17,7 +17,7 @@ interface MonthlyHeaderViewProps {
 const MonthlyHeaderView = ({
   year,
   month,
-  isShowMoveTodayBtn,
+  isToday = false,
   handleArrowClicked,
   handleChangeWeeklyView,
   handleMoveToday,
@@ -41,18 +41,13 @@ const MonthlyHeaderView = ({
           ></button>
         </div>
         {/* TODO 오늘보기 마크업 수정 필요 */}
-        {isShowMoveTodayBtn && (
-          <button
-            className={cn("")}
-            style={{ position: "absolute", right: "60px" }}
-            aria-label="Today View"
-            onClick={handleMoveToday}
-          >
+        {!isToday && (
+          <button className={cn("btn-calendar-today")} aria-label="Today">
             <Image
-              src="/calendar/icon-weekly.svg"
+              src="/calendar/icon-today.svg"
               width={20}
               height={20}
-              alt={"오늘 보기"}
+              alt={"오늘보기"}
             />
           </button>
         )}
