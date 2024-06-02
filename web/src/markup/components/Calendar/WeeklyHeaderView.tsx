@@ -9,14 +9,18 @@ interface WeeklyHeaderViewProps {
   year: number;
   month: number;
   week: number;
-  handleChangeMonthlyView: () => void;
+  isToday?: boolean;
+  onChangeMonthlyView: () => void;
+  onClickTodayMoveBtn: () => void;
 }
 
 const WeeklyHeaderView = ({
   year,
   month,
   week,
-  handleChangeMonthlyView,
+  isToday = false,
+  onChangeMonthlyView,
+  onClickTodayMoveBtn,
 }: WeeklyHeaderViewProps) => {
   return (
     <div className={cn("calendar-header")}>
@@ -25,21 +29,24 @@ const WeeklyHeaderView = ({
           <span>{year}</span>년 <span>{month}</span>월 <span>{week}</span>주
         </strong>
         <div className={cn("btn-area")}>
-          <button
-            className={cn("btn-calendar-today")}
-            aria-label="Today"
-          >
-            <Image
-              src="/calendar/icon-today.svg"
-              width={20}
-              height={20}
-              alt={""}
-            />
-          </button>
+          {!isToday && (
+            <button
+              className={cn("btn-calendar-today")}
+              aria-label="Today"
+              onClick={onClickTodayMoveBtn}
+            >
+              <Image
+                src="/calendar/icon-today.svg"
+                width={20}
+                height={20}
+                alt={"오늘보기"}
+              />
+            </button>
+          )}
           <button
             className={cn("btn-calendar-view")}
             aria-label="Monthly View"
-            onClick={handleChangeMonthlyView}
+            onClick={onChangeMonthlyView}
           >
             <Image
               src="/calendar/icon-monthly.svg"
