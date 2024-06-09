@@ -39,6 +39,11 @@
     height: 100%;
     background: $color-system-gray-gray10;
     border-radius: inherit;
+
+    &[aria-valuenow="100"] {
+      background: rgba($color-system-purple-purple0, .6);
+      pointer-events: none;
+    }
   }
 
   &-info {
