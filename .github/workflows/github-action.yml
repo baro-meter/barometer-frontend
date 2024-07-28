@@ -17,9 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Install pnpm
-      #   run: |
-      #     npm install -g pnpm@8
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -37,25 +34,10 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
 
-      - name: Check tsconfig.json
-        working-directory: ./web
-        run: |
-          cat tsconfig.json # 디버깅 목적
-
-      - name: Check next.config.js
-        working-directory: ./web
-        run: cat next.config.js # 디버깅 목적
-
-      - name: List src directory
-        working-directory: ./web
-        run: ls -R src # src 디렉토리 구조 확인
-
       - name: Check Build
         working-directory: ./web
         run: |
           pnpm build
-          cat .next/trace
-          cat .next/cache/webpack/*
 
       - name: Build storybook
         working-directory: ./web
