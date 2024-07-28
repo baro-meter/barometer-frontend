@@ -42,6 +42,8 @@ jobs:
         run: |
           cd web
           pnpm build
+        env:
+          NODE_PATH: web/src
 
       - name: Build storybook
         run: |
