@@ -42,6 +42,14 @@ jobs:
         run: |
           cat tsconfig.json # 디버깅 목적
 
+      - name: Check next.config.js
+        working-directory: ./web
+        run: cat next.config.js # 디버깅 목적
+
+      - name: List src directory
+        working-directory: ./web
+        run: ls -R src # src 디렉토리 구조 확인
+
       - name: Check Build
         working-directory: ./web
         run: |
