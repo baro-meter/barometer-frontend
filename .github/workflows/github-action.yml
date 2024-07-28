@@ -29,6 +29,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
 
+      - name: Clear cache
+        run: |
+          rm -rf ./node_modules
+          pnpm store prune
+
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
