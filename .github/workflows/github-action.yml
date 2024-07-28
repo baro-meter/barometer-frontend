@@ -36,6 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd web
           pnpm install --frozen-lockfile
 
       - name: Check tsconfig.json
@@ -48,7 +49,7 @@ jobs:
           cd web
           pnpm build
         env:
-          NODE_PATH: web/src
+          NODE_PATH: ./web/src
 
       - name: Build storybook
         run: |
