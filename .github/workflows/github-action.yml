@@ -53,7 +53,7 @@ jobs:
       - name: Check Build
         working-directory: ./web
         run: |
-          pnpm build || true
+          pnpm build -- --no-eslint
           cat .next/trace
           cat .next/cache/webpack/*
 
