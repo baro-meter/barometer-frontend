@@ -33,24 +33,23 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
+        working-directory: ./web
         run: |
           pnpm install --frozen-lockfile
 
       - name: Check tsconfig.json
+        working-directory: ./web
         run: |
-          cd web
           cat tsconfig.json # 디버깅 목적
 
       - name: Check Build
+        working-directory: ./web
         run: |
-          cd web
           pnpm build
-        env:
-          NODE_PATH: ./web/src
 
       - name: Build storybook
+        working-directory: ./web
         run: |
-          cd web
           pwd
           pnpm run build-storybook
 
