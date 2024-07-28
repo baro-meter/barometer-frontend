@@ -17,12 +17,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - run: npm ci # package-lock.json 에 적혀있는 패키지를 그~대로 설치합니다.
+      - run: npm run build-step2 # package.json에 빌드 스크립트를 여기 적으세요
+
       - name: Build storybook
         run: |
           cd web
           npm run build-storybook
-          mv ./storybook-static ../build/storybook
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./web/storybook-static
+          destination_dir: storybook # GitHub Pages의 /storybook 경로에 배포
