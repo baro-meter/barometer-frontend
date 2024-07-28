@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import BaroMeterDateView from "@/markup/components/Calendar/BaroMeterDateView";
+import BaroMeterDateView from "@/markup/components/calendar/BaroMeterDateView";
 
 const meta = {
   title: "Markup/Components/Calendar/Common/BaroMeterDate",

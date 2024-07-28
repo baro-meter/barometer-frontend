@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import DayHeaderView from "@/markup/components/Calendar/DayHeaderView";
+import DayHeaderView from "@/markup/components/calendar/DayHeaderView";
 
 const meta = {
   title: "Markup/Components/Calendar/Common/DayHeader",

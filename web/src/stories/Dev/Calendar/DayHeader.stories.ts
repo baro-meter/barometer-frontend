@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import DayHeader from "@/components/Calendar/DayHeader";
+import DayHeader from "@/components/calendar/DayHeader";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
-// import MonthlyCalendar from "../../components/Calendar/MonthlyCalendar";
+import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -27,7 +27,6 @@ const MonthlyPageView = ({
 }: MonthlyPageViewProps) => {
   return (
     <>
-      {/*
       <MonthlyCalendar
         year={year}
         month={month}
@@ -35,6 +34,7 @@ const MonthlyPageView = ({
         onChangeDate={handleChangeDate}
         onChangeViewMode={handleChangeViewMode}
       />
+      {/* TODO 마크업 필요 */}
       <div
         style={{
           position: "fixed",
@@ -45,7 +45,6 @@ const MonthlyPageView = ({
       >
         <ProgressListView alignment="horizontal" progressList={progressList} />
       </div>
-      */}
     </>
   );
 };
