@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
-import MonthlyCalendar from "@/components/Calendar/MonthlyCalendar";
+import MonthlyCalendar from "../../components/Calendar/MonthlyCalendar";
 
 interface MonthlyPageViewProps {
   year: number;
