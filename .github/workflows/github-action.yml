@@ -34,11 +34,15 @@ jobs:
           cd web
           pnpm install --frozen-lockfile
 
+      - name: Check diretory
+        run: |
+          pwd
+
       - name: Build storybook
         run: |
           cd web
           pwd
-          npm run build-storybook
+          pnpm run build-storybook
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
