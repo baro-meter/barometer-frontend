@@ -20,6 +20,6 @@
     }
   },
   // "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "include": ["src"],
+  "include": ["next-env.d.ts", "src"],
   "exclude": ["node_modules"]
 }
