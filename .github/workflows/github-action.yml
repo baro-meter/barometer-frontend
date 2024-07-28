@@ -31,12 +31,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd web
           pnpm install --frozen-lockfile
 
-      - name: Check diretory
+      - name: Check tsconfig.json
+        run: cat tsconfig.json # 디버깅 목적
+
+      - name: Check Build
         run: |
-          pwd
+          cd web
+          pnpm build
 
       - name: Build storybook
         run: |
