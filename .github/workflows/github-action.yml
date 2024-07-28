@@ -34,7 +34,9 @@ jobs:
           pnpm install --frozen-lockfile
 
       - name: Check tsconfig.json
-        run: cat tsconfig.json # 디버깅 목적
+        run: |
+          cd web
+          cat tsconfig.json # 디버깅 목적
 
       - name: Check Build
         run: |
