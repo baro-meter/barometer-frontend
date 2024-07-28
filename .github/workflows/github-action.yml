@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: build storybook
 
 on:
   push:
@@ -32,11 +32,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd web
-          pnpm install
+          pnpm install --frozen-lockfile
 
       - name: Build storybook
         run: |
           cd web
+          pwd
           npm run build-storybook
 
       - name: Deploy to GitHub Pages
