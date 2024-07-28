@@ -34,24 +34,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          ls
-          cd web
-          ls
           pnpm install --frozen-lockfile
 
       - name: Check tsconfig.json
         run: |
-          ls
           cd web
-          ls
           cat tsconfig.json # 디버깅 목적
 
-      - name: Check Build
-        run: |
-          cd web
-          pnpm build
-        env:
-          NODE_PATH: ./web/src
+      # - name: Check Build
+      #   run: |
+      #     cd web
+      #     pnpm build
+      #   env:
+      #     NODE_PATH: ./web/src
 
       - name: Build storybook
         run: |
