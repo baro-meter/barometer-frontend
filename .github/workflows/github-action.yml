@@ -31,7 +31,6 @@ jobs:
 
       - name: Clear cache
         run: |
-          rm -rf ./node_modules
           pnpm store prune
 
       - name: Install dependencies
