@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames/bind";
-import scss from "styles/components/progress.module.scss";
+import scss from "@/styles/components/progress.module.scss";
 
 const cn = classNames.bind(scss);
 

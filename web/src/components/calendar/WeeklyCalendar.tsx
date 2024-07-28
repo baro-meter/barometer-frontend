@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
-import scss from "styles/components/calendar.module.scss";
+import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import DayHeader from "./DayHeader";
 import Weekly from "./Weekly";

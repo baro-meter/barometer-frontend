@@ -24,10 +24,6 @@ const config: StorybookConfig = {
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@": path.resolve(__dirname, "../src"),
-    };
     return config;
   },
 };

@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { getFormatDayjs } from "utils/calendarUtil";
-import ProgressListView from "markup/components/ProgressListView";
-import { ProgressProps } from "markup/components/ProgressView";
+import { getFormatDayjs } from "@/utils/calendarUtil";
+import ProgressListView from "@/markup/components/ProgressListView";
+import { ProgressProps } from "@/markup/components/ProgressView";
 
 interface MonthlyPageViewProps {
   year: number;

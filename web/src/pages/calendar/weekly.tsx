@@ -1,13 +1,13 @@
 import WeeklyCalendar from "@/components/Calendar/WeeklyCalendar";
 import dayjs from "dayjs";
-import WeeklyHeaderView from "markup/components/Calendar/WeeklyHeaderView";
+import WeeklyHeaderView from "@/markup/components/Calendar/WeeklyHeaderView";
 import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
-import { getFormatDayjs } from "utils/calendarUtil";
+import { getFormatDayjs } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/Calendar/WeeklyList";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";

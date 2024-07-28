@@ -1,5 +1,5 @@
-import ProgresListView from "markup/components/ProgressListView";
-import { ProgressProps } from "markup/components/ProgressView";
+import ProgresListView from "@/markup/components/ProgressListView";
+import { ProgressProps } from "@/markup/components/ProgressView";
 import React, { useEffect, useState } from "react";
 
 interface WeeklyListViewProps {

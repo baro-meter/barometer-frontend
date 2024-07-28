@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames/bind";
-import scss from "styles/components/calendar.module.scss";
+import scss from "@/styles/components/calendar.module.scss";
 import Image from "next/image";
 
 const cn = classNames.bind(scss);

@@ -14,10 +14,10 @@
     "jsx": "preserve",
     "incremental": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "src/",
+    "baseUrl": ".",
     "paths": {
-      "@/styles/*": ["styles/*"],
-      "@/components/*": ["components/*"],
+      // "@/styles/*": ["styles/*"],
+      // "@/components/*": ["components/*"],
       "@/*": ["src/*"]
     }
   },
