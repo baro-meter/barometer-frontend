@@ -59,14 +59,6 @@ export default function BaroMeterDate({
   isActive,
   onClick,
 }: BaroMeterDateProps) {
-  if (date <= 0) {
-    return (
-      <div className={cn("date", "date-today", "calendar-column")}>
-        <div className={cn("group")}></div>
-      </div>
-    );
-  }
-
   const imageUrl = useMemo(() => {
     let imageName;
     switch (score) {
@@ -93,6 +85,14 @@ export default function BaroMeterDate({
       onClick();
     }
   };
+
+  if (date <= 0) {
+    return (
+      <div className={cn("date", "date-today", "calendar-column")}>
+        <div className={cn("group")}></div>
+      </div>
+    );
+  }
 
   const viewProps = {
     date,

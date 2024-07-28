@@ -24,7 +24,14 @@ const BaroMeterDateView = ({
   return (
     <div className={cn("date", "date-today", "calendar-column")}>
       <button type="button" className={cn("group")}>
-        <Image className={cn("vector")} style={{stroke: "red", strokeWidth: "0.84px"}} alt="Vector" fill storke-width="0.84px" src={imageUrl} />
+        <Image
+          className={cn("vector")}
+          style={{ stroke: "red", strokeWidth: "0.84px" }}
+          alt="Vector"
+          fill
+          storke-width="0.84px"
+          src={imageUrl}
+        />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
       </button>
       {/* TODO 수정 필요 */}
@@ -52,14 +59,6 @@ export default function BaroMeterDate({
   successGoalCount,
   isActive,
 }: BaroMeterDateProps) {
-  if (date <= 0) {
-    return (
-      <div className={cn("date", "date-today", "calendar-column")}>
-        <div className={cn("group")}></div>
-      </div>
-    );
-  }
-
   const imageUrl = useMemo(() => {
     let imageName;
     switch (score) {
@@ -80,6 +79,14 @@ export default function BaroMeterDate({
     }
     return `/calendar/${imageName}.svg`;
   }, [isActive, score]);
+
+  if (date <= 0) {
+    return (
+      <div className={cn("date", "date-today", "calendar-column")}>
+        <div className={cn("group")}></div>
+      </div>
+    );
+  }
 
   const viewProps = { date, successGoalCount, imageUrl, hasScore: score > 0 };
 

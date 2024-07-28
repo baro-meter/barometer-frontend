@@ -16,6 +16,5 @@ export const Default: Story = {
   args: {
     year: 2024,
     month: 4,
-    isShowMoveTodayBtn: false,
   },
 };
