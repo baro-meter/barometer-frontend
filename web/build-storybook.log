@@ -1,0 +1,4 @@
+
+> @health-app/web@0.1.0 build-storybook /Users/imijeong/Projects/SideProjects/healthApp/web
+> storybook build "--output-dir" "/var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--31215-okpgOeIy8u5H"
+
