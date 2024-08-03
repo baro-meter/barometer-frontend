@@ -24,6 +24,6 @@ export const Primary: Story = {
   args: {
     weekIdx: 3,
     weekDates: [14, 15, 16, 17, 18, 19, 20],
-    activeDate: 14,
+    activeDate: 15,
   },
 };
