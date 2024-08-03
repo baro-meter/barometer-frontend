@@ -46,11 +46,3 @@ jobs:
           workingDir: ./web
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create comment PR
-        uses: thollander/actions-comment-pull-request@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          number: ${{ github.event.pull_request.number }}
-          message: "🚀storybook: ${{ steps.chromatic.outputs.storybookUrl }}"

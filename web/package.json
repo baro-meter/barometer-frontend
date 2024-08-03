@@ -9,8 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_0f2ff3746770bda"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "classnames": "^2.5.0",
