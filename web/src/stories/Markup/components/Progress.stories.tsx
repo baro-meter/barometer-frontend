@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import ProgressView from "markup/components/ProgressView";
+import ProgressView from "@/markup/components/ProgressView";
 
 const meta = {
   title: "Markup/Components/Progress",

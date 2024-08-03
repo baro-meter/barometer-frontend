@@ -6,11 +6,11 @@ import React, {
   useState,
 } from "react";
 import classNames from "classnames/bind";
-import scss from "styles/components/calendar.module.scss";
+import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
-import DayHeader from "./DayHeader";
+import DayHeader from "@/components/calendar/DayHeader";
 import Weekly from "./Weekly";
-import MonthlyHeaderView from "markup/components/Calendar/MonthlyHeaderView";
+import MonthlyHeaderView from "@/markup/components/calendar/MonthlyHeaderView";
 
 const cn = classNames.bind(scss);
 

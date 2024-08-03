@@ -1,12 +1,11 @@
-import type {Meta, StoryObj} from '@storybook/react';
-
-import Test from 'markup/pages/Test';
+import Test from "@/markup/pages/Test";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: 'Markup/Pages/Test',
+  title: "Markup/Pages/Test",
   component: Test,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {},
 } satisfies Meta<typeof Test>;

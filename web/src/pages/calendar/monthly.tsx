@@ -1,11 +1,11 @@
-import MonthlyCalendar from "@/components/Calendar/MonthlyCalendar";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { getFormatDayjs } from "utils/calendarUtil";
-import ProgressListView from "markup/components/ProgressListView";
-import { ProgressProps } from "markup/components/ProgressView";
+import { getFormatDayjs } from "@/utils/calendarUtil";
+import ProgressListView from "@/markup/components/ProgressListView";
+import { ProgressProps } from "@/markup/components/ProgressView";
+import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 
 interface MonthlyPageViewProps {
   year: number;

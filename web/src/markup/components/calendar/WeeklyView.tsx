@@ -1,7 +1,7 @@
-import React from 'react';
-import classNames from 'classnames/bind';
-import scss from 'styles/components/calendar.module.scss';
-import BaroMeterDate from './BaroMeterDateView';
+import React from "react";
+import classNames from "classnames/bind";
+import scss from "@/styles/components/calendar.module.scss";
+import BaroMeterDate from "./BaroMeterDateView";
 
 const cn = classNames.bind(scss);
 
@@ -11,9 +11,9 @@ interface WeeklyViewProps {
   activeDate?: number; // TODO today일수도 있어서 작업 안함
 }
 
-const WeeklyView = ({weekIdx, weekDates, activeDate}: WeeklyViewProps) => {
+const WeeklyView = ({ weekIdx, weekDates, activeDate }: WeeklyViewProps) => {
   return (
-    <div role="row" key={weekIdx} className={cn('row', 'calendar-row')}>
+    <div role="row" key={weekIdx} className={cn("row", "calendar-row")}>
       {weekDates.map((d, di) => (
         <BaroMeterDate
           key={weekIdx * 10 + di}
