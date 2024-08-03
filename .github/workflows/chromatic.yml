@@ -52,4 +52,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          number: ${{ github.event.pull_request.number }}
           message: "🚀storybook: ${{ steps.chromatic.outputs.storybookUrl }}"
