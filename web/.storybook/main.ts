@@ -19,7 +19,6 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   webpackFinal: async (config: any) => {
-    // config.resolve.alias['@'] = path.resolve(__dirname, '../src');
     config.resolve.plugins.push(
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, "../tsconfig.json"),

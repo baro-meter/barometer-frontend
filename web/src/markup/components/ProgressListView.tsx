@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames/bind";
-import scss from "styles/components/progress.module.scss";
-import ProgressView, { ProgressProps } from "markup/components/ProgressView";
+import scss from "@/styles/components/progress.module.scss";
+import ProgressView, { ProgressProps } from "@/markup/components/ProgressView";
 const cn = classNames.bind(scss);
 
 interface ProgressListView {

@@ -1,6 +1,15 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:storybook/recommended"
-  ]
+  "extends": ["next", "next/core-web-vitals", "plugin:storybook/recommended"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["./src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 }
