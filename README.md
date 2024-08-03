@@ -1,5 +1,10 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# Storybook
+
+1. https://www.chromatic.com/library?appId=66adc2c0c12c345e70e76d41 접속
+2. View storybook 클릭
+
 # Getting Started
 
 ## 프로젝트 환경
