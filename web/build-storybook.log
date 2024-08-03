@@ -1,21 +1,21 @@
 
 > @health-app/web@0.1.0 build-storybook /Users/imijeong/Projects/SideProjects/healthApp/web
-> storybook build "--output-dir" "/var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27082-vGXScErLF2sC"
+> storybook build "--output-dir" "/var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27990-FNICdKzm3RfI"
 
 @storybook/cli v7.6.6
 
-info => Cleaning outputDir: /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27082-vGXScErLF2sC
+info => Cleaning outputDir: /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27990-FNICdKzm3RfI
 info => Loading presets
 info => Building manager..
-info => Manager built (124 ms)
+info => Manager built (99 ms)
 info => Building preview..
-info => Copying static files: /Users/imijeong/Projects/SideProjects/healthApp/node_modules/.pnpm/@storybook+manager@7.6.6/node_modules/@storybook/manager/static at /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27082-vGXScErLF2sC/sb-common-assets
+info => Copying static files: /Users/imijeong/Projects/SideProjects/healthApp/node_modules/.pnpm/@storybook+manager@7.6.6/node_modules/@storybook/manager/static at /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27990-FNICdKzm3RfI/sb-common-assets
 WARN No story files found for the specified pattern: src/**/*.mdx
 info Using Babel compiler
 info Addon-docs: using MDX2
 info => Using implicit CSS loaders
 info => Using default Webpack5 setup
-info => Copying static files: /Users/imijeong/Projects/SideProjects/healthApp/web/public at /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27082-vGXScErLF2sC/
+info => Copying static files: /Users/imijeong/Projects/SideProjects/healthApp/web/public at /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27990-FNICdKzm3RfI/
 WARN asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
 WARN This can impact web performance.
 WARN Assets: 
@@ -29,5 +29,5 @@ WARN       runtime~main.fb1437b5.iframe.bundle.js
 WARN       114.5bee7333.iframe.bundle.js
 WARN       main.ebf7ae1a.iframe.bundle.js
 WARN 
-info => Preview built (6.6 s)
-info => Output directory: /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27082-vGXScErLF2sC
+info => Preview built (6.41 s)
+info => Output directory: /var/folders/2w/wlqyj0v54733274mfydqq8fh0000gn/T/chromatic--27990-FNICdKzm3RfI
