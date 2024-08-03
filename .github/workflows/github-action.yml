@@ -44,10 +44,11 @@ jobs:
         run: |
           pwd
           pnpm run build-storybook
+          mkdir ./dist
+          mv ./storybook-static ./dist/storybook
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web/storybook-static
-          destination_dir: storybook # GitHub Pages의 /storybook 경로에 배포
+          publish_dir: ./dist
