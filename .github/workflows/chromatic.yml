@@ -6,17 +6,37 @@ on: push
 
 # List of jobs
 jobs:
-  test:
+  build-storybook:
     # Operating System
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
     # Job steps
     steps:
-      - uses: actions/checkout@v1
-      - run: yarn
-        #👇 Adds Chromatic as a step in the workflow
-      - uses: chromaui/action@v1
-        # Options required for Chromatic's GitHub Action
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
         with:
-          #👇 Chromatic projectToken, see https://storybook.js.org/tutorials/intro-to-storybook/react/ko/deploy/ to obtain it
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          version: 8
+          run_install: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Publish Chromatic
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
+          workingDir: ./web
+          projectToken: ${{ secrets.CHROMATIC_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
