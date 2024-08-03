@@ -2,7 +2,11 @@
 name: "Chromatic Deployment"
 
 # Event for the workflow
-on: push
+on:
+  push:
+    paths:
+      - "**.stories.ts"
+      - "**.stories.tsx"
 
 # List of jobs
 jobs:
@@ -14,7 +18,7 @@ jobs:
         node-version: [18.x]
     # Job steps
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -39,3 +43,10 @@ jobs:
           workingDir: ./web
           projectToken: ${{ secrets.CHROMATIC_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: "🚀storybook: ${{ steps.chromatic.outputs.storybookUrl }}"
