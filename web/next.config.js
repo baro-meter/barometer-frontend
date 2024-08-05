@@ -17,8 +17,7 @@ const nextConfig = {
             loader: "file-loader",
             options: {
               name: "[path][name].[ext]",
-              publicPath: (url) =>
-                `/barometer-frontend/storybook_static/${url}`,
+              publicPath: (url) => `barometer-frontend/storybook_static/${url}`,
             },
           },
         ],
