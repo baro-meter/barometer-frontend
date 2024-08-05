@@ -12,6 +12,10 @@ const nextConfig = {
   },
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname, "src");
+    console.log(process.env.STORYBOOK);
+    if (process.env.STORYBOOK) {
+      console.log("Storybook build detected");
+    }
     // if (process.env.STORYBOOK) {
     //   config.module.rules.push({
     //     test: /\.(png|jpe?g|gif|svg)$/i,
