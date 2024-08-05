@@ -48,7 +48,7 @@ const MonthlyHeaderView = ({
             onClick={onClickTodayMoveBtn}
           >
             <Image
-              src="/calendar/icon-today.svg"
+              src="@images/calendar/icon-today.svg"
               width={20}
               height={20}
               alt={"오늘보기"}

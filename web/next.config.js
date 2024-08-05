@@ -1,7 +1,9 @@
 const path = require("path");
 
+const isGhpage = process.env.GH_PAGES === "true";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: isGhpage ? "/barometer-frontend/storybook_static" : "",
   reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
@@ -9,6 +11,9 @@ const nextConfig = {
   },
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname, "src");
+    config.module.rules.push({
+      test,
+    });
     return config;
   },
 };
