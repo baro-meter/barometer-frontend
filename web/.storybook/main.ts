@@ -25,6 +25,9 @@ const config: StorybookConfig = {
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
+    if (process.env.GH_PAGES) {
+      config.output.publicPath = "/barometer-frontend/storybook_static";
+    }
     // if (configType === "PRODUCTION") {
     //   config.output.publicPath = "/barometer-frontend/storybook_static";
     // }
@@ -54,9 +57,5 @@ const config: StorybookConfig = {
 
     return config;
   },
-  env: (config) => ({
-    ...config,
-    IS_STORYBOOK: "true",
-  }),
 };
 export default config;
