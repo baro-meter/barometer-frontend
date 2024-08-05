@@ -2,8 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Storybook
 
-1. https://www.chromatic.com/library?appId=66adc2c0c12c345e70e76d41 접속
-2. View storybook 클릭
+https://baro-meter.github.io/barometer-frontend/storybook_static
 
 # Getting Started
 
