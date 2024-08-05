@@ -24,9 +24,6 @@ const config: StorybookConfig = {
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
-    if (configType === "PRODUCTION") {
-      config.output.publicPath = "/barometer-frontend/storybook_static";
-    }
     return config;
   },
 };
