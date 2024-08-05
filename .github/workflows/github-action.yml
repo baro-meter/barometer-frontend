@@ -35,6 +35,8 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Build storybook
         working-directory: ./web
+        env:
+          GH_PAGES: true
         run: |
           pwd
           GH_PAGES=true pnpm run build-storybook
