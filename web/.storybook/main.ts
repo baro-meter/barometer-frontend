@@ -24,21 +24,21 @@ const config: StorybookConfig = {
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
-    if (configType === "PRODUCTION") {
-      config.output.publicPath = "/barometer-frontend/storybook_static";
-    }
-    // config.module.rules.push({
-    //   test: /\.(png|jpe?g|gif|svg)$/i,
-    //   use: [
-    //     {
-    //       loader: "file-loader",
-    //       options: {
-    //         name: "[path][name].[ext]",
-    //         publicPath: (url) => `/barometer-frontend/storybook_static/${url}`,
-    //       },
-    //     },
-    //   ],
-    // });
+    // if (configType === "PRODUCTION") {
+    //   config.output.publicPath = "/barometer-frontend/storybook_static";
+    // }
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif|svg|html)$/i,
+      use: [
+        {
+          loader: "file-loader",
+          options: {
+            name: "[path][name].[ext]",
+            publicPath: (url) => `/barometer-frontend/storybook_static/${url}`,
+          },
+        },
+      ],
+    });
     // const imageRule = config.module.rules.find(
     //   (rule: any) => rule.test && rule.test.test(/\.(png|jpe?g|gif|svg)$/i)
     // );
