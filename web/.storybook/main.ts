@@ -28,12 +28,12 @@ const config: StorybookConfig = {
     //   config.output.publicPath = "/barometer-frontend/storybook_static";
     // }
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg|html)$/i,
+      test: /\.(png|jpe?g|gif|svg)$/i,
       use: [
         {
           loader: "file-loader",
           options: {
-            name: "[path][name].[ext]",
+            // name: "[path][name].[ext]",
             publicPath: (url) => `/barometer-frontend/storybook_static/${url}`,
           },
         },
