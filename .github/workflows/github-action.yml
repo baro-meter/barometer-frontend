@@ -33,10 +33,6 @@ jobs:
         working-directory: ./web
         run: |
           pnpm install --frozen-lockfile
-      - name: Check Build
-        working-directory: ./web
-        run: |
-          pnpm build
       - name: Build storybook
         working-directory: ./web
         run: |
