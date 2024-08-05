@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react";
 import "./storybook.css";
 import "../src/styles/base/_reset.scss";
-import nextImage from 'next/image';
+import nextImage from "next/image";
 
 const preview: Preview = {
   parameters: {
@@ -15,10 +15,5 @@ const preview: Preview = {
     assetsBasePath: "/barometer-frontend/",
   },
 };
-
-Object.defineProperties(nextImage, 'default', {
-  configurable: true,
-  value: 
-})
 
 export default preview;
