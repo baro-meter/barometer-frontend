@@ -24,9 +24,9 @@ const config: StorybookConfig = {
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
-    // if (configType === "PRODUCTION") {
-    //   config.output.publicPath = "/barometer-frontend/storybook_static";
-    // }
+    if (configType === "PRODUCTION") {
+      config.output.publicPath = "/barometer-frontend/storybook_static";
+    }
     // config.module.rules.push({
     //   test: /\.(png|jpe?g|gif|svg)$/i,
     //   use: [
@@ -39,17 +39,17 @@ const config: StorybookConfig = {
     //     },
     //   ],
     // });
-    const imageRule = config.module.rules.find(
-      (rule: any) => rule.test && rule.test.test(/\.(png|jpe?g|gif|svg)$/i)
-    );
+    // const imageRule = config.module.rules.find(
+    //   (rule: any) => rule.test && rule.test.test(/\.(png|jpe?g|gif|svg)$/i)
+    // );
 
-    if (imageRule) {
-      // 기존 로더의 옵션을 수정
-      imageRule.options = {
-        ...imageRule.options,
-        publicPath: "/barometer-frontend/storybook_static/",
-      };
-    }
+    // if (imageRule) {
+    //   // 기존 로더의 옵션을 수정
+    //   imageRule.options = {
+    //     ...imageRule.options,
+    //     publicPath: "/barometer-frontend/storybook_static/",
+    //   };
+    // }
 
     return config;
   },
