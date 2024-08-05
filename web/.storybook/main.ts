@@ -15,21 +15,18 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ["../public"],
-  // staticDirs: [
-  //   {
-  //     from: "../public",
-  //     to: "src/components/fonts",
-  //   },
-  // ],
   docs: {
     autodocs: "tag",
   },
-  webpackFinal: async (config: any) => {
+  webpackFinal: async (config: any, { configType }) => {
     config.resolve.plugins.push(
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, "../tsconfig.json"),
       })
     );
+    if (configType === "PRODUCTION") {
+      config.output.publicPath = "/barometer-frontend/storybook_static";
+    }
     return config;
   },
 };
