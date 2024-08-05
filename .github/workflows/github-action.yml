@@ -37,7 +37,7 @@ jobs:
         working-directory: ./web
         run: |
           pwd
-          pnpm run build-storybook
+          GH_PAGES=true pnpm run build-storybook
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
