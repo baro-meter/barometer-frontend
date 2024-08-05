@@ -3,7 +3,7 @@ const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  assetPrefix: process.env.STORYBOOK
+  assetPrefix: process.env.IS_STORYBOOK
     ? "barometer-frontend/storybook_static"
     : "",
   sassOptions: {
