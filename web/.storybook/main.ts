@@ -1,6 +1,7 @@
 import type { StorybookConfig } from "@storybook/nextjs";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 import path from "path";
+import { config } from "next/dist/build/templates/pages";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -27,18 +28,18 @@ const config: StorybookConfig = {
     // if (configType === "PRODUCTION") {
     //   config.output.publicPath = "/barometer-frontend/storybook_static";
     // }
-    config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg)$/i,
-      use: [
-        {
-          loader: "file-loader",
-          options: {
-            // name: "[path][name].[ext]",
-            publicPath: (url) => `/barometer-frontend/storybook_static/${url}`,
-          },
-        },
-      ],
-    });
+    // config.module.rules.push({
+    //   test: /\.(png|jpe?g|gif|svg)$/i,
+    //   use: [
+    //     {
+    //       loader: "file-loader",
+    //       options: {
+    //         // name: "[path][name].[ext]",
+    //         publicPath: (url) => `/barometer-frontend/storybook_static/${url}`,
+    //       },
+    //     },
+    //   ],
+    // });
     // const imageRule = config.module.rules.find(
     //   (rule: any) => rule.test && rule.test.test(/\.(png|jpe?g|gif|svg)$/i)
     // );
@@ -53,5 +54,9 @@ const config: StorybookConfig = {
 
     return config;
   },
+  env: (config) => ({
+    ...config,
+    IS_STORYBOOK: "true",
+  }),
 };
 export default config;
