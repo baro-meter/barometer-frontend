@@ -9,20 +9,20 @@ const nextConfig = {
   },
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname, "src");
-    if (process.env.STORYBOOK) {
-      config.module.rules.push({
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "[path][name].[ext]",
-              publicPath: (url) => `barometer-frontend/storybook_static/${url}`,
-            },
-          },
-        ],
-      });
-    }
+    // if (process.env.STORYBOOK) {
+    //   config.module.rules.push({
+    //     test: /\.(png|jpe?g|gif|svg)$/i,
+    //     use: [
+    //       {
+    //         loader: "file-loader",
+    //         options: {
+    //           name: "[path][name].[ext]",
+    //           publicPath: (url) => `barometer-frontend/storybook_static/${url}`,
+    //         },
+    //       },
+    //     ],
+    //   });
+    // }
     return config;
   },
 };
