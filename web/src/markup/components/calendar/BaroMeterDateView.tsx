@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/barometerDate.module.scss";
 import Image from "next/image";
+import { basePath } from "next.config";
 
 const cn = classNames.bind(scss);
 
@@ -77,7 +78,7 @@ export default function BaroMeterDate({
       default:
         imageName = isActive ? "date-today" : "date-monthly";
     }
-    return `/calendar/${imageName}.svg`;
+    return `${basePath}/calendar/${imageName}.svg`;
   }, [isActive, score]);
 
   if (date <= 0) {
