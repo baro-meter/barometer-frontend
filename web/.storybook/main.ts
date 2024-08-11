@@ -26,5 +26,10 @@ const config: StorybookConfig = {
     );
     return config;
   },
+  env: (config, { configType }) => ({
+    ...config,
+    STORYBOOK_BASE_URL:
+      configType === "PRODUCTION" ? "/barometer-frontend/storybook" : "",
+  }),
 };
 export default config;
