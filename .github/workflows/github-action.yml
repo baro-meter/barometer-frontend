@@ -1,26 +1,21 @@
-# Workflow name
-name: "Chromatic Deployment"
+name: build storybook
 
-# Event for the workflow
 on:
   push:
-    paths:
-      - "**.stories.ts"
-      - "**.stories.tsx"
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
 
-# List of jobs
 jobs:
   build-storybook:
-    # Operating System
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [18.x]
-    # Job steps
+
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm
@@ -38,11 +33,13 @@ jobs:
         working-directory: ./web
         run: |
           pnpm install --frozen-lockfile
-
-      - name: Publish Chromatic
-        id: chromatic
-        uses: chromaui/action@v1
+      - name: Build storybook
+        working-directory: ./web
+        run: |
+          pwd
+          pnpm run build-storybook
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          workingDir: ./web
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook

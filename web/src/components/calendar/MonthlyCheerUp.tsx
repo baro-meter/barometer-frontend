@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/cheerup.module.scss";
 import Image from "next/image";
+import { basePath } from "next.config";
 
 const cn = classNames.bind(scss);
 
@@ -57,9 +58,9 @@ export default function MonthlyCheerUp({
   }, [state]);
   const btnImage = useMemo(() => {
     if (state === "finish") {
-      return `/calendar/cheerup_reward.svg`;
+      return `${basePath}/calendar/cheerup_reward.svg`;
     } else if (state === "init") {
-      return `/calendar/cheerup_next.svg`;
+      return `${basePath}/calendar/cheerup_next.svg`;
     }
     return undefined;
   }, [state]);

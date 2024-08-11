@@ -2,6 +2,7 @@ const path = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: process.env.STORYBOOK_BASE_URL ?? "",
   reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
@@ -9,6 +10,7 @@ const nextConfig = {
   },
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname, "src");
+    config.resolve.alias["@images"] = path.resolve(__dirname, "public");
     return config;
   },
 };

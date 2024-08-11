@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build -o ../storybook"
   },
   "dependencies": {
     "classnames": "^2.5.0",
@@ -34,7 +34,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
-    "chromatic": "^11.7.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.1",
     "eslint-plugin-storybook": "^0.6.15",

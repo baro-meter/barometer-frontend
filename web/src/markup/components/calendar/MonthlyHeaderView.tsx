@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import Image from "next/image";
+import { basePath } from "next.config";
 
 const cn = classNames.bind(scss);
 
@@ -48,7 +49,7 @@ const MonthlyHeaderView = ({
             onClick={onClickTodayMoveBtn}
           >
             <Image
-              src="/calendar/icon-today.svg"
+              src={`${basePath}/calendar/icon-today.svg`}
               width={20}
               height={20}
               alt={"오늘보기"}
@@ -61,7 +62,7 @@ const MonthlyHeaderView = ({
           onClick={onChangeWeeklyView}
         >
           <Image
-            src="/calendar/icon-weekly.svg"
+            src={`${basePath}/calendar/icon-weekly.svg`}
             width={20}
             height={20}
             alt={"Weekly 전환"}
