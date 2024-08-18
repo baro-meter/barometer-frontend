@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Storybook
 
-https://baro-meter.github.io/barometer-frontend/storybook
+https://baro-meter.github.io/barometer-frontend
 
 # Getting Started
 
