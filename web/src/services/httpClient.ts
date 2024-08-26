@@ -8,11 +8,11 @@ export class HttpClient implements IHttpClient {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: "/api",
+      baseURL: "/",
       headers: {
         "Content-Type": "application/json",
       },
-      timeout: 5000,
+      timeout: 10000,
       withCredentials: true,
       withXSRFToken: true,
     });
