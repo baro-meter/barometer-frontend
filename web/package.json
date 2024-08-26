@@ -12,6 +12,7 @@
     "build-storybook": "storybook build -o ../storybook"
   },
   "dependencies": {
+    "axios": "^1.7.5",
     "classnames": "^2.5.0",
     "dayjs": "^1.11.10",
     "next": "14.0.1",
