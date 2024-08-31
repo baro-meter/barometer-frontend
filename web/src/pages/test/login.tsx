@@ -1,12 +1,15 @@
-import { UserType } from "@/types/authType";
+import { LoginUserType } from "@/types/authType";
 import httpClient from "../../services/httpClient";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { auth, join, login } from "@/services/auth/authService";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { accessTokenState, userState } from "@/recoils/user";
 
 interface LoginPageViewProps {
-  user: UserType;
+  user: LoginUserType;
   authCode: string;
+  accessTokenStr?: string;
   handleJoin: (event: React.FormEvent<HTMLFormElement>) => void;
   handleAuth: (event: React.FormEvent<HTMLFormElement>) => void;
   handleChange: (
@@ -19,6 +22,7 @@ interface LoginPageViewProps {
 const LoginPageView = ({
   user,
   authCode,
+  accessTokenStr,
   handleJoin,
   handleAuth,
   handleChange,
@@ -70,6 +74,10 @@ const LoginPageView = ({
         <h1>join 후 login</h1>
         <button onClick={handleLogin}>Login</button>
       </div>
+      <div>
+        <h1>login 후 accessToken 조회</h1>
+        <div>{accessTokenStr}</div>
+      </div>
     </>
   );
 };
@@ -77,17 +85,24 @@ const LoginPageView = ({
 interface LoginPageProps {}
 
 const LoginPage = ({}: LoginPageProps) => {
+  const [authedUser, setAuthedUser] = useRecoilState(userState);
+  const accessTokenStr = useRecoilValue(accessTokenState);
   const joinMutation = useMutation({ mutationFn: join });
   const authMutation = useMutation({ mutationFn: auth });
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (response) => {
+      if (!response) {
+        alert("login 실패");
+        return;
+      }
       console.log(response);
-
+      const { accessToken, refreshToken } = response;
+      setAuthedUser({ ...user, accessToken, refreshToken });
       // TODO react-query로 token 관리하는 로직 추가하기
     },
   });
-  const [user, setUser] = useState<UserType>({
+  const [user, setUser] = useState<LoginUserType>({
     nickname: "",
     password: "",
     email: "",
@@ -126,6 +141,7 @@ const LoginPage = ({}: LoginPageProps) => {
   const viewProps = {
     user,
     authCode,
+    accessTokenStr,
     handleJoin,
     handleAuth,
     handleChange,
