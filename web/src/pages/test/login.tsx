@@ -1,11 +1,8 @@
+import { UserType } from "@/types/authType";
 import httpClient from "../../services/httpClient";
 import React, { useState } from "react";
-
-interface UserType {
-  nickname: string;
-  password: string;
-  email: string;
-}
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { auth, join, login } from "@/services/auth/authService";
 
 interface LoginPageViewProps {
   user: UserType;
@@ -80,6 +77,16 @@ const LoginPageView = ({
 interface LoginPageProps {}
 
 const LoginPage = ({}: LoginPageProps) => {
+  const joinMutation = useMutation({ mutationFn: join });
+  const authMutation = useMutation({ mutationFn: auth });
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      console.log(response);
+
+      // TODO react-query로 token 관리하는 로직 추가하기
+    },
+  });
   const [user, setUser] = useState<UserType>({
     nickname: "",
     password: "",
@@ -89,19 +96,13 @@ const LoginPage = ({}: LoginPageProps) => {
 
   const handleJoin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(user);
 
-    const url = `/join/email/${user.email}`;
-
-    httpClient.post(url, user);
+    joinMutation.mutate(user);
   };
 
   const handleAuth = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(user);
-
-    const url = `/join/email/${user.email}/auth?authCode=${authCode}`;
-    httpClient.post(url, user);
+    authMutation.mutate({ user, authCode });
   };
 
   const handleChange = (
@@ -119,9 +120,7 @@ const LoginPage = ({}: LoginPageProps) => {
   };
 
   const handleLogin = async () => {
-    const url = `/login/email/${user.email}`;
-    const response = await httpClient.post(url, { password: user.password });
-    console.log(response);
+    loginMutation.mutate(user);
   };
 
   const viewProps = {

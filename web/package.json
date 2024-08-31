@@ -12,6 +12,8 @@
     "build-storybook": "storybook build -o ../storybook"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.53.1",
+    "@tanstack/react-query-devtools": "^5.53.1",
     "axios": "^1.7.5",
     "classnames": "^2.5.0",
     "dayjs": "^1.11.10",
