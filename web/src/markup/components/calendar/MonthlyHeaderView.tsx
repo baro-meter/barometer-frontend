@@ -6,6 +6,11 @@ import { basePath } from "next.config";
 
 const cn = classNames.bind(scss);
 
+/**
+ * deprecated
+ * - UI 변동이 있을 수도 있을 것 같아 일단 파일만 남겨둠
+ */
+
 interface MonthlyHeaderViewProps {
   year: number;
   month: number;

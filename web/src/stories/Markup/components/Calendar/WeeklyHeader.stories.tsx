@@ -7,6 +7,13 @@ const meta = {
   argTypes: {},
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: "⚠️ [deprecated] CalendarHeaderView로 통합되었습니다.",
+      },
+    },
+  },
 } satisfies Meta<typeof WeeklyHeaderView>;
 
 export default meta;
