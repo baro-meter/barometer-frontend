@@ -12,11 +12,15 @@
     "build-storybook": "storybook build -o ../storybook"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.53.1",
+    "@tanstack/react-query-devtools": "^5.53.1",
+    "axios": "^1.7.5",
     "classnames": "^2.5.0",
     "dayjs": "^1.11.10",
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "recoil": "^0.7.7",
     "sass": "^1.69.6",
     "swiper": "^11.1.4"
   },
