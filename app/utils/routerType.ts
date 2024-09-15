@@ -19,7 +19,9 @@ export type TestAppRootStackScreenProps<
 
 export type HomeTabParamList = {
   Calendar: undefined;
-  Test: undefined;
+  Mission: undefined;
+  Analytics: undefined;
+  Setting: undefined;
 };
 
 export type HomeTabScreenProps<T extends keyof HomeTabParamList> =
