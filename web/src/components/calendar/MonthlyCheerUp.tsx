@@ -16,7 +16,7 @@ const MonthlyCheerUpView = ({ text, btnImage }: MonthlyCheerUpViewProps) => {
     <div className={cn("frame")}>
       <div className={cn("text-wrapper")}>BARO</div>
       <div className={cn("div")}>{text}</div>
-      {btnImage && (
+      {btnImage && 
         <Image
           className={cn("vector")}
           alt="btn"
@@ -24,7 +24,7 @@ const MonthlyCheerUpView = ({ text, btnImage }: MonthlyCheerUpViewProps) => {
           width={16}
           height={16}
         />
-      )}
+      }
     </div>
   );
 };

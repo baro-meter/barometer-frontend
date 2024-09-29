@@ -1,0 +1,151 @@
+.input {
+  $block: &;
+
+  &-wrap {
+    &.is-error {
+      #{$block}-text {
+        .input {
+          border-color: $color-system-red-red40;
+        }
+      }
+    }
+
+    .btn-delete {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 20px 16px;
+    }
+  
+    .text-error {
+      padding: 8px 16px 0;
+      font-size: 13px;
+      color: $color-system-red-red40;
+      line-height: 17px;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  &-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: $color-system-gray-gray95;
+    line-height: 19px;
+    letter-spacing: -0.3px;
+  }
+
+  &-text {
+    display: block;
+    position: relative;
+
+    .input {
+      display: block;
+      width: 100%;
+      padding: 20px 48px 20px 16px;
+      border: 1px solid transparent;
+      background: $color-system-gray-gray0;
+      border-radius: 16px;
+      box-sizing: border-box;
+      color: $color-system-gray-gray95;
+    }
+  }
+}
+
+.textarea {
+  &-wrap {
+    overflow: hidden;
+    display: flex;
+    height: 120px;
+    padding: 16px;
+    box-sizing: border-box;
+    background: $surface-text-field;
+    border-radius: 16px;
+
+    .file {
+      position: relative;
+      display: block;
+      width: 42px;
+      height: 42px;
+      margin-left: 24px;
+      border-radius: 12px;
+      box-sizing: border-box;
+      
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 14px;
+        height: 14px;
+        margin: auto;
+        z-index: 0;
+        background: url(../../../public/img/icon-add.svg);
+        background-size: cover;
+        content: '';
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid $color-system-gray-gray20;
+        border-radius: 12px;
+        content: '';
+      }
+
+      &-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        opacity: 0;
+        appearance: none;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-text {
+    flex: 1;
+  }
+
+  &-input {
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    color: $color-system-gray-gray60;
+    line-height: 19px;
+    letter-spacing: -0.3px;
+  }
+}
+
+.image-preview {
+  &-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+    
+    img {
+      overflow: hidden;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .btn-delete {
+      position: absolute;
+      top: -5px;
+      right: -6px;
+    }
+  }
+
+}

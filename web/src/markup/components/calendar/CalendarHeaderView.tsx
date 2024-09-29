@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
+import Picker from 'react-mobile-picker';
 
 interface CalendarHeaderViewProps {
   type: "monthly" | "weekly";
@@ -15,17 +16,6 @@ interface CalendarHeaderViewProps {
 
 const cn = classNames.bind(scss);
 
-/**
- * 24.08.31 변경사항
- * 기존 Monthly / Weekly Header가 나눠져있던 영역이 하나로 통일됨
- * - 날짜 표현 영역 및 위치가 변동이 없어보여서 합쳤습니다.
- *
- * TODO
- * - 기존 MonthlyHeaderView 컴포넌트 기준으로 마크업 잡고 + 기능 코드 옮겨왔습니다. 변경된 UI에 맞게 마크업 수정해주시면 될 것 같아요~!
- *    - 날짜 옆 화살표 누락되어있습니다. 마크업 추가 해주세용
- * - 날짜 영역 누르면 어떤 이벤트 발생되는지 기획 문의 필요 + 화면 구현 필요
- * - Weekly View에는 오늘보기 기능이 없는건지 기획 문의 필요
- */
 const CalendarHeaderView = ({
   type,
   year,
@@ -34,13 +24,39 @@ const CalendarHeaderView = ({
   onToggleCalendarType,
   onClickTodayMoveBtn,
 }: CalendarHeaderViewProps) => {
+  const [isPickerVisible, setPickerVisible] = useState(false);
+
+  const [pickerValue, setPickerValue] = useState({
+    year: year.toString(),
+    month: month.toString(),
+  });
+
+  const togglePicker = () => {
+    setPickerVisible(!isPickerVisible);
+  };
+
+  const handlePickerChange = (value: { [key: string]: string }) => {
+    setPickerValue(value);
+  };
+
+  const yearOptions = Array.from({ length: 10 }, (_, i) => (year - 5 + i).toString());
+  const monthOptions = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
+
   return (
-    <div className={cn("calendar-header")}>
+    <div className={cn("calendar-header", { "is-selected": isPickerVisible })}>
       <div className={cn("inner")}>
         <div className={cn("date-wrapper")}>
-          <strong className={cn("date")}>
-            <span>{year}</span>.<span>{month}</span>
-          </strong>
+          <button type="button" className={cn("date")} onClick={togglePicker}>
+            <span>{pickerValue.year}</span>.<span>{pickerValue.month}</span>
+            <span className={cn("icon")}>
+              <Image 
+                src={`${basePath}/calendar/icon-arrow-bottom.svg`}
+                width={12}
+                height={7}
+                alt={"날짜 변경"}
+              />
+            </span>
+          </button>
         </div>
         {type === "weekly" ? (
           <button
@@ -57,7 +73,7 @@ const CalendarHeaderView = ({
           </button>
         ) : (
           <>
-            {!isToday && (
+            {!isToday && 
               <button
                 className={cn("btn-calendar-today")}
                 aria-label="Today"
@@ -70,7 +86,7 @@ const CalendarHeaderView = ({
                   alt={"오늘보기"}
                 />
               </button>
-            )}
+            }
             <button
               className={cn("btn-calendar-view")}
               aria-label="Weekly View"
@@ -86,6 +102,42 @@ const CalendarHeaderView = ({
           </>
         )}
       </div>
+
+      {isPickerVisible && (
+        <div className={cn("picker-container")}>
+          <Picker
+            value={pickerValue}
+            onChange={handlePickerChange}
+            wheelMode="natural"
+            height={108} 
+            itemHeight={36}
+            className={cn("picker-inner")}
+          >
+            <Picker.Column name="year" className={cn("picker-year")}>
+              {yearOptions.map(option => (
+                <Picker.Item key={option} value={option}>
+                  {({ selected }) => (
+                    <div className={selected ? cn("selected-item") : ''}>
+                      {option}
+                    </div>
+                  )}
+                </Picker.Item>
+              ))}
+            </Picker.Column>
+            <Picker.Column name="month" className={cn("picker-month")}>
+              {monthOptions.map(option => (
+                <Picker.Item key={option} value={option}>
+                  {({ selected }) => (
+                    <div className={selected ? cn("selected-item") : ''}>
+                      {option}
+                    </div>
+                  )}
+                </Picker.Item>
+              ))}
+            </Picker.Column>
+          </Picker>
+        </div>
+      )}
     </div>
   );
 };

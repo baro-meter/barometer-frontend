@@ -1,0 +1,32 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: -0.03px;
+
+  & + & {
+    margin-left: 12px;
+  }
+
+  img {
+    margin-right: 6px;
+  }
+
+  &.excellent {
+    color: $color-system-teal-teal50;
+  }
+
+  &.good {
+    color: $color-system-yellow-yellow90;
+  }
+
+  &.insufficient {
+    color: $color-system-orange-orange50;
+  }
+
+  &.poor {
+    color: $color-system-gray-gray60;
+  }
+}

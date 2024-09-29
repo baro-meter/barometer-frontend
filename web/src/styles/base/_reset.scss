@@ -3,10 +3,10 @@
 html,
 body {
   height: 100%;
-  height: 100%;
+  height: 100%; 
 }
 
-body {
+body { 
   -webkit-overflow-scrolling: touch;
   -webkit-text-size-adjust: none;
   user-select: none;
@@ -112,6 +112,24 @@ select,
 textarea {
   color: inherit;
   line-height: normal;
+}
+
+textarea {
+  border: 0;
+  background: none;
+  resize: none;
+
+  &::placeholder {
+    color: $color-system-gray-gray30;
+  }
+}
+
+input {
+  caret-color: $color-system-indigo-indigo70;
+  
+  &::placeholder {
+    color: $color-system-gray-gray30;
+  }
 }
 
 button,

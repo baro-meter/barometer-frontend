@@ -1,0 +1,23 @@
+.button {
+  display: inline-flex;
+  padding: 16px 28px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  color: $color-system-gray-gray80;
+  line-height: 18px;
+  letter-spacing: -0.3px;
+
+  &:disabled {
+    opacity: 30%;
+    pointer-events: none;
+  }
+
+  &-primary {
+    background: $color-system-gray-gray20;
+  }
+
+  &-secondary {
+    background: $color-system-gray-gray10;
+  }
+}

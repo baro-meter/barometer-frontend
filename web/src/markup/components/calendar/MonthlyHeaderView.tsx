@@ -32,11 +32,6 @@ const MonthlyHeaderView = ({
     <div className={cn("calendar-header")}>
       <div className={cn("inner")}>
         <div className={cn("date-wrapper")}>
-          <button
-            className={cn("btn-prev")}
-            aria-label="이전달"
-            onClick={() => onClickArrow("prev")}
-          ></button>
           <strong className={cn("date")}>
             <span>{year}</span>.<span>{month}</span>
           </strong>
