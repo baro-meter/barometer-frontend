@@ -1,6 +1,5 @@
 import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
 import dayjs from "dayjs";
-import WeeklyHeaderView from "@/markup/components/calendar/WeeklyHeaderView";
 import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -12,6 +11,7 @@ import WeeklyList from "@/components/calendar/WeeklyList";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";
 import "swiper/css";
+import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -20,7 +20,6 @@ dayjs.extend(utc);
 interface WeeklyPageViewProps {
   year: number;
   month: number;
-  week: number;
   date: number;
   isToday: boolean;
   setSwiper: React.Dispatch<React.SetStateAction<SwiperTypes | undefined>>;
@@ -33,7 +32,6 @@ interface WeeklyPageViewProps {
 const WeeklyPageView = ({
   year,
   month,
-  week,
   date,
   isToday,
   setSwiper,
@@ -44,12 +42,12 @@ const WeeklyPageView = ({
 }: WeeklyPageViewProps) => {
   return (
     <>
-      <WeeklyHeaderView
+      <CalendarHeaderView
+        type="weekly"
         year={year}
         month={month}
-        week={week}
         isToday={isToday}
-        onChangeMonthlyView={handleChangeMonthlyView}
+        onToggleCalendarType={handleChangeMonthlyView}
         onClickTodayMoveBtn={handleClickTodayMoveBtn}
       />
       <Swiper
@@ -146,7 +144,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   const viewProps = {
     year: selectedDate.weekYear(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
-    week: selectedDate.week(),
     date: selectedDate.date(),
     isToday,
     setSwiper,

@@ -1,0 +1,111 @@
+.mission {
+  $block: &;
+  position: relative;
+  width: 100%;
+  letter-spacing: -0.3px;
+
+  &:nth-child(1) {
+    #{$block}-label {
+      img {
+        filter: brightness(0) saturate(100%) invert(47%) sepia(17%) saturate(2507%) hue-rotate(196deg) brightness(94%) contrast(91%);
+      }
+    }
+  }
+
+  &:nth-child(3) {
+    #{$block}-label {
+      img {
+        filter: brightness(0) saturate(100%) invert(80%) sepia(24%) saturate(7234%) hue-rotate(319deg) brightness(95%) contrast(89%);
+      }
+    }
+  }
+
+  &:nth-child(4) {
+    #{$block}-label {
+      img {
+        filter: brightness(0) saturate(100%) invert(62%) sepia(54%) saturate(1374%) hue-rotate(208deg) brightness(102%) contrast(98%);
+      }
+    }
+  }
+
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    &.type-2x {
+      #{$block} {
+        &:not(:last-child) {
+          flex-basis: calc(50% - 8px);
+          min-height: 175px;
+        }
+      }
+
+      #{$block}-label {
+        .title {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+
+  &-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    background: none;
+    cursor: pointer;
+
+    &:checked {
+      & + #{$block}-label {
+        border-color: $color-system-gray-gray30;
+
+        &::before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba($color-system-gray-gray99, 0.04);
+          content: '';
+        }
+      }
+    }
+  }
+
+  &-label {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    background: $surface-contents-bg;
+    padding: 20px;
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      color: $color-system-gray-gray95;
+      line-height: 19px;
+    }
+
+    .description {
+      margin-top: 4px;
+      font-size: 13px;
+      color: $color-system-gray-gray50;
+      line-height: 17px;
+    }
+
+    img {
+      margin-top: auto;
+    }
+  }
+}

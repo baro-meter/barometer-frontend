@@ -6,6 +6,11 @@ import { basePath } from "next.config";
 
 const cn = classNames.bind(scss);
 
+/**
+ * deprecated
+ * - UI 변동이 있을 수도 있을 것 같아 일단 파일만 남겨둠
+ */
+
 interface MonthlyHeaderViewProps {
   year: number;
   month: number;
@@ -27,11 +32,6 @@ const MonthlyHeaderView = ({
     <div className={cn("calendar-header")}>
       <div className={cn("inner")}>
         <div className={cn("date-wrapper")}>
-          <button
-            className={cn("btn-prev")}
-            aria-label="이전달"
-            onClick={() => onClickArrow("prev")}
-          ></button>
           <strong className={cn("date")}>
             <span>{year}</span>.<span>{month}</span>
           </strong>

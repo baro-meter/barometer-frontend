@@ -10,7 +10,7 @@ import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import DayHeader from "@/components/calendar/DayHeader";
 import Weekly from "./Weekly";
-import MonthlyHeaderView from "@/markup/components/calendar/MonthlyHeaderView";
+import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 
 const cn = classNames.bind(scss);
 
@@ -21,7 +21,6 @@ interface MonthlyCalendarViewProps {
   isSixWeeks: boolean;
   isToday: boolean;
   handleClickDate: (date: number) => void;
-  handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeWeeklyView: () => void;
   handleMoveToday: () => void;
 }
@@ -33,17 +32,16 @@ const MonthlyCalendarView = ({
   isSixWeeks,
   isToday,
   handleClickDate,
-  handleArrowClicked,
   handleChangeWeeklyView,
   handleMoveToday,
 }: MonthlyCalendarViewProps) => {
   return (
     <>
-      <MonthlyHeaderView
+      <CalendarHeaderView
+        type="monthly"
         year={monthlyDayjs.year()}
         month={monthlyDayjs.month() + 1}
-        onClickArrow={handleArrowClicked}
-        onChangeWeeklyView={handleChangeWeeklyView}
+        onToggleCalendarType={handleChangeWeeklyView}
         onClickTodayMoveBtn={handleMoveToday}
         isToday={isToday}
       />
@@ -171,6 +169,7 @@ export default function MonthlyCalendar({
     }
   };
 
+  /** deprecated 달 넘기기 기능 (사용 여부 기획 확인 필요) */
   const handleArrowClicked = useCallback(
     (type: "next" | "prev") => {
       let changedDate = dayjsObject;
