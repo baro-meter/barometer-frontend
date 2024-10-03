@@ -198,7 +198,8 @@ export default function MonthlyCalendar({
     const changedDate = dayjs()
       .year(year)
       .month(month - 1)
-      .set("date", 1);
+      .set("date", 1)
+      .day(0);
 
     setDayjsObject(changedDate);
     if (onChangeDate) {

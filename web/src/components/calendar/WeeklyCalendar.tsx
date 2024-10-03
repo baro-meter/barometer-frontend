@@ -69,30 +69,15 @@ export default function WeeklyCalendar({
   onChangeDate,
 }: WeeklyCalendarProps) {
   const [swiper, setSwiper] = useState<SwiperTypes>();
-  // TODO . week을 dayjs로 관리하기
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
       .month(month - 1)
       .set("date", date)
   );
-  // const [week, setWeek] = useState(
-  //   dayjs()
-  //     .year(year)
-  //     .month(month - 1)
-  //     .set("date", date)
-  //     .week()
-  // );
   const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
 
   useEffect(() => {
-    // setWeek(
-    //   dayjs()
-    //     .year(year)
-    //     .month(month - 1)
-    //     .set("date", date)
-    //     .week()
-    // );
     setSelectedDate(
       dayjs()
         .year(year)
@@ -112,20 +97,13 @@ export default function WeeklyCalendar({
   }, [year, selectedDate]);
 
   const handleClickDate = (d: number) => {
-    setSelectedDate(selectedDate.set("date", d));
+    const goalDate = selectedDate.set("date", d);
+    setSelectedDate(goalDate);
 
-    // if (onChangeDate) {
-    //   onChangeDate(d);
-    // }
+    if (onChangeDate) {
+      onChangeDate(goalDate);
+    }
   };
-
-  // useEffect(() => {
-  //   if (onChangeDate) {
-  //     onChangeDate(selectedDate);
-  //   }
-  //   console.log("a");
-  //   console.log(selectedDate);
-  // }, [selectedDate]);
 
   const handleSwipeWeek = (activeIndex: number) => {
     let goalDate;
@@ -135,9 +113,12 @@ export default function WeeklyCalendar({
       goalDate = selectedDate.add(1, "week").day(0);
     }
     if (goalDate && swiper) {
-      // onChangeDate(goalDate);
-      setSelectedDate(goalDate);
       swiper.slideTo(1);
+
+      setSelectedDate(goalDate);
+      if (onChangeDate) {
+        onChangeDate(goalDate);
+      }
     }
   };
 

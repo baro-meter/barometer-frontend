@@ -94,8 +94,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   const handleChangeSelectedDate = (dayJs: dayjs.Dayjs) => {
     const todayDate = selectedDate.date();
     const d = dayJs.date();
-    console.log(dayJs);
-    console.log(d);
 
     // const diff = Math.abs(todayDate - d);
     const diff = selectedDate.diff(dayJs, "days");
@@ -119,7 +117,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
 
   const handleChangeDate = (year: number, month: number) => {
     setSelectedDate(
-      selectedDate
+      dayjs()
         .year(year)
         .month(month - 1)
         .set("date", 1)
