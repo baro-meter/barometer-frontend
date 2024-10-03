@@ -1,15 +1,13 @@
 import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
 import dayjs from "dayjs";
 import { GetServerSidePropsContext } from "next";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/calendar/WeeklyList";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { type Swiper as SwiperTypes } from "swiper";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 
@@ -22,11 +20,9 @@ interface WeeklyPageViewProps {
   month: number;
   date: number;
   isToday: boolean;
-  setSwiper: React.Dispatch<React.SetStateAction<SwiperTypes | undefined>>;
   handleChangeMonthlyView: () => void;
-  handleChangeSelectedDate: (d: number) => void;
+  handleChangeSelectedDate: (d: dayjs.Dayjs) => void;
   handleClickTodayMoveBtn: () => void;
-  handleSwipeWeek: (activeIdx: number) => void;
 }
 
 const WeeklyPageView = ({
@@ -34,11 +30,9 @@ const WeeklyPageView = ({
   month,
   date,
   isToday,
-  setSwiper,
   handleChangeMonthlyView,
   handleChangeSelectedDate,
   handleClickTodayMoveBtn,
-  handleSwipeWeek,
 }: WeeklyPageViewProps) => {
   return (
     <>
@@ -50,24 +44,12 @@ const WeeklyPageView = ({
         onToggleCalendarType={handleChangeMonthlyView}
         onClickTodayMoveBtn={handleClickTodayMoveBtn}
       />
-      <Swiper
-        onSwiper={setSwiper}
-        slidesPerView={1}
-        initialSlide={1}
-        spaceBetween={10}
-        onSlideChange={(s) => handleSwipeWeek(s.activeIndex)}
-      >
-        <SwiperSlide />
-        <SwiperSlide>
-          <WeeklyCalendar
-            year={year}
-            month={month}
-            date={date}
-            onChangeDate={handleChangeSelectedDate}
-          />
-        </SwiperSlide>
-        <SwiperSlide />
-      </Swiper>
+      <WeeklyCalendar
+        year={year}
+        month={month}
+        date={date}
+        onChangeDate={handleChangeSelectedDate}
+      />
       <WeeklyList year={year} month={month} date={date} />
     </>
   );
@@ -84,7 +66,7 @@ interface WeeklyPageProps {
  */
 
 const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
-  const [swiper, setSwiper] = useState<SwiperTypes>();
+  // const [swiper, setSwiper] = useState<SwiperTypes>();
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [isToday, setIsToday] = useState(true);
@@ -106,10 +88,14 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     router.push(`/calendar/monthly?initDate=${getFormatDayjs(selectedDate)}`);
   }, [selectedDate]);
 
-  const handleChangeSelectedDate = (d: number) => {
+  const handleChangeSelectedDate = (dayJs: dayjs.Dayjs) => {
     const todayDate = selectedDate.date();
+    const d = dayJs.date();
+    console.log(dayJs);
+    console.log(d);
 
-    const diff = Math.abs(todayDate - d);
+    // const diff = Math.abs(todayDate - d);
+    const diff = selectedDate.diff(dayJs, "days");
     if (diff >= 7) {
       // 다른 달
       if (todayDate > d) {
@@ -128,29 +114,14 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     setSelectedDate(dayjs());
   };
 
-  const handleSwipeWeek = (activeIndex: number) => {
-    let goalDate;
-    if (activeIndex === 0) {
-      goalDate = selectedDate.subtract(1, "week").day(0);
-    } else if (activeIndex === 2) {
-      goalDate = selectedDate.add(1, "week").day(0);
-    }
-    if (goalDate && swiper) {
-      setSelectedDate(goalDate);
-      swiper.slideTo(1);
-    }
-  };
-
   const viewProps = {
     year: selectedDate.weekYear(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     isToday,
-    setSwiper,
     handleChangeMonthlyView,
     handleChangeSelectedDate,
     handleClickTodayMoveBtn,
-    handleSwipeWeek,
   };
 
   return <WeeklyPageView {...viewProps} />;
