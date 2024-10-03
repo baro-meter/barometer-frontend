@@ -8,9 +8,9 @@ import React, {
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
-import DayHeader from "@/components/calendar/DayHeader";
 import Weekly from "./Weekly";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
+import DayHeader from "@/markup/components/calendar/DayHeaderView";
 
 const cn = classNames.bind(scss);
 
@@ -23,6 +23,7 @@ interface MonthlyCalendarViewProps {
   handleClickDate: (date: number) => void;
   handleChangeWeeklyView: () => void;
   handleMoveToday: () => void;
+  handleChangeDate: (year: number, month: number) => void;
 }
 
 const MonthlyCalendarView = ({
@@ -34,6 +35,7 @@ const MonthlyCalendarView = ({
   handleClickDate,
   handleChangeWeeklyView,
   handleMoveToday,
+  handleChangeDate,
 }: MonthlyCalendarViewProps) => {
   return (
     <>
@@ -41,9 +43,10 @@ const MonthlyCalendarView = ({
         type="monthly"
         year={monthlyDayjs.year()}
         month={monthlyDayjs.month() + 1}
+        isToday={isToday}
         onToggleCalendarType={handleChangeWeeklyView}
         onClickTodayMoveBtn={handleMoveToday}
-        isToday={isToday}
+        onChangeDate={handleChangeDate}
       />
       <div className={cn("container")} role="grid">
         <DayHeader />
@@ -191,6 +194,19 @@ export default function MonthlyCalendar({
     setDayjsObject(dayjs());
   };
 
+  const handleChangeDate = (year: number, month: number) => {
+    const changedDate = dayjs()
+      .year(year)
+      .month(month - 1)
+      .set("date", 1)
+      .day(0);
+
+    setDayjsObject(changedDate);
+    if (onChangeDate) {
+      onChangeDate(changedDate);
+    }
+  };
+
   const viewProps = {
     monthlyDayjs: dayjsObject,
     calendarDates,
@@ -201,6 +217,7 @@ export default function MonthlyCalendar({
     handleArrowClicked,
     handleChangeWeeklyView: onChangeViewMode,
     handleMoveToday,
+    handleChangeDate,
   };
 
   return <MonthlyCalendarView {...viewProps} />;
