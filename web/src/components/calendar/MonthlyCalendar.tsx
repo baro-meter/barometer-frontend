@@ -8,9 +8,9 @@ import React, {
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
-import DayHeader from "@/components/calendar/DayHeader";
 import Weekly from "./Weekly";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
+import DayHeader from "@/markup/components/calendar/DayHeaderView";
 
 const cn = classNames.bind(scss);
 

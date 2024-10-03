@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
-import DayHeader from "@/components/calendar/DayHeader";
 import Weekly from "@/components/calendar/Weekly";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
+import DayHeader from "@/markup/components/calendar/DayHeaderView";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
