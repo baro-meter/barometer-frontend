@@ -6,8 +6,6 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { currentGoalState } from "@/recoils/goals";
 import { getGoals } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 
