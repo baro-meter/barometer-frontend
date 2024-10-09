@@ -52,13 +52,13 @@
             <mxPoint x="43.999999999999886" y="680" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ymip4WVbfa-R8SADGr8S-21" value="GET /report" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" edge="1" parent="ymip4WVbfa-R8SADGr8S-2">
+        <mxCell id="ymip4WVbfa-R8SADGr8S-21" value="GET /report" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#FF0800;" edge="1" parent="ymip4WVbfa-R8SADGr8S-2">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="55" y="395" as="sourcePoint" />
             <mxPoint x="220" y="395" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ymip4WVbfa-R8SADGr8S-22" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" edge="1" parent="ymip4WVbfa-R8SADGr8S-2">
+        <mxCell id="ymip4WVbfa-R8SADGr8S-22" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#FF0800;" edge="1" parent="ymip4WVbfa-R8SADGr8S-2">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="55" y="425" as="targetPoint" />
             <mxPoint x="220" y="425" as="sourcePoint" />
@@ -70,7 +70,7 @@
         <mxCell id="ymip4WVbfa-R8SADGr8S-24" value="&lt;b&gt;[바로미터 작성됨]&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=1;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;movable=1;resizable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" parent="ymip4WVbfa-R8SADGr8S-2">
           <mxGeometry x="60" y="350" width="150" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="ymip4WVbfa-R8SADGr8S-25" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" vertex="1" parent="ymip4WVbfa-R8SADGr8S-2">
+        <mxCell id="ymip4WVbfa-R8SADGr8S-25" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#FF0800;" vertex="1" parent="ymip4WVbfa-R8SADGr8S-2">
           <mxGeometry x="225" y="390" width="10" height="40" as="geometry" />
         </mxCell>
         <mxCell id="ymip4WVbfa-R8SADGr8S-26" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ymip4WVbfa-R8SADGr8S-2">
@@ -202,6 +202,9 @@
         </mxCell>
         <mxCell id="DS_AHWgSbqVEHc7j3QiW-4" value="[month (weekly view일 경우 2개 일 수 있음)" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;movable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" vertex="1" parent="ymip4WVbfa-R8SADGr8S-1">
           <mxGeometry x="261" y="183" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ShvPzKwa-Ip8Ow04kaZG-1" value="바로미터 단일 조회 api 호출 로직은, `/view/calendar` or `/reports` 로 일괄 조회되면&lt;br&gt;삭제 예정" style="label;fontStyle=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;overflow=hidden;spacingLeft=28;spacingRight=4;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;imageWidth=16;imageHeight=16;whiteSpace=wrap;html=1;image=img/clipart/Gear_128x128.png;fontColor=#ff0000;" vertex="1" parent="ymip4WVbfa-R8SADGr8S-1">
+          <mxGeometry x="480" y="430" width="280" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
