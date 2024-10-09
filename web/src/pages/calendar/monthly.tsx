@@ -6,6 +6,8 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
+import { useSetRecoilState } from "recoil";
+import { dateState } from "@/recoils/date";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -72,6 +74,7 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
       isActive: true,
     },
   ];
+  const setGlobalDate = useSetRecoilState(dateState);
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
@@ -104,6 +107,10 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
   const handleChangeDate = (d: dayjs.Dayjs) => {
     setSelectedDate(d);
   };
+
+  useEffect(() => {
+    setGlobalDate(selectedDate);
+  }, [selectedDate]);
 
   const viewProps = {
     year: selectedDate.year(),

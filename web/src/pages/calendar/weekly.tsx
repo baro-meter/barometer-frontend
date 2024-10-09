@@ -10,6 +10,8 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/calendar/WeeklyList";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { dateState } from "@/recoils/date";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -69,7 +71,7 @@ interface WeeklyPageProps {
  */
 
 const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
-  // const [swiper, setSwiper] = useState<SwiperTypes>();
+  const setGlobalDate = useSetRecoilState(dateState);
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [isToday, setIsToday] = useState(true);
@@ -85,6 +87,8 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   useEffect(() => {
     const diff = selectedDate.diff(dayjs(), "days");
     setIsToday(diff === 0 && selectedDate.date() === dayjs().date());
+
+    setGlobalDate(selectedDate);
   }, [selectedDate]);
 
   const handleChangeMonthlyView = useCallback(() => {
