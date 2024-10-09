@@ -75,7 +75,6 @@ export default function WeeklyList({ year, month, date }: WeeklyListPageProps) {
   const [progressList, setProgressList] = useState(initData);
   const handleActiveProgress = (item: ProgressProps) => {
     // TODO 나중에 VO 만들어서 task id로 비교
-    console.log(`클릭됨: ${item.task}`);
     const findIndex = progressList.findIndex((_) => _ === item);
     setProgressList((prev) => {
       const changed = [...prev];

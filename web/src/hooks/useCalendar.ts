@@ -39,15 +39,7 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
   }, [currentDate]);
 
   useEffect(() => {
-    console.log(
-      "선택된 날짜가 변경되어 currentGoal이 변경되었습니다. goalKey : " +
-        goalKey
-    );
-    console.log(currentDate);
-    console.log(currentGoal);
-
     const fetchGoal = async () => {
-      console.log("fetchGoal");
       const newGoals = await getGoals(currentDate.year(), currentDate.month());
       setCurrentGoal(newGoals);
     };

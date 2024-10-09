@@ -94,11 +94,10 @@ export default function WeeklyCalendar({
       dates.push(startDate.add(i, "day").date());
     }
     setCalendarDates(dates);
-  }, [year, selectedDate]);
+  }, [selectedDate]);
 
   const handleClickDate = (d: number) => {
     const goalDate = selectedDate.set("date", d);
-    setSelectedDate(goalDate);
 
     if (onChangeDate) {
       onChangeDate(goalDate);
@@ -115,7 +114,6 @@ export default function WeeklyCalendar({
     if (goalDate && swiper) {
       swiper.slideTo(1);
 
-      setSelectedDate(goalDate);
       if (onChangeDate) {
         onChangeDate(goalDate);
       }

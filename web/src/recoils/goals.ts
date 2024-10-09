@@ -24,7 +24,6 @@ export const currentGoalState = selectorFamily({
     (goalKey: string) =>
     ({ get }) => {
       const goalMapper = get(goalState);
-      console.log(`${goalKey}요청 - ${goalMapper[goalKey]}`);
 
       return goalMapper[goalKey];
     },
