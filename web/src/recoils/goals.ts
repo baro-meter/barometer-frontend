@@ -1,6 +1,8 @@
-import { GoalStateType } from "@/types/goal";
-import { atom, selector } from "recoil";
-import { dateState } from "./date";
+import { GoalStateType, GoalType } from "@/types/goal";
+import { atom, selector, selectorFamily } from "recoil";
+import { useDayjsToStr } from "@/hooks/useDateFormat";
+import { getGoals } from "@/services/calendar/calendarService";
+import dayjs from "dayjs";
 
 /**
  * 조회가 되었던 '월'에 대한 목표 값들 캐싱
@@ -10,19 +12,27 @@ import { dateState } from "./date";
  */
 export const goalState = atom<GoalStateType>({
   key: "goalState",
-  default: undefined,
+  default: {} as GoalStateType,
 });
 
 /**
  * 현재 선택된 날짜에 대한 목표 값
  */
-export const currentGoalState = selector({
+export const currentGoalState = selectorFamily({
   key: "currentGoalState",
-  get: ({ get }) => {
-    const date = get(dateState);
-    const goalMapper = get(goalState);
-    const dateKey = `${date.year()}-${date.month()}`;
+  get:
+    (goalKey: string) =>
+    ({ get }) => {
+      const goalMapper = get(goalState);
+      console.log(`${goalKey}요청 - ${goalMapper[goalKey]}`);
 
-    return goalMapper[dateKey];
-  },
+      return goalMapper[goalKey];
+    },
+  set:
+    (goalKey: string) =>
+    ({ set }, newValue) => {
+      set(goalState, (prevState) => {
+        return { ...prevState, [goalKey]: newValue as GoalType[] };
+      });
+    },
 });
