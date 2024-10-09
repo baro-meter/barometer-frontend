@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import Image from "next/image";
@@ -28,6 +28,13 @@ const CalendarHeaderView = ({
 }: CalendarHeaderViewProps) => {
   const [isPickerVisible, setPickerVisible] = useState(false);
 
+  useEffect(() => {
+    setPickerValue({
+      year: year.toString(),
+      month: month.toString(),
+    });
+  }, [year, month]);
+
   const [pickerValue, setPickerValue] = useState({
     year: year.toString(),
     month: month.toString(),
@@ -40,7 +47,7 @@ const CalendarHeaderView = ({
   const handlePickerChange = (value: { [key: string]: string }) => {
     if (value.year && value.month) {
       const { year, month } = value;
-      setPickerValue({ year: year, month: month });
+      setPickerValue({ year, month });
       onChangeDate(parseInt(year), parseInt(month));
     } else {
       console.error("picker doesn`t have year and month");
