@@ -6,8 +6,10 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
-import { useSetRecoilState } from "recoil";
-import { dateState } from "@/recoils/date";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { currentGoalState } from "@/recoils/goals";
+import { getGoals } from "@/services/calendar/calendarService";
+import { GoalType } from "@/types/goal";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -52,10 +54,11 @@ const MonthlyPageView = ({
 };
 // Weekly -> Monthly 전환될 때 선택된 날짜를 전달 받는다.
 interface MonthlyPageProps {
+  monthlyGoals: GoalType[];
   initDate?: string;
 }
 
-const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
+const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
   const testData = [
     { task: "일이삼사오육칠팔", width: 70, count: "2번" },
     { task: "걸어서 회사가기", width: 10, count: "매일" },
@@ -74,7 +77,7 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
       isActive: true,
     },
   ];
-  const setGlobalDate = useSetRecoilState(dateState);
+
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
@@ -108,10 +111,6 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
     setSelectedDate(d);
   };
 
-  useEffect(() => {
-    setGlobalDate(selectedDate);
-  }, [selectedDate]);
-
   const viewProps = {
     year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
@@ -125,11 +124,17 @@ const MonthlyPage = ({ initDate }: MonthlyPageProps) => {
   return <MonthlyPageView {...viewProps} />;
 };
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-  const initDate = context.query?.initDate ?? "";
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const initDate = (context.query?.initDate ?? "") as string;
+  const current = initDate ? dayjs(initDate) : dayjs();
+  const monthlyGoals = await getGoals(current.year(), current.month());
+
   return {
     props: {
       initDate,
+      monthlyGoals,
     },
   };
 };
