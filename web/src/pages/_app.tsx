@@ -8,12 +8,13 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot, useRecoilValue } from "recoil";
-import { accessTokenState } from "@/recoils/user";
+import { useAccessTokenValue } from "@/recoils/user";
 import httpClient from "@/services/httpClient";
 
 // axios interceptor 전역 설정시 recoil 활용을 위해서 분리
 function AxiosInterceptorInitializer() {
-  const accessToken = useRecoilValue(accessTokenState);
+  // TODO 초기에는 무조건 로그인하는 로직 넣어야 함 (지금은 그냥 localStorage 데이터 있음 로그인됨 - 개발 편의성 위해)
+  const accessToken = useAccessTokenValue();
 
   useEffect(() => {
     console.log("init!!!!");

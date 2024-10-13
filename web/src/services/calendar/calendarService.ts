@@ -6,7 +6,7 @@ export const getGoals = async (year: number, month: number) => {
   // TODO 실제 api 호출 테스트 - 지금은 api 구동이 안됨
   // const url = `/goals`;
   // const params = { year, month };
-  // return httpClient.get(url, { params });
+  // return httpClient.get<GoalType[]>(url, { params });
 
   return [
     {

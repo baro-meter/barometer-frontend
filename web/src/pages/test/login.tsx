@@ -1,10 +1,8 @@
 import { LoginUserType } from "@/types/authType";
-import httpClient from "../../services/httpClient";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { auth, join, login } from "@/services/auth/authService";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { accessTokenState, userState } from "@/recoils/user";
+import { useAccessTokenValue, useUserState } from "@/recoils/user";
 
 interface LoginPageViewProps {
   user: LoginUserType;
@@ -85,8 +83,8 @@ const LoginPageView = ({
 interface LoginPageProps {}
 
 const LoginPage = ({}: LoginPageProps) => {
-  const [authedUser, setAuthedUser] = useRecoilState(userState);
-  const accessTokenStr = useRecoilValue(accessTokenState);
+  const [authedUser, setAuthedUser] = useUserState();
+  const accessTokenStr = useAccessTokenValue();
   const joinMutation = useMutation({ mutationFn: join });
   const authMutation = useMutation({ mutationFn: auth });
   const loginMutation = useMutation({

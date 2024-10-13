@@ -53,3 +53,16 @@ export function useGoalState() {
 
   return [isInitial ? defaultValue : value, setValue] as const;
 }
+
+export function useCurrentGoalState(goalKey: string) {
+  const [isInitial, setIsInitial] = useState(true);
+  const [currentGoal, setCurrentGoal] = useRecoilState(
+    currentGoalState(goalKey)
+  );
+
+  useEffect(() => {
+    setIsInitial(false);
+  }, []);
+
+  return [isInitial ? [] : currentGoal, setCurrentGoal] as const;
+}
