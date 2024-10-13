@@ -26,10 +26,13 @@ export class HttpClient implements IHttpClient {
     return HttpClient.instance;
   }
 
-  private initInterceptors() {
+  public initInterceptors(accessToken?: string) {
     this.axiosInstance.interceptors.request.use(
       (config) => {
         // TODO refresh token, access token 처리 필요한 경우 정의
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
         return config;
       },
       (error) => Promise.reject(error)
