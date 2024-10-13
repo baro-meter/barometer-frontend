@@ -127,7 +127,9 @@ export const getServerSideProps = async (
 ) => {
   const initDate = (context.query?.initDate ?? "") as string;
   const current = initDate ? dayjs(initDate) : dayjs();
-  const monthlyGoals = await getGoals(current.year(), current.month());
+  const monthlyGoals = await getGoals(current.year(), current.month() + 1);
+  console.log(current.year(), current.month());
+  console.log(monthlyGoals);
 
   return {
     props: {

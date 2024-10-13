@@ -8,7 +8,7 @@ export class HttpClient implements IHttpClient {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: "/",
+      baseURL: `${process.env.API_URL}/`,
       headers: {
         "Content-Type": "application/json",
       },
