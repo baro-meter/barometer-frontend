@@ -15,7 +15,6 @@ interface MonthlyPageViewProps {
   month: number;
   date: number;
   progressList: ProgressProps[];
-  handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -89,24 +88,11 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
     }
   }, [initDate]);
 
-  const handleArrowClicked = useCallback(
-    (type: "next" | "prev") => {
-      let changedDate = selectedDate;
-      if (type === "next") {
-        changedDate = changedDate.add(1, "month").set("date", 1);
-      } else {
-        changedDate = changedDate.subtract(1, "month").set("date", 1);
-      }
-      setSelectedDate(changedDate);
-    },
-    [selectedDate]
-  );
-
   const handleChangeViewMode = useCallback(() => {
     router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
   }, [selectedDate]);
 
-  const handleChangeDate = (d: dayjs.Dayjs) => {
+  const handleChangeDate = async (d: dayjs.Dayjs) => {
     setSelectedDate(d);
   };
 
@@ -115,7 +101,6 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     progressList,
-    handleArrowClicked,
     handleChangeViewMode,
     handleChangeDate,
   };

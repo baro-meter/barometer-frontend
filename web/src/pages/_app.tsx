@@ -9,7 +9,20 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { MutableSnapshot, RecoilRoot } from "recoil";
 import { getCookies } from "cookies-next";
-import { userState } from "@/recoils/user";
+import { useAccessTokenValue, userState } from "@/recoils/user";
+import httpClient from "@/services/httpClient";
+
+// axios interceptor 전역 설정시 recoil 활용을 위해서 분리
+function AxiosInterceptorInitializer() {
+  // TODO 초기에는 무조건 로그인하는 로직 넣어야 함 (지금은 그냥 localStorage 데이터 있음 로그인됨 - 개발 편의성 위해)
+  const accessToken = useAccessTokenValue();
+
+  useEffect(() => {
+    httpClient.initInterceptors(accessToken);
+  }, [accessToken]);
+
+  return null; // No UI needed for this component
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -40,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <RecoilRoot initializeState={initializer}>
+          <AxiosInterceptorInitializer />
           <Component {...pageProps} />
         </RecoilRoot>
       </HydrationBoundary>

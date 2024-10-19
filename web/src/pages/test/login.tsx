@@ -105,6 +105,7 @@ const LoginPage = ({}: LoginPageProps) => {
        * 여기처럼 getInitialProps에서 refreshToken 호출 후 적용할까?
        */
 
+      // TODO 암호화 한번 해서 설정?
       setCookie("accessToken", accessToken);
       setCookie("accessToken", accessToken);
       setCookie("nickname", user.nickname);

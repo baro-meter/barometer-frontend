@@ -37,8 +37,6 @@ export class HttpClient implements IHttpClient {
   public setCredentials({ accessToken, refreshToken }: CredentialType) {
     this.axiosInstance.interceptors.request.use(
       (config) => {
-        // TODO refresh token 만료 시 교체 로직
-
         // refresh token, access token 처리 필요한 경우 정의
         if (accessToken) {
           config.headers.Authorization = `${accessToken}`;
@@ -49,9 +47,12 @@ export class HttpClient implements IHttpClient {
     );
   }
 
-  public initInterceptors() {
+  public initInterceptors(accessToken?: string) {
     this.axiosInstance.interceptors.request.use(
       (config) => {
+        if (accessToken) {
+          config.headers.Authorization = accessToken;
+        }
         return config;
       },
       (error) => Promise.reject(error)
