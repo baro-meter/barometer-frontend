@@ -6,7 +6,7 @@ import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 const defaultValue = undefined;
 
-const userState = atom<AuthUserType | undefined>({
+export const userState = atom<AuthUserType | undefined>({
   key: "userState", // unique ID (with respect to other atoms/selectors)
   default: defaultValue, // default value (aka initial value)
   effects_UNSTABLE: [persistAtom],

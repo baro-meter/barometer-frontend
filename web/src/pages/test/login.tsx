@@ -97,9 +97,18 @@ const LoginPage = ({}: LoginPageProps) => {
       }
       console.log(response);
       const { accessToken, refreshToken } = response;
-      setAuthedUser({ ...user, accessToken, refreshToken });
+      const authedUser = { ...user, accessToken, refreshToken };
+      setAuthedUser(authedUser);
+
+      /** TODO 다 쿠키에 저장하는게 맞을까?
+       * https://9yujin.tistory.com/104
+       * 여기처럼 getInitialProps에서 refreshToken 호출 후 적용할까?
+       */
+
       setCookie("accessToken", accessToken);
-      setCookie("refreshToken", refreshToken);
+      setCookie("accessToken", accessToken);
+      setCookie("nickname", user.nickname);
+      setCookie("email", user.email);
     },
   });
   const [user, setUser] = useState<LoginUserType>({
