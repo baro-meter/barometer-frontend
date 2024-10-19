@@ -122,6 +122,7 @@ export const setHttpClientCredentials = (
   cookies: Partial<{ [key: string]: string }>
 ) => {
   const { refreshToken, accessToken } = cookies;
+  // TODO 로그인 페이지로 리다이렉트
   if (!accessToken) {
     console.error("accessToken is not found!");
     return;

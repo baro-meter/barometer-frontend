@@ -6,9 +6,10 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
-import { getGoals } from "@/services/calendar/calendarService";
+import { getCalendarView, getGoals } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
+import { CalendarViewType } from "@/types/calendar";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -54,9 +55,14 @@ const MonthlyPageView = ({
 interface MonthlyPageProps {
   monthlyGoals: GoalType[];
   initDate?: string;
+  calendarViewData: CalendarViewType;
 }
 
-const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
+const MonthlyPage = ({
+  initDate,
+  monthlyGoals,
+  calendarViewData,
+}: MonthlyPageProps) => {
   const testData = [
     { task: "일이삼사오육칠팔", width: 70, count: "2번" },
     { task: "걸어서 회사가기", width: 10, count: "매일" },
@@ -115,10 +121,19 @@ export const getServerSideProps = async (
 
   const initDate = (context.query?.initDate ?? "") as string;
   let monthlyGoals = [] as GoalType[];
+  let calendarViewData: CalendarViewType = { goals: [], reports: [] };
 
   try {
     const current = initDate ? dayjs(initDate) : dayjs();
     monthlyGoals = await getGoals(current.year(), current.month() + 1);
+    calendarViewData = await getCalendarView(
+      current.year(),
+      current.month() + 1
+    );
+    console.log("monthlyGoals");
+    console.log(monthlyGoals);
+    console.log("calendarViewData");
+    console.log(calendarViewData);
   } catch (e) {
     console.error(e);
   }
@@ -127,6 +142,7 @@ export const getServerSideProps = async (
     props: {
       initDate,
       monthlyGoals,
+      calendarViewData,
     },
   };
 };
