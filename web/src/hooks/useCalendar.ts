@@ -1,7 +1,12 @@
-import { currentGoalState, goalState } from "@/recoils/goals";
+import {
+  currentGoalState,
+  goalState,
+  useCurrentGoalState,
+  useGoalState,
+} from "@/recoils/goals";
 import { GoalStateType } from "@/types/goal";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { useDayjsToStr } from "./useDateFormat";
 import dayjs from "dayjs";
 import { getGoals } from "@/services/calendar/calendarService";
@@ -13,12 +18,9 @@ import { getGoals } from "@/services/calendar/calendarService";
 export const useCalendar = (currentDate: dayjs.Dayjs) => {
   const { getGoalStateKey } = useDayjsToStr();
 
-  const [goal, setGoal] = useRecoilState(goalState);
+  const [goal, setGoal] = useGoalState();
   const [goalKey, setGoalKey] = useState(getGoalStateKey(currentDate));
-  //   const currentDate = useRecoilValue(currentDateState);
-  const [currentGoal, setCurrentGoal] = useRecoilState(
-    currentGoalState(goalKey)
-  );
+  const [currentGoal, setCurrentGoal] = useCurrentGoalState(goalKey);
 
   // calendar View 조회 시, goals 데이터 받아서 초기화
   const initGoals = (initGoalState: GoalStateType) => {

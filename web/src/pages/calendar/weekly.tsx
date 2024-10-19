@@ -10,10 +10,7 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/calendar/WeeklyList";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { currentGoalState } from "@/recoils/goals";
 import { useCalendar } from "@/hooks/useCalendar";
-import { useDayjsToStr } from "@/hooks/useDateFormat";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -105,6 +102,9 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   };
 
   const handleChangeDate = (year: number, month: number) => {
+    console.log(`week: ${selectedDate.week()}`);
+    console.log(`weekYear: ${selectedDate.weekYear()}`);
+
     setSelectedDate(
       dayjs()
         .year(year)

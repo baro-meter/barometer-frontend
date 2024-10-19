@@ -1,8 +1,10 @@
 import { GoalStateType, GoalType } from "@/types/goal";
-import { atom, selector, selectorFamily } from "recoil";
-import { useDayjsToStr } from "@/hooks/useDateFormat";
-import { getGoals } from "@/services/calendar/calendarService";
-import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { atom, selectorFamily, useRecoilState } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
+const defaultValue = {} as GoalStateType;
 
 /**
  * 조회가 되었던 '월'에 대한 목표 값들 캐싱
@@ -12,7 +14,8 @@ import dayjs from "dayjs";
  */
 export const goalState = atom<GoalStateType>({
   key: "goalState",
-  default: {} as GoalStateType,
+  default: defaultValue,
+  effects_UNSTABLE: [persistAtom],
 });
 
 /**
@@ -35,3 +38,31 @@ export const currentGoalState = selectorFamily({
       });
     },
 });
+
+/**
+ * for ssr
+ * https://github.com/polemius/recoil-persist#server-side-rendering
+ */
+export function useGoalState() {
+  const [isInitial, setIsInitial] = useState(true);
+  const [value, setValue] = useRecoilState(goalState);
+
+  useEffect(() => {
+    setIsInitial(false);
+  }, []);
+
+  return [isInitial ? defaultValue : value, setValue] as const;
+}
+
+export function useCurrentGoalState(goalKey: string) {
+  const [isInitial, setIsInitial] = useState(true);
+  const [currentGoal, setCurrentGoal] = useRecoilState(
+    currentGoalState(goalKey)
+  );
+
+  useEffect(() => {
+    setIsInitial(false);
+  }, []);
+
+  return [isInitial ? [] : currentGoal, setCurrentGoal] as const;
+}

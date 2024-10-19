@@ -8,10 +8,11 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "styles")],
     prependData: `@import "@/styles/abstracts/_variables.scss"; @import "@/styles/abstracts/_mixins.scss";`,
   },
+  // client 단에서만 됨
   async rewrites() {
     return [
       {
-        source: "/:path*",
+        source: "/api/:path*",
         destination: "http://localhost:8080/:path*",
       },
     ];

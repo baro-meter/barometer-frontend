@@ -6,17 +6,16 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { currentGoalState } from "@/recoils/goals";
-import { getGoals } from "@/services/calendar/calendarService";
+import { getCalendarView, getGoals } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
+import { setHttpClientCredentials } from "@/services/httpClient";
+import { CalendarViewType } from "@/types/calendar";
 
 interface MonthlyPageViewProps {
   year: number;
   month: number;
   date: number;
   progressList: ProgressProps[];
-  handleArrowClicked: (type: "next" | "prev") => void;
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -56,9 +55,14 @@ const MonthlyPageView = ({
 interface MonthlyPageProps {
   monthlyGoals: GoalType[];
   initDate?: string;
+  calendarViewData: CalendarViewType;
 }
 
-const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
+const MonthlyPage = ({
+  initDate,
+  monthlyGoals,
+  calendarViewData,
+}: MonthlyPageProps) => {
   const testData = [
     { task: "일이삼사오육칠팔", width: 70, count: "2번" },
     { task: "걸어서 회사가기", width: 10, count: "매일" },
@@ -90,24 +94,11 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
     }
   }, [initDate]);
 
-  const handleArrowClicked = useCallback(
-    (type: "next" | "prev") => {
-      let changedDate = selectedDate;
-      if (type === "next") {
-        changedDate = changedDate.add(1, "month").set("date", 1);
-      } else {
-        changedDate = changedDate.subtract(1, "month").set("date", 1);
-      }
-      setSelectedDate(changedDate);
-    },
-    [selectedDate]
-  );
-
   const handleChangeViewMode = useCallback(() => {
     router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
   }, [selectedDate]);
 
-  const handleChangeDate = (d: dayjs.Dayjs) => {
+  const handleChangeDate = async (d: dayjs.Dayjs) => {
     setSelectedDate(d);
   };
 
@@ -116,7 +107,6 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     progressList,
-    handleArrowClicked,
     handleChangeViewMode,
     handleChangeDate,
   };
@@ -127,14 +117,32 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  setHttpClientCredentials(context.req.cookies);
+
   const initDate = (context.query?.initDate ?? "") as string;
-  const current = initDate ? dayjs(initDate) : dayjs();
-  const monthlyGoals = await getGoals(current.year(), current.month());
+  let monthlyGoals = [] as GoalType[];
+  let calendarViewData: CalendarViewType = { goals: [], reports: [] };
+
+  try {
+    const current = initDate ? dayjs(initDate) : dayjs();
+    monthlyGoals = await getGoals(current.year(), current.month() + 1);
+    calendarViewData = await getCalendarView(
+      current.year(),
+      current.month() + 1
+    );
+    console.log("monthlyGoals");
+    console.log(monthlyGoals);
+    console.log("calendarViewData");
+    console.log(calendarViewData);
+  } catch (e) {
+    console.error(e);
+  }
 
   return {
     props: {
       initDate,
       monthlyGoals,
+      calendarViewData,
     },
   };
 };
