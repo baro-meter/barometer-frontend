@@ -2,13 +2,21 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 import IHttpClient from "@/services/IHttpClient";
 
+const isServer = typeof window === "undefined"; // 서버에서 실행되는지 확인
+
+interface CredentialType {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export class HttpClient implements IHttpClient {
   private static instance: HttpClient;
   private readonly axiosInstance: AxiosInstance;
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: `${process.env.API_URL}/`,
+      // 서버일 땐 직접 호출 필요
+      baseURL: `${isServer ? process.env.API_URL : "/api"}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -26,13 +34,24 @@ export class HttpClient implements IHttpClient {
     return HttpClient.instance;
   }
 
-  public initInterceptors(accessToken?: string) {
+  public setCredentials({ accessToken, refreshToken }: CredentialType) {
     this.axiosInstance.interceptors.request.use(
       (config) => {
-        // TODO refresh token, access token 처리 필요한 경우 정의
+        // TODO refresh token 만료 시 교체 로직
+
+        // refresh token, access token 처리 필요한 경우 정의
         if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
+          config.headers.Authorization = `${accessToken}`;
         }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+  }
+
+  public initInterceptors() {
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
         return config;
       },
       (error) => Promise.reject(error)
@@ -96,3 +115,19 @@ export class HttpClient implements IHttpClient {
 }
 
 export default HttpClient.getInstance();
+
+// SSR api 호출 시 cookie 값을 통해서 토큰 값을 가져와서 일일이 설정해야함
+export const setHttpClientCredentials = (
+  cookies: Partial<{ [key: string]: string }>
+) => {
+  const { refreshToken, accessToken } = cookies;
+  if (!accessToken) {
+    console.error("accessToken is not found!");
+    return;
+  }
+  if (!refreshToken) {
+    console.error("refreshToken is not found!");
+    return;
+  }
+  HttpClient.getInstance().setCredentials({ refreshToken, accessToken });
+};

@@ -10,8 +10,8 @@ export const getGoals = async (year: number, month: number) => {
     params,
     // TODO getServerSideProps에서 못 넣고 있음 -> cookie로 해결 필요
     headers: {
-      Authorization:
-        "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYXJvbWV0ZXIiLCJzdWIiOiIyIiwiZXhwIjoxNzI4ODg4NzU2LCJpYXQiOjE3Mjg4MDIzNTZ9.uVibjZ9eYOINZ_5VdRXreA6_vVIJEEqCcQguxLk5oTJ48GB7vcIKx_aQJwBsiK_bdBYOEZ1269JpBKc3UxAWKA",
+      // Authorization:
+      //   "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYXJvbWV0ZXIiLCJzdWIiOiIyIiwiZXhwIjoxNzI4ODg4NzU2LCJpYXQiOjE3Mjg4MDIzNTZ9.uVibjZ9eYOINZ_5VdRXreA6_vVIJEEqCcQguxLk5oTJ48GB7vcIKx_aQJwBsiK_bdBYOEZ1269JpBKc3UxAWKA",
     },
   });
 

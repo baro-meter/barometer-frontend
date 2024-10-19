@@ -8,6 +8,7 @@ import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 import { getGoals } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
+import { setHttpClientCredentials } from "@/services/httpClient";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -125,11 +126,17 @@ const MonthlyPage = ({ initDate, monthlyGoals }: MonthlyPageProps) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  setHttpClientCredentials(context.req.cookies);
+
   const initDate = (context.query?.initDate ?? "") as string;
-  const current = initDate ? dayjs(initDate) : dayjs();
-  const monthlyGoals = await getGoals(current.year(), current.month() + 1);
-  console.log(current.year(), current.month());
-  console.log(monthlyGoals);
+  let monthlyGoals = [] as GoalType[];
+
+  try {
+    const current = initDate ? dayjs(initDate) : dayjs();
+    monthlyGoals = await getGoals(current.year(), current.month() + 1);
+  } catch (e) {
+    console.error(e);
+  }
 
   return {
     props: {

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { auth, join, login } from "@/services/auth/authService";
 import { useAccessTokenValue, useUserState } from "@/recoils/user";
+import { setCookie } from "cookies-next";
 
 interface LoginPageViewProps {
   user: LoginUserType;
@@ -97,7 +98,8 @@ const LoginPage = ({}: LoginPageProps) => {
       console.log(response);
       const { accessToken, refreshToken } = response;
       setAuthedUser({ ...user, accessToken, refreshToken });
-      // TODO react-query로 token 관리하는 로직 추가하기
+      setCookie("accessToken", accessToken);
+      setCookie("refreshToken", refreshToken);
     },
   });
   const [user, setUser] = useState<LoginUserType>({
