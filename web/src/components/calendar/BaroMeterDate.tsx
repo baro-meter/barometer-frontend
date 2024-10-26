@@ -9,6 +9,9 @@ const cn = classNames.bind(scss);
 type scoreType = 0 | 1 | 2 | 3 | 4;
 type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
 
+/**
+ * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
+ */
 interface BaroMeterDateViewProps {
   date: number;
   successGoalCount: succesGoalCountType;
@@ -29,10 +32,17 @@ const BaroMeterDateView = ({
       className={cn("date", "date-today", "calendar-column")}
       onClick={handleClick}
     >
-      <div className={cn("group")}>
-        <Image className={cn("vector")} alt="Vector" fill src={imageUrl} />
+      <button type="button" className={cn("group")}>
+        <Image
+          className={cn("vector")}
+          style={{ stroke: "red", strokeWidth: "0.84px" }}
+          alt="Vector"
+          fill
+          storke-width="0.84px"
+          src={imageUrl}
+        />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
-      </div>
+      </button>
       {/* TODO 수정 필요 */}
       <div className={cn("frame")}>
         {[...Array(successGoalCount)].map((i) => (

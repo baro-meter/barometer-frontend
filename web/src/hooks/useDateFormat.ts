@@ -8,6 +8,7 @@ export const useDayjsToStr = () => {
 
   const GOAL_STATE_KEY_FORMAT = "YYYY-MM";
   const getGoalStateKey = (dayjsObj: dayjs.Dayjs) => {
+    console.log(dayjsObj);
     return dayjsObj.format(GOAL_STATE_KEY_FORMAT);
   };
 

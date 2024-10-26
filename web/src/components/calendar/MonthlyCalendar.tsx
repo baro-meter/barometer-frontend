@@ -14,6 +14,9 @@ import DayHeader from "@/markup/components/calendar/DayHeaderView";
 
 const cn = classNames.bind(scss);
 
+/**
+ * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
+ */
 interface MonthlyCalendarViewProps {
   monthlyDayjs: dayjs.Dayjs;
   calendarDates: number[][];
@@ -198,8 +201,7 @@ export default function MonthlyCalendar({
     const changedDate = dayjs()
       .year(year)
       .month(month - 1)
-      .set("date", 1)
-      .day(0);
+      .set("date", 1);
 
     setDayjsObject(changedDate);
     if (onChangeDate) {
