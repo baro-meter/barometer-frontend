@@ -10,6 +10,9 @@ import { getCalendarView, getGoals } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
+import { useCalendar } from "@/hooks/useCalendar";
+import { useDayjsToStr } from "@/hooks/useDateFormat";
+import { goalState } from "@/recoils/goals";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -60,7 +63,7 @@ interface MonthlyPageProps {
 
 const MonthlyPage = ({
   initDate,
-  monthlyGoals,
+  // monthlyGoals, // 일단 서버사이드에서 매번 호출할 필요 없을 것 같아서 주석 처리
   calendarViewData,
 }: MonthlyPageProps) => {
   const testData = [
@@ -86,6 +89,13 @@ const MonthlyPage = ({
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
   const [progressList, setProgressList] = useState(testData);
+
+  const { currentGoal } = useCalendar(selectedDate);
+
+  useEffect(() => {
+    console.log("currentGoal");
+    console.log(currentGoal);
+  }, [currentGoal]);
 
   useEffect(() => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
@@ -120,18 +130,18 @@ export const getServerSideProps = async (
   setHttpClientCredentials(context.req.cookies);
 
   const initDate = (context.query?.initDate ?? "") as string;
-  let monthlyGoals = [] as GoalType[];
+  // let monthlyGoals = [] as GoalType[];
   let calendarViewData: CalendarViewType = { goals: [], reports: [] };
 
   try {
     const current = initDate ? dayjs(initDate) : dayjs();
-    monthlyGoals = await getGoals(current.year(), current.month() + 1);
+    // monthlyGoals = await getGoals(current.year(), current.month() + 1);
     calendarViewData = await getCalendarView(
       current.year(),
       current.month() + 1
     );
-    console.log("monthlyGoals");
-    console.log(monthlyGoals);
+    // console.log("monthlyGoals");
+    // console.log(monthlyGoals);
     console.log("calendarViewData");
     console.log(calendarViewData);
   } catch (e) {
@@ -141,7 +151,7 @@ export const getServerSideProps = async (
   return {
     props: {
       initDate,
-      monthlyGoals,
+      // monthlyGoals,
       calendarViewData,
     },
   };
