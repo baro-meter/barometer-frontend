@@ -2,12 +2,13 @@ import { AuthUserType } from "@/types/authType";
 import { useEffect, useState } from "react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { v1 } from "uuid";
 
 const { persistAtom } = recoilPersist();
 const defaultValue = undefined;
 
 export const userState = atom<AuthUserType | undefined>({
-  key: "userState", // unique ID (with respect to other atoms/selectors)
+  key: `userState/${v1}`, // unique ID (with respect to other atoms/selectors)
   default: defaultValue, // default value (aka initial value)
   effects_UNSTABLE: [persistAtom],
 });

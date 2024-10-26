@@ -56,17 +56,15 @@ const MonthlyCalendarView = ({
         <div role="rowgroup" className={cn("calendar")} ref={layoutRef}>
           {calendarDates.map((w, i) =>
             !isSixWeeks && i === 5 ? (
-              <></>
+              <div key={`w-${i}`}></div>
             ) : (
-              <>
-                <Weekly
-                  key={i}
-                  weekIdx={i}
-                  weekDates={w}
-                  activeDate={monthlyDayjs.date()}
-                  onClickDate={handleClickDate}
-                />
-              </>
+              <Weekly
+                key={`w-${i}`}
+                weekIdx={i}
+                weekDates={w}
+                activeDate={monthlyDayjs.date()}
+                onClickDate={handleClickDate}
+              />
             )
           )}
         </div>
