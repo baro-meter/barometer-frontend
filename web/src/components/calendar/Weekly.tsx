@@ -25,7 +25,7 @@ const WeeklyView = ({
     <div role="row" key={weekIdx} className={cn("row", "calendar-row")}>
       {weekDates.map((d, di) => (
         <BaroMeterDate
-          key={weekIdx * 10 + di}
+          key={`bm-${weekIdx * 10 + di}`}
           date={d}
           score={0}
           successGoalCount={0}

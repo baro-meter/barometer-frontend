@@ -2,6 +2,7 @@ import { GoalStateType, GoalType } from "@/types/goal";
 import { useEffect, useState } from "react";
 import { atom, selectorFamily, useRecoilState } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { v1 } from "uuid";
 
 const { persistAtom } = recoilPersist();
 const defaultValue = {} as GoalStateType;
@@ -13,7 +14,7 @@ const defaultValue = {} as GoalStateType;
  * - 수정이 이루어질 때만 갱신된다.
  */
 export const goalState = atom<GoalStateType>({
-  key: "goalState",
+  key: `goalState/${v1}`,
   default: defaultValue,
   effects_UNSTABLE: [persistAtom],
 });
@@ -22,7 +23,7 @@ export const goalState = atom<GoalStateType>({
  * 현재 선택된 날짜에 대한 목표 값
  */
 export const currentGoalState = selectorFamily({
-  key: "currentGoalState",
+  key: `currentGoalState/${v1}`,
   get:
     (goalKey: string) =>
     ({ get }) => {
