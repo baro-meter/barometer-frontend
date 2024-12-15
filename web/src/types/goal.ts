@@ -17,3 +17,9 @@ export interface GoalStateType {
   // key: YYYY-MM (ex. 2024-10)
   [key: string]: GoalType[];
 }
+
+export interface GoalCategoryType {
+  typeId?: GoalTypeId; // 전체는 goalTypeId가 없다.
+  text: string;
+  order: number;
+}
