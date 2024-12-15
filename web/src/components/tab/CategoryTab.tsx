@@ -1,3 +1,5 @@
+import CategoryLabel from "@/markup/components/CategoryLabel";
+import { GoalTypeId } from "@/types/goal";
 import React, { createContext, useState } from "react";
 
 interface CategoryTabViewProps {
@@ -6,7 +8,12 @@ interface CategoryTabViewProps {
 
 const CategoryTabView = ({ children }: CategoryTabViewProps) => {
   // TODO 마크업 필요
-  return <div className="tab-container">{children}</div>;
+  return (
+    <div className="tab-container">
+      <CategoryLabel />
+      {children}
+    </div>
+  );
 };
 
 interface CategoryTabProps {
@@ -16,21 +23,25 @@ interface CategoryTabProps {
 export default function CategoryTab({ children }: CategoryTabProps) {
   const viewProps = { children };
 
-  const [activeTabIdx, setActiveTabIdx] = useState<number>(0);
+  const [activeTabTypeId, setActiveTabTypeId] = useState<
+    GoalTypeId | undefined
+  >();
 
   return (
-    <CategoryTabContext.Provider value={{ activeTabIdx, setActiveTabIdx }}>
+    <CategoryTabContext.Provider
+      value={{ activeTabTypeId, setActiveTabTypeId }}
+    >
       <CategoryTabView {...viewProps} />
     </CategoryTabContext.Provider>
   );
 }
 
 interface CategoryTabContextType {
-  activeTabIdx: number;
-  setActiveTabIdx: (idx: number) => void;
+  activeTabTypeId: GoalTypeId | undefined;
+  setActiveTabTypeId: (typeId: GoalTypeId | undefined) => void;
 }
 
 export const CategoryTabContext = createContext<CategoryTabContextType>({
-  activeTabIdx: 0,
-  setActiveTabIdx: () => {},
+  activeTabTypeId: undefined,
+  setActiveTabTypeId: () => {},
 });

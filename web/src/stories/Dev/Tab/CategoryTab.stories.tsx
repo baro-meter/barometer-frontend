@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import CategoryTab from "@/components/tab/CategoryTab";
 import CategoryTabPanel from "@/components/tab/CategoryTabPanel";
-import CategoryLabel from "@/markup/components/CategoryLabel";
+import { GoalTypeId } from "@/types/goal";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -28,10 +28,17 @@ export const TabList: Story = {
   args: {},
   render: (args) => (
     <CategoryTab>
-      <CategoryLabel />
-      <CategoryTabPanel index={0}>tab panel1</CategoryTabPanel>
-      <CategoryTabPanel index={1}>tab panel2</CategoryTabPanel>
-      <CategoryTabPanel index={2}>tab panel3</CategoryTabPanel>
+      <CategoryTabPanel>전체</CategoryTabPanel>
+      <CategoryTabPanel typeId={GoalTypeId.OTHER}>기타</CategoryTabPanel>
+      <CategoryTabPanel typeId={GoalTypeId.REGULAR_LIFE}>
+        규칙적인 생활
+      </CategoryTabPanel>
+      <CategoryTabPanel typeId={GoalTypeId.PEACE_OF_MIND}>
+        마음의 여유
+      </CategoryTabPanel>
+      <CategoryTabPanel typeId={GoalTypeId.WEIGHT_MANAGEMENT}>
+        체중 관리
+      </CategoryTabPanel>
     </CategoryTab>
   ),
 };

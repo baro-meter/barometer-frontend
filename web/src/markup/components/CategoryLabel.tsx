@@ -14,9 +14,9 @@ export const CategoryLabel = () => {
   return (
     <div className={cn("category-list")}>
       <CategoryTabContext.Consumer>
-        {({ activeTabIdx, setActiveTabIdx }) => {
+        {({ activeTabTypeId, setActiveTabTypeId }) => {
           return getCategoryLableItems().map((category, index) => {
-            const handleChange = () => setActiveTabIdx(index);
+            const handleChange = () => setActiveTabTypeId(category.typeId);
             const id = `category${index}`;
             return (
               <span key={id} className={cn("category")}>
@@ -24,7 +24,7 @@ export const CategoryLabel = () => {
                   type="radio"
                   id={id}
                   name="categoryGroup"
-                  checked={activeTabIdx === index}
+                  checked={activeTabTypeId === category.typeId}
                   onChange={handleChange}
                   className={cn("category-input")}
                 />

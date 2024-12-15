@@ -1,5 +1,6 @@
 import React from "react";
 import { CategoryTabContext } from "./CategoryTab";
+import { GoalTypeId } from "@/types/goal";
 
 interface CategoryTabPanelViewProps {
   children?: React.ReactNode;
@@ -11,19 +12,19 @@ const CategoryTabPanelView = ({ children }: CategoryTabPanelViewProps) => {
 
 interface CategoryTabPanelProps {
   children?: React.ReactNode;
-  index: number; // tabItem의 index 순서 매칭용 (0부터 시작)
+  typeId?: GoalTypeId; // undefined = 전체
 }
 
 export default function CategoryTabPanel({
   children,
-  index,
+  typeId,
 }: CategoryTabPanelProps) {
   const viewProps = { children };
 
   return (
     <CategoryTabContext.Consumer>
-      {({ activeTabIdx }) =>
-        activeTabIdx === index && <CategoryTabPanelView {...viewProps} />
+      {({ activeTabTypeId }) =>
+        activeTabTypeId === typeId && <CategoryTabPanelView {...viewProps} />
       }
     </CategoryTabContext.Consumer>
   );
