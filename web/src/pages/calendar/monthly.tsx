@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "@/utils/calendarUtil";
@@ -13,6 +13,8 @@ import { CalendarViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
 import { useDayjsToStr } from "@/hooks/useDateFormat";
 import { goalState } from "@/recoils/goals";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { useAccessTokenValue } from "@/recoils/user";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -58,14 +60,14 @@ const MonthlyPageView = ({
 interface MonthlyPageProps {
   monthlyGoals: GoalType[];
   initDate?: string;
-  calendarViewData: CalendarViewType;
+  // calendarViewData: CalendarViewType;
 }
 
 const MonthlyPage = ({
   initDate,
-  // monthlyGoals, // 일단 서버사이드에서 매번 호출할 필요 없을 것 같아서 주석 처리
-  calendarViewData,
-}: MonthlyPageProps) => {
+}: // calendarViewData,
+// monthlyGoals, // 일단 서버사이드에서 매번 호출할 필요 없을 것 같아서 주석 처리
+MonthlyPageProps) => {
   const testData = [
     { task: "일이삼사오육칠팔", width: 70, count: "2번" },
     { task: "걸어서 회사가기", width: 10, count: "매일" },
@@ -87,22 +89,39 @@ const MonthlyPage = ({
 
   const router = useRouter();
   // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
-  const [selectedDate, setSelectedDate] = useState(dayjs()); // 미선택은 불가능하다고 이해함
+  const [selectedDate, setSelectedDate] = useState(
+    initDate ? dayjs(initDate) : dayjs()
+  ); // 미선택은 불가능하다고 이해함
   const [progressList, setProgressList] = useState(testData);
 
+  // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
+  const accessToken = useAccessTokenValue();
+
   const { currentGoal } = useCalendar(selectedDate);
+  const { data: calendarViewData } = useQuery<CalendarViewType>({
+    queryKey: ["calendarViewData"],
+    queryFn: () => {
+      console.log(`fetchCalendarView: ${getFormatDayjs(selectedDate)}`);
+      return getCalendarView(
+        getFormatDayjs(selectedDate.startOf("month")),
+        getFormatDayjs(selectedDate.endOf("month"))
+      );
+    },
+    enabled: !!accessToken,
+  });
 
   useEffect(() => {
-    console.log("currentGoal");
-    console.log(currentGoal);
-  }, [currentGoal]);
+    console.log(`selectedDate: ${getFormatDayjs(selectedDate)}`);
+  }, [selectedDate]);
 
   useEffect(() => {
-    // 날짜가 바뀔 때 마다 달력이 초기화된다.
-    if (!!initDate) {
-      setSelectedDate(dayjs(initDate));
-    }
+    console.log(`initDate: ${initDate}`);
   }, [initDate]);
+
+  useEffect(() => {
+    console.log("calendarViewData~!@~@");
+    console.log(calendarViewData);
+  }, [calendarViewData]);
 
   const handleChangeViewMode = useCallback(() => {
     router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
@@ -129,30 +148,34 @@ export const getServerSideProps = async (
 ) => {
   setHttpClientCredentials(context.req.cookies);
 
+  const queryClient = new QueryClient();
   const initDate = (context.query?.initDate ?? "") as string;
-  // let monthlyGoals = [] as GoalType[];
-  let calendarViewData: CalendarViewType = { goals: [], reports: [] };
+  // let calendarViewData: CalendarViewType = { goals: [], reports: [] };
 
   try {
     const current = initDate ? dayjs(initDate) : dayjs();
-    // monthlyGoals = await getGoals(current.year(), current.month() + 1);
-    calendarViewData = await getCalendarView(
-      current.year(),
-      current.month() + 1
-    );
-    // console.log("monthlyGoals");
-    // console.log(monthlyGoals);
-    console.log("calendarViewData");
-    console.log(calendarViewData);
+    await queryClient.prefetchQuery({
+      queryKey: ["calendarViewData"],
+      queryFn: () =>
+        getCalendarView(
+          getFormatDayjs(current.startOf("month")),
+          getFormatDayjs(current.endOf("month"))
+        ),
+    });
+    // calendarViewData = await getCalendarView(
+    //   getFormatDayjs(current.startOf("month")),
+    //   getFormatDayjs(current.endOf("month"))
+    // );
   } catch (e) {
     console.error(e);
   }
 
   return {
     props: {
+      dehydratedState: dehydrate(queryClient),
       initDate,
       // monthlyGoals,
-      calendarViewData,
+      // calendarViewData,
     },
   };
 };
