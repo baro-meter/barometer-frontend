@@ -3,29 +3,19 @@ import classNames from "classnames/bind";
 import scss from "@/styles/components/category.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
-import { RoundTabContext } from "@/components/tab/RoundTab";
+import { CategoryTabContext } from "@/components/tab/CategoryTab";
+import { useCategory } from "@/hooks/useCategory";
 
 const cn = classNames.bind(scss);
 
-export interface CategoryItem {
-  text: string;
-  iconType?: boolean;
-}
-
-export interface CategoryLabelProps {
-  categories: CategoryItem[];
-}
-
-/**
- * TODO
- * - categories도 내가 들고 있을거라 그냥 고정으로 여기 넣기
- */
-export const CategoryLabel = ({ categories }: CategoryLabelProps) => {
+export const CategoryLabel = () => {
+  //  categories 정의 프론트 단에서 const로 들고 있어서 고정값으로 들고옴
+  const { getCategoryLableItems } = useCategory();
   return (
     <div className={cn("category-list")}>
-      <RoundTabContext.Consumer>
+      <CategoryTabContext.Consumer>
         {({ activeTabIdx, setActiveTabIdx }) => {
-          return categories.map((category, index) => {
+          return getCategoryLableItems().map((category, index) => {
             const handleChange = () => setActiveTabIdx(index);
             const id = `category${index}`;
             return (
@@ -39,7 +29,7 @@ export const CategoryLabel = ({ categories }: CategoryLabelProps) => {
                   className={cn("category-input")}
                 />
                 <label htmlFor={id} className={cn("category-label")}>
-                  {category.iconType && (
+                  {category.typeId !== undefined && (
                     <Image
                       src={`${basePath}/img/icon-category.svg`}
                       width={12}
@@ -53,7 +43,7 @@ export const CategoryLabel = ({ categories }: CategoryLabelProps) => {
             );
           });
         }}
-      </RoundTabContext.Consumer>
+      </CategoryTabContext.Consumer>
     </div>
   );
 };
