@@ -1,5 +1,6 @@
 import React from "react";
 import { RoundTabContext } from "./RoundTab";
+import CategoryLabel from "@/markup/components/CategoryLabelView";
 
 /**
  * round 형태의 탭을 정의하는 컴포넌트입니다.
@@ -44,5 +45,4 @@ export default function RoundTabItem({ label, index }: RoundTabItemProps) {
       }}
     </RoundTabContext.Consumer>
   );
-  // return <RoundTabItemView {...viewProps} />;
 }

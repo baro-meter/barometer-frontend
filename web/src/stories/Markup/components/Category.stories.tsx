@@ -16,16 +16,19 @@ export const Default: Story = {
     const [categories, setCategories] = useState(args.categories);
 
     const handleChange = (id: string) => {
-      setCategories(categories.map((category, index) => 
-        ({ ...category, checked: `category${index}` === id })
-      ));
+      setCategories(
+        categories.map((category, index) => ({
+          ...category,
+          checked: `category${index}` === id,
+        }))
+      );
     };
 
     const updatedArgs = {
       ...args,
       categories: categories.map((category, index) => ({
         ...category,
-        id: `category${index}`
+        id: `category${index}`,
       })),
     };
 

@@ -4,6 +4,7 @@ import RoundTab from "@/components/tab/RoundTab";
 import RoundTabItem from "@/components/tab/RoundTabItem";
 import RoundTabList from "@/components/tab/RoundTabList";
 import RoundTabPanel from "@/components/tab/RoundTabPanel";
+import CategoryLabel from "@/markup/components/CategoryLabelView";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -29,11 +30,24 @@ export const TabList: Story = {
   args: {},
   render: (args) => (
     <RoundTab>
-      <RoundTabList {...args}>
+      <CategoryLabel
+        categories={[
+          { text: "전체", iconType: false },
+          { text: "규칙적인 생활", iconType: true },
+          { text: "체중관리", iconType: true },
+          { text: "마음의 여유", iconType: true },
+          { text: "자기 개발", iconType: true },
+          { text: "레이블", iconType: true },
+          { text: "레이블", iconType: true },
+          { text: "레이블", iconType: true },
+          { text: "레이블", iconType: true },
+        ]}
+      />
+      {/* <RoundTabList {...args}>
         <RoundTabItem label="tab1" index={0} />
         <RoundTabItem label="tab2" index={1} />
         <RoundTabItem label="tab3" index={2} />
-      </RoundTabList>
+      </RoundTabList> */}
       <RoundTabPanel index={0}>tab panel1</RoundTabPanel>
       <RoundTabPanel index={1}>tab panel2</RoundTabPanel>
       <RoundTabPanel index={2}>tab panel3</RoundTabPanel>
