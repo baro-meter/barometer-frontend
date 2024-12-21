@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
-import weekYear from "dayjs/plugin/weekYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs } from "@/utils/calendarUtil";
@@ -13,7 +12,6 @@ import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView"
 import { useCalendar } from "@/hooks/useCalendar";
 
 dayjs.extend(weekOfYear);
-dayjs.extend(weekYear);
 dayjs.extend(utc);
 
 interface WeeklyPageViewProps {
@@ -94,6 +92,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (dayJs: dayjs.Dayjs) => {
+    console.log("handleChangeSelectedDate: " + dayJs.toString());
     setSelectedDate(dayJs);
   };
 
@@ -102,9 +101,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   };
 
   const handleChangeDate = (year: number, month: number) => {
-    console.log(`week: ${selectedDate.week()}`);
-    console.log(`weekYear: ${selectedDate.weekYear()}`);
-
     setSelectedDate(
       dayjs()
         .year(year)
@@ -114,7 +110,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   };
 
   const viewProps = {
-    year: selectedDate.weekYear(),
+    year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     isToday,
