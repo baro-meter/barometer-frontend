@@ -5,3 +5,10 @@ const FORMAT = "YYYY-MM-DD";
 export function getFormatDayjs(dayjsObj: dayjs.Dayjs) {
   return dayjsObj.format(FORMAT);
 }
+
+export function getWeeklyDateRange(date: dayjs.Dayjs) {
+  let startDate = dayjs().year(date.year()).week(date.week()).day(0);
+  let endDate = startDate.add(7, "day");
+
+  return { startDate, endDate };
+}

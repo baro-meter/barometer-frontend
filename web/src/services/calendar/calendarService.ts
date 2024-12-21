@@ -10,9 +10,9 @@ export const getGoals = async (year: number, month: number) => {
   });
 };
 
-// export const getCalendarView = async (startDate: string, endDate: string) => {
-export const getCalendarView = async (year: number, month: number) => {
+export const getCalendarView = async (startDate: string, endDate: string) => {
   const url = `/view/calendar`;
-  const params = { year, month };
+  const params = { startDate, endDate };
+
   return httpClient.get<CalendarViewType>(url, { params });
 };

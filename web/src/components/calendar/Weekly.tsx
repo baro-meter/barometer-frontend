@@ -5,6 +5,9 @@ import BaroMeterDate from "./BaroMeterDate";
 
 const cn = classNames.bind(scss);
 
+/**
+ * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
+ */
 interface WeeklyViewProps {
   weekIdx: number;
   weekDates: number[];
@@ -22,7 +25,7 @@ const WeeklyView = ({
     <div role="row" key={weekIdx} className={cn("row", "calendar-row")}>
       {weekDates.map((d, di) => (
         <BaroMeterDate
-          key={weekIdx * 10 + di}
+          key={`bm-${weekIdx * 10 + di}`}
           date={d}
           score={0}
           successGoalCount={0}
