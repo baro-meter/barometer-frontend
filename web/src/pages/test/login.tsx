@@ -71,7 +71,7 @@ const LoginPageView = ({
       </form>
       <div>
         <h1>join 후 바로 login</h1>
-        <button onClick={handleLogin}>Login</button>
+        <button onClick={() => handleLogin}>Login</button>
       </div>
       <form onSubmit={handleLogin}>
         <h2>그냥 로그인</h2>

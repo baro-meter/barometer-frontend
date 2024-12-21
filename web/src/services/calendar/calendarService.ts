@@ -1,7 +1,6 @@
 import httpClient from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
 import { GoalType } from "@/types/goal";
-import { useQuery } from "@tanstack/react-query";
 
 export const getGoals = async (year: number, month: number) => {
   const url = `/goal`;

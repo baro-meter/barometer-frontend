@@ -8,6 +8,7 @@ import weekYear from "dayjs/plugin/weekYear";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";
+import { getWeeklyDateRange } from "@/utils/calendarUtil";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -89,7 +90,7 @@ export default function WeeklyCalendar({
   useEffect(() => {
     // weeklyView는 오늘 기준 일주일만 보여준다. 따라서, 이번주의 weekly date를 구한다.
     const dates = new Array(7);
-    let startDate = dayjs().year(year).week(selectedDate.week()).day(0);
+    const { startDate } = getWeeklyDateRange(selectedDate);
     for (let i = 0; i < 7; i++) {
       dates.push(startDate.add(i, "day").date());
     }

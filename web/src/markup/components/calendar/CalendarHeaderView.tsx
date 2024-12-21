@@ -29,6 +29,7 @@ const CalendarHeaderView = ({
   const [isPickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
+    console.log("*" + year, month);
     setPickerValue({
       year: year.toString(),
       month: month.toString(),

@@ -44,7 +44,6 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
   }, [currentDate]);
 
   useEffect(() => {
-    console.log("1");
     const fetchGoal = async () => {
       const newGoals = await getGoals(
         currentDate.year(),

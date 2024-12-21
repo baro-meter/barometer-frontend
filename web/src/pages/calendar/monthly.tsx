@@ -6,13 +6,11 @@ import { getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
-import { getCalendarView, getGoals } from "@/services/calendar/calendarService";
+import { getCalendarView } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
-import { useDayjsToStr } from "@/hooks/useDateFormat";
-import { goalState } from "@/recoils/goals";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 
@@ -95,19 +93,24 @@ MonthlyPageProps) => {
   const [progressList, setProgressList] = useState(testData);
 
   // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
+  // TODO accessToken이 뒤늦게 설정되어서, prefetch가 정상 동작하지 않음 -> 해결책 강구.
   const accessToken = useAccessTokenValue();
 
-  const { currentGoal } = useCalendar(selectedDate);
+  const startDate = useMemo(
+    () => getFormatDayjs(selectedDate.startOf("month")),
+    [selectedDate]
+  );
+  const endDate = useMemo(
+    () => getFormatDayjs(selectedDate.endOf("month")),
+    [selectedDate]
+  );
+
+  useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
-    queryKey: ["calendarViewData"],
-    queryFn: () => {
-      console.log(`fetchCalendarView: ${getFormatDayjs(selectedDate)}`);
-      return getCalendarView(
-        getFormatDayjs(selectedDate.startOf("month")),
-        getFormatDayjs(selectedDate.endOf("month"))
-      );
-    },
+    queryKey: ["calendarViewData", startDate, endDate],
+    queryFn: () => getCalendarView(startDate, endDate),
     enabled: !!accessToken,
+    staleTime: 1000 * 60,
   });
 
   useEffect(() => {
@@ -119,7 +122,6 @@ MonthlyPageProps) => {
   }, [initDate]);
 
   useEffect(() => {
-    console.log("calendarViewData~!@~@");
     console.log(calendarViewData);
   }, [calendarViewData]);
 
@@ -154,13 +156,11 @@ export const getServerSideProps = async (
 
   try {
     const current = initDate ? dayjs(initDate) : dayjs();
+    const startDate = getFormatDayjs(current.startOf("month"));
+    const endDate = getFormatDayjs(current.endOf("month"));
     await queryClient.prefetchQuery({
-      queryKey: ["calendarViewData"],
-      queryFn: () =>
-        getCalendarView(
-          getFormatDayjs(current.startOf("month")),
-          getFormatDayjs(current.endOf("month"))
-        ),
+      queryKey: ["calendarViewData", startDate, endDate],
+      queryFn: () => getCalendarView(startDate, endDate),
     });
     // calendarViewData = await getCalendarView(
     //   getFormatDayjs(current.startOf("month")),
