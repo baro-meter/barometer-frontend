@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/progress.module.scss";
 
@@ -6,35 +6,57 @@ const cn = classNames.bind(scss);
 
 export interface ProgressProps {
   task: string;
-  count: string;
-  width: number;
-  isActive?: boolean;
+  count: number;
   onClick?: () => void;
+  isDone?: boolean;
 }
 
-const ProgressView = ({
-  task,
-  width,
-  count,
-  isActive,
-  onClick,
-}: ProgressProps) => {
+interface ProgressBoxProps {
+  isActive?: boolean;
+  isDeActive?: boolean;
+  onClick: () => void;
+}
+
+const ProgressBox = ({ isActive, isDeActive, onClick }: ProgressBoxProps) => {
   return (
-    <div
-      className={cn("progress", { "is-active": isActive })}
+    <span
+      className={cn("progress-box", {
+        "is-active": isActive,
+        "is-deactive": isDeActive,
+      })}
       onClick={onClick}
-    >
-      <div
-        className={cn("progress-bar")}
-        role="progressbar"
-        aria-valuenow={width}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        style={{ width: `${width}%` }}
-      ></div>
+    ></span>
+  );
+};
+
+const ProgressView = ({ task, count, onClick, isDone }: ProgressProps) => {
+  const [activeStates, setActiveStates] = useState<boolean[]>(
+    Array(count).fill(false)
+  );
+
+  const handleBoxClick = (index: number) => {
+    const newStates = [...activeStates];
+    if (index === 0 || activeStates[index - 1]) {
+      newStates[index] = !newStates[index];
+      setActiveStates(newStates);
+    }
+  };
+
+  return (
+    <div className={cn("progress-item")}>
       <div className={cn("progress-info")}>
         <strong className={cn("progress-title")}>{task}</strong>
-        <span className={cn("progress-count")}>이번 주 {count}</span>
+        <span className={cn("progress-count")}>이번 주 {count}일</span>
+      </div>
+      <div className={cn("progress", { "is-done": isDone })} onClick={onClick}>
+        {[...Array(count)].map((_, index) => (
+          <ProgressBox
+            key={index}
+            isActive={activeStates[index]}
+            isDeActive={!activeStates[index] && index === 0}
+            onClick={() => handleBoxClick(index)}
+          />
+        ))}
       </div>
     </div>
   );

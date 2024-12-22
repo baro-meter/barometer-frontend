@@ -14,6 +14,7 @@ interface BaroMeterDateViewProps {
   successGoalCount: succesGoalCountType;
   imageUrl: string;
   hasScore: boolean;
+  isActive: boolean;
 }
 
 const BaroMeterDateView = ({
@@ -21,16 +22,20 @@ const BaroMeterDateView = ({
   successGoalCount,
   imageUrl,
   hasScore,
+  isActive,
 }: BaroMeterDateViewProps) => {
   return (
-    <div className={cn("date", "date-today", "calendar-column")}>
+    <div
+      className={cn("date", "date-today", "calendar-column", {
+        "is-active": isActive,
+      })}
+    >
       <button type="button" className={cn("group")}>
         <Image
           className={cn("vector")}
-          style={{ stroke: "red", strokeWidth: "0.84px" }}
+          style={{ strokeWidth: "0.84px" }}
           alt="Vector"
           fill
-          storke-width="0.84px"
           src={imageUrl}
         />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
@@ -58,7 +63,7 @@ export default function BaroMeterDate({
   date,
   score,
   successGoalCount,
-  isActive,
+  isActive = false,
 }: BaroMeterDateProps) {
   const imageUrl = useMemo(() => {
     let imageName;
@@ -89,7 +94,13 @@ export default function BaroMeterDate({
     );
   }
 
-  const viewProps = { date, successGoalCount, imageUrl, hasScore: score > 0 };
+  const viewProps = {
+    date,
+    successGoalCount,
+    imageUrl,
+    hasScore: score > 0,
+    isActive,
+  };
 
   return <BaroMeterDateView {...viewProps} />;
 }

@@ -22,8 +22,7 @@ const ProgressListView = ({
           key={i}
           task={data.task}
           count={data.count}
-          width={data.width}
-          isActive={!!data.isActive}
+          isDone={!!data.isDone}
           onClick={() => {
             if (onActiveProgress) {
               onActiveProgress(data);
