@@ -1,0 +1,29 @@
+.subtab {
+  margin-bottom: 12px;
+
+  &.has-border {
+    border-bottom: 1px solid $color-system-gray-gray10;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-family: $font-family-en;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: -0.03em;
+    color: $color-system-gray-gray95;
+  }
+
+  .btn-more {
+    margin-left: auto;
+    padding: 4px 4px 4px 0;
+  }
+}

@@ -1,18 +1,18 @@
-import Test from "@/markup/pages/Test";
+import Layout from "@/markup/pages/Layout";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Markup/Pages/Test",
-  component: Test,
+  title: "Markup/Pages/Layout",
+  component: Layout,
   parameters: {
     layout: "centered",
   },
   argTypes: {},
-} satisfies Meta<typeof Test>;
+} satisfies Meta<typeof Layout>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {},
 };

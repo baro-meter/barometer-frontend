@@ -13,34 +13,27 @@ type Story = StoryObj<typeof HeaderView>;
 
 export const Basic: Story = {
   args: {
-    headerType: 'basic',
-    titleText: '이번 주 미션'
+    headerType: "basic",
+    titleText: "이번 주 미션",
   },
 };
 
 export const Back: Story = {
   args: {
-    headerType: 'back',
-    titleText: '기록 모아보기'
+    headerType: "back",
+    titleText: "기록 모아보기",
   },
 };
 
 export const OnlyBack: Story = {
   args: {
-    headerType: 'onlyBack'
+    headerType: "onlyBack",
   },
 };
 
 export const Progress: Story = {
   args: {
-    headerType: 'progress',
-    progressWidth: 20
-  },
-};
-
-export const TitleWithOption: Story = {
-  args: {
-    headerType: 'titleWithOption',
-    titleText: '15.TODAY'
+    headerType: "progress",
+    progressWidth: 20,
   },
 };

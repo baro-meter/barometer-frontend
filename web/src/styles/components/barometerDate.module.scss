@@ -4,10 +4,17 @@
   padding: 14px 0;
   text-align: center;
 
+  &.is-active {
+    .text-wrapper {
+      color: $color-system-gray-gray99;
+    }
+  }
+
   .group {
-    height: 26px;
     position: relative;
     width: 26px;
+    height: 26px;
+    font-family: $font-family-en;
   }
 
   .vector {
@@ -18,15 +25,15 @@
   }
 
   .text-wrapper {
-    color: $color-system-gray-gray99;
+    position: absolute;
+    top: 4px;
+    width: calc(100% - 2px);
     font-size: 12px;
     font-weight: 600;
-    width: calc(100% - 2px);
+    color: $color-system-gray-gray30;
     letter-spacing: 0;
     line-height: 16px;
-    position: absolute;
     text-align: center;
-    top: 4px;
     white-space: nowrap;
   }
 

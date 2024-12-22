@@ -15,8 +15,7 @@ type Story = StoryObj<typeof ProgressView>;
 export const Default: Story = {
   args: {
     task: "필라테스 수업",
-    width: 60,
-    count: "매일",
-    isActive: false,
+    count: 7,
+    isDone: false,
   },
 };

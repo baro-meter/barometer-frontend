@@ -31,20 +31,17 @@ interface WeeklyProps {
   weekIdx?: number;
   weekDates: number[];
   activeDate?: number;
-  className?: string;
 }
 
 export default function Weekly({
   weekIdx = 0,
   weekDates,
   activeDate,
-  className,
 }: WeeklyProps) {
   const viewProps = {
     weekIdx,
     weekDates,
     activeDate,
-    className,
   };
   return <WeeklyView {...viewProps} />;
 }

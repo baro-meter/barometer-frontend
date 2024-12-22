@@ -9,6 +9,10 @@
     display: flex;
     max-width: 100%;
     gap: 6px;
+
+    @at-root .tab-area & {
+      margin-right: -20px;
+    }
   }
 
   &-input {
@@ -34,11 +38,12 @@
           height: 100%;
           border-radius: 18px;
           background: rgba($color-system-gray-gray99, 0.04);
-          content: '';
+          content: "";
         }
 
         img {
-          filter: brightness(0) saturate(100%) invert(95%) sepia(7%) saturate(56%) hue-rotate(182deg) brightness(89%) contrast(87%);
+          filter: brightness(0) saturate(100%) invert(95%) sepia(7%)
+            saturate(56%) hue-rotate(182deg) brightness(89%) contrast(87%);
         }
       }
     }

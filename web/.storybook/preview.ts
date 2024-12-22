@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import "./storybook.css";
-import "../src/styles/base/_reset.scss";
+import "../src/styles/barometer.scss";
 
 const preview: Preview = {
   parameters: {

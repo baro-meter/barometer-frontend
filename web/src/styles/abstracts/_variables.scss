@@ -3,9 +3,9 @@ $color-system-blue-blue10: rgba(41, 84, 140, 1);
 $color-system-blue-blue20: rgba(54, 111, 188, 1);
 $color-system-blue-blue60: rgba(102, 169, 241, 1);
 $color-system-gray-gray0: rgba(29, 30, 31, 1);
-$color-system-gray-gray10: rgba(41, 43, 46, 1);
+$color-system-gray-gray10: rgba(37, 37, 38, 1);
 $color-system-gray-gray20: rgba(52, 54, 56, 1);
-$color-system-gray-gray30: rgba(63, 67, 71, 1);
+$color-system-gray-gray30: rgba(73, 75, 77, 1);
 $color-system-gray-gray40: rgba(92, 97, 102, 1);
 $color-system-gray-gray5: rgba(33, 35, 36, 1);
 $color-system-gray-gray50: rgba(120, 124, 128, 1);
@@ -48,4 +48,7 @@ $surface-contents-bg: rgba(26, 26, 26, 1);
 $surface-surface: rgba(20, 20, 20, 1);
 $surface-text-field: rgba(23, 23, 23, 1);
 
-$font-family: "Montserrat", system-ui, -apple-system, roboto, "Apple SD Gothic Neo", sans-serif;
+$font-family-en: "Montserrat", system-ui, -apple-system, roboto,
+  "Apple SD Gothic Neo", sans-serif;
+$font-family: "Paperlogy", system-ui, -apple-system, roboto,
+  "Apple SD Gothic Neo", sans-serif;
