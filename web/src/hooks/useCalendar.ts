@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useDayjsToStr } from "./useDateFormat";
 import dayjs from "dayjs";
 import { getGoals } from "@/services/calendar/calendarService";
+import { reportState } from "@/recoils/reports";
+import { useSetRecoilState } from "recoil";
+import { ReportType } from "@/types/calendar";
 
 /**
  * TODO calendar View에서 공통적으로 동작하는 로직을 설정
@@ -15,6 +18,7 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
   const [goal, setGoal] = useGoalState();
   const [goalKey, setGoalKey] = useState(getGoalStateKey(currentDate));
   const [currentGoal, setCurrentGoal] = useCurrentGoalState(goalKey);
+  const setCalendarViewData = useSetRecoilState(reportState);
 
   /**
    * calendar View 조회 시, goals 데이터 받아서 초기화
@@ -26,15 +30,15 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
    * - 혹은 react-native 연동 시 로컬 데이터 초기에 받도록 설정 할 때 사용
    * @param initGoalState
    */
-  const initGoals = (initGoalState: GoalStateType) => {
-    setGoal((beforeGoal) => {
-      const result = { ...beforeGoal };
-      Object.keys(initGoalState).forEach((key) => {
-        result[key] = initGoalState[key];
-      });
-      return result;
-    });
-  };
+  // const initGoals = (initGoalState: GoalStateType) => {
+  //   setGoal((beforeGoal) => {
+  //     const result = { ...beforeGoal };
+  //     Object.keys(initGoalState).forEach((key) => {
+  //       result[key] = initGoalState[key];
+  //     });
+  //     return result;
+  //   });
+  // };
 
   useEffect(() => {
     const newGoalKey = getGoalStateKey(currentDate);
@@ -57,8 +61,12 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
     }
   }, [currentGoal, currentDate]);
 
+  const initBaromters = (reports: ReportType[]) => {
+    setCalendarViewData(reports);
+  };
+
   return {
-    initGoals,
     currentGoal,
+    initBaromters,
   };
 };

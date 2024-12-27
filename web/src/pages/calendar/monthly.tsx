@@ -112,8 +112,7 @@ MonthlyPageProps) => {
     return `${selectedDate.date()}. ${title}`;
   }, [selectedDate]);
 
-  const setCalendarViewData = useSetRecoilState(reportState);
-  const { currentGoal } = useCalendar(selectedDate);
+  const { initBaromters, currentGoal } = useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
@@ -124,7 +123,9 @@ MonthlyPageProps) => {
   useEffect(() => {}, [selectedDate]);
 
   useEffect(() => {
-    setCalendarViewData(calendarViewData?.reports ?? []);
+    if (calendarViewData?.reports) {
+      initBaromters(calendarViewData.reports);
+    }
   }, [calendarViewData]);
 
   useEffect(() => {
