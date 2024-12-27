@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { getFormatDayjs } from "@/utils/calendarUtil";
+import { getDayText, getFormatDayjs } from "@/utils/calendarUtil";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
@@ -21,6 +21,7 @@ interface MonthlyPageViewProps {
   month: number;
   date: number;
   progressList: ProgressProps[];
+  subTabTitle: string;
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -30,6 +31,7 @@ const MonthlyPageView = ({
   month,
   date,
   progressList,
+  subTabTitle,
   handleChangeViewMode,
   handleChangeDate,
 }: MonthlyPageViewProps) => {
@@ -50,7 +52,7 @@ const MonthlyPageView = ({
         <div className="bottom-area">
           <div className="inner">
             {/* TODO 700px 이하 subTab 소거 */}
-            <SubTab title="15.TODAY" hasBorder />
+            <SubTab title={subTabTitle} hasBorder />
             <div className="tab-area">
               <CategoryLabel />
               <ProgressListView
@@ -77,29 +79,16 @@ const MonthlyPage = ({
 // monthlyGoals, // 일단 서버사이드에서 매번 호출할 필요 없을 것 같아서 주석 처리
 MonthlyPageProps) => {
   const testData = [
-    { task: "일이삼사오육칠팔", width: 70, count: "2번" },
-    { task: "걸어서 회사가기", width: 10, count: "매일" },
-    { task: "우유 한잔 마시기", width: 50, count: "4번" },
-    { task: "근력 운동 하기", width: 20, count: "2번", isActive: true },
-    {
-      task: "출퇴근할때 계단으로 오르내리기 더써볼까 이거 계속늘어남 이게 맞을까~~~~?",
-      width: 90,
-      count: "1번",
-    },
-    { task: "이제 더이상 할게 없는데", width: 80, count: "2번" },
-    {
-      task: "모름..",
-      width: 60,
-      count: "2번",
-      isActive: true,
-    },
+    { task: "일이삼사오육칠팔", count: 5 },
+    { task: "걸어서 회사가기", count: 3 },
+    { task: "우유 한잔 마시기", count: 5 },
+    { task: "근력 운동 하기", count: 4 },
   ];
 
   const router = useRouter();
-  // TODO 기획 측에 달력 인터랙션이 내가 이해한 것과 동일한지 확인 필요
   const [selectedDate, setSelectedDate] = useState(
     initDate ? dayjs(initDate) : dayjs()
-  ); // 미선택은 불가능하다고 이해함
+  ); // 미선택은 불가능
   const [progressList, setProgressList] = useState(testData);
 
   // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
@@ -114,6 +103,12 @@ MonthlyPageProps) => {
     () => getFormatDayjs(selectedDate.endOf("month")),
     [selectedDate]
   );
+  const subTabTitle = useMemo(() => {
+    const title = selectedDate.isSame(dayjs(), "day")
+      ? "TODAY"
+      : getDayText(selectedDate);
+    return `${selectedDate.date()}. ${title}`;
+  }, [selectedDate]);
 
   useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
@@ -123,9 +118,7 @@ MonthlyPageProps) => {
     staleTime: 1000 * 60,
   });
 
-  useEffect(() => {
-    console.log(`selectedDate: ${getFormatDayjs(selectedDate)}`);
-  }, [selectedDate]);
+  useEffect(() => {}, [selectedDate]);
 
   useEffect(() => {
     console.log(`initDate: ${initDate}`);
@@ -140,6 +133,7 @@ MonthlyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeDate = async (d: dayjs.Dayjs) => {
+    console.log(`handleChangeDate: ${d}`);
     setSelectedDate(d);
   };
 
@@ -148,6 +142,7 @@ MonthlyPageProps) => {
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     progressList,
+    subTabTitle,
     handleChangeViewMode,
     handleChangeDate,
   };

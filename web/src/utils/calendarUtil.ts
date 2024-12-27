@@ -12,3 +12,9 @@ export function getWeeklyDateRange(date: dayjs.Dayjs) {
 
   return { startDate, endDate };
 }
+
+// day.js 기준으로 요일 3글자를 가져오는 함수
+const DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+export function getDayText(dayjsObj: dayjs.Dayjs) {
+  return DAYS[dayjsObj.day()];
+}
