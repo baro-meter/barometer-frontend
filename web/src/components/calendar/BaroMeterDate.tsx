@@ -1,12 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/barometerDate.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
+import { currentReportState } from "@/recoils/reports";
+import { useRecoilValue } from "recoil";
 
 const cn = classNames.bind(scss);
 
-type scoreType = 0 | 1 | 2 | 3 | 4;
 type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
 
 /**
@@ -17,6 +18,7 @@ interface BaroMeterDateViewProps {
   successGoalCount: succesGoalCountType;
   imageUrl: string;
   hasScore: boolean;
+  isActive: boolean;
   handleClick: () => void;
 }
 
@@ -25,20 +27,22 @@ const BaroMeterDateView = ({
   successGoalCount,
   imageUrl,
   hasScore,
+  isActive,
   handleClick,
 }: BaroMeterDateViewProps) => {
   return (
     <div
-      className={cn("date", "date-today", "calendar-column")}
+      className={cn("date", "date-today", "calendar-column", {
+        "is-active": isActive,
+      })}
       onClick={handleClick}
     >
       <button type="button" className={cn("group")}>
         <Image
           className={cn("vector")}
-          style={{ stroke: "red", strokeWidth: "0.84px" }}
+          style={{ strokeWidth: "0.84px" }}
           alt="Vector"
           fill
-          storke-width="0.84px"
           src={imageUrl}
         />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
@@ -57,22 +61,20 @@ const BaroMeterDateView = ({
 
 interface BaroMeterDateProps {
   date: number;
-  score: scoreType;
-  successGoalCount: succesGoalCountType;
   isActive?: boolean;
   onClick?: () => void;
 }
 
 export default function BaroMeterDate({
   date,
-  score,
-  successGoalCount,
   isActive,
   onClick,
 }: BaroMeterDateProps) {
+  const report = useRecoilValue(currentReportState(date));
+
   const imageUrl = useMemo(() => {
     let imageName;
-    switch (score) {
+    switch (report?.score) {
       case 1:
         imageName = "date_bad";
         break;
@@ -89,7 +91,7 @@ export default function BaroMeterDate({
         imageName = isActive ? "date-today" : "date-monthly";
     }
     return `${basePath}/calendar/${imageName}.svg`;
-  }, [isActive, score]);
+  }, [isActive, report]);
 
   const handleClick = () => {
     if (onClick) {
@@ -107,9 +109,10 @@ export default function BaroMeterDate({
 
   const viewProps = {
     date,
-    successGoalCount,
+    successGoalCount: (report?.archivedCount ?? 0) as succesGoalCountType,
     imageUrl,
-    hasScore: score > 0,
+    hasScore: !!report?.score && report?.score > 0,
+    isActive: !!isActive,
     handleClick,
   };
 

@@ -6,12 +6,16 @@ interface GoalType {
   archivedDates: string[];
 }
 
-interface ReportType {
+export interface ReportType {
+  archivedCount: number;
+  archivedGoalIds: number[];
   date: string;
+  message?: string;
+  photo?: string;
   score: number;
 }
 
 export interface CalendarViewType {
-  goals: GoalType[];
+  goals: GoalType[]; // 이건 없는듯?
   reports: ReportType[];
 }

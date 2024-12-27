@@ -5,6 +5,7 @@ export enum GoalTypeId {
   WEIGHT_MANAGEMENT,
 }
 
+// TODO calendar.ts의 GoalType과 통합할 것
 export interface GoalType {
   id: number;
   title: string;

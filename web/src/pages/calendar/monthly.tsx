@@ -15,6 +15,8 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import SubTab from "@/markup/components/SubTab";
 import CategoryLabel from "@/markup/components/CategoryLabel";
+import { useSetRecoilState } from "recoil";
+import { reportState } from "@/recoils/reports";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -110,7 +112,8 @@ MonthlyPageProps) => {
     return `${selectedDate.date()}. ${title}`;
   }, [selectedDate]);
 
-  useCalendar(selectedDate);
+  const setCalendarViewData = useSetRecoilState(reportState);
+  const { currentGoal } = useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
@@ -121,12 +124,13 @@ MonthlyPageProps) => {
   useEffect(() => {}, [selectedDate]);
 
   useEffect(() => {
-    console.log(`initDate: ${initDate}`);
-  }, [initDate]);
+    setCalendarViewData(calendarViewData?.reports ?? []);
+  }, [calendarViewData]);
 
   useEffect(() => {
-    console.log(calendarViewData);
-  }, [calendarViewData]);
+    console.log("=======currentGoal========");
+    console.log(currentGoal);
+  }, [currentGoal]);
 
   const handleChangeViewMode = useCallback(() => {
     router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
