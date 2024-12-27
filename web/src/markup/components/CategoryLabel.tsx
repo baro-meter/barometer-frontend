@@ -5,17 +5,22 @@ import Image from "next/image";
 import { basePath } from "next.config";
 import { CategoryTabContext } from "@/components/tab/CategoryTab";
 import { useCategory } from "@/hooks/useCategory";
+import { GoalCategoryType } from "@/types/goal";
 
 const cn = classNames.bind(scss);
 
-export const CategoryLabel = () => {
+interface CategoryLabelProps {
+  items: GoalCategoryType[];
+}
+
+export const CategoryLabel = ({ items }: CategoryLabelProps) => {
   //  categories 정의 프론트 단에서 const로 들고 있어서 고정값으로 들고옴
-  const { getCategoryLableItems } = useCategory();
+  // const { getAllCategoryLableItems } = useCategory();
   return (
     <div className={cn("category-list")}>
       <CategoryTabContext.Consumer>
         {({ activeTabTypeId, setActiveTabTypeId }) => {
-          return getCategoryLableItems().map((category, index) => {
+          return items.map((category, index) => {
             const handleChange = () => setActiveTabTypeId(category.typeId);
             const id = `category${index}`;
             return (

@@ -107,10 +107,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [initDate]);
 
   useEffect(() => {
-    console.log(calendarViewData);
-  }, [calendarViewData]);
-
-  useEffect(() => {
     const diff = selectedDate.diff(dayjs(), "days");
     setIsToday(diff === 0 && selectedDate.date() === dayjs().date());
   }, [selectedDate]);
@@ -120,7 +116,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (dayJs: dayjs.Dayjs) => {
-    console.log("handleChangeSelectedDate: " + dayJs.toString());
     setSelectedDate(dayJs);
   };
 

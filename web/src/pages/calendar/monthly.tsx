@@ -7,7 +7,7 @@ import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 import { getCalendarView } from "@/services/calendar/calendarService";
-import { GoalType } from "@/types/goal";
+import { GoalCategoryType, GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
@@ -15,8 +15,6 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import SubTab from "@/markup/components/SubTab";
 import CategoryLabel from "@/markup/components/CategoryLabel";
-import { useSetRecoilState } from "recoil";
-import { reportState } from "@/recoils/reports";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -24,6 +22,7 @@ interface MonthlyPageViewProps {
   date: number;
   progressList: ProgressProps[];
   subTabTitle: string;
+  goalCategories: GoalCategoryType[];
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -34,6 +33,7 @@ const MonthlyPageView = ({
   date,
   progressList,
   subTabTitle,
+  goalCategories,
   handleChangeViewMode,
   handleChangeDate,
 }: MonthlyPageViewProps) => {
@@ -56,7 +56,7 @@ const MonthlyPageView = ({
             {/* TODO 700px 이하 subTab 소거 */}
             <SubTab title={subTabTitle} hasBorder />
             <div className="tab-area">
-              <CategoryLabel />
+              <CategoryLabel items={goalCategories} />
               <ProgressListView
                 alignment="horizontal"
                 progressList={progressList}
@@ -72,7 +72,6 @@ const MonthlyPageView = ({
 interface MonthlyPageProps {
   monthlyGoals: GoalType[];
   initDate?: string;
-  // calendarViewData: CalendarViewType;
 }
 
 const MonthlyPage = ({
@@ -112,15 +111,14 @@ MonthlyPageProps) => {
     return `${selectedDate.date()}. ${title}`;
   }, [selectedDate]);
 
-  const { initBaromters, currentGoal } = useCalendar(selectedDate);
+  const { initBaromters, currentGoal, goalCategories } =
+    useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
     enabled: !!accessToken,
     staleTime: 1000 * 60,
   });
-
-  useEffect(() => {}, [selectedDate]);
 
   useEffect(() => {
     if (calendarViewData?.reports) {
@@ -148,6 +146,7 @@ MonthlyPageProps) => {
     date: selectedDate.date(),
     progressList,
     subTabTitle,
+    goalCategories,
     handleChangeViewMode,
     handleChangeDate,
   };
