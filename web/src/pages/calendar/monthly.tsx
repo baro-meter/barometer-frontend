@@ -13,6 +13,8 @@ import { CalendarViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
+import SubTab from "@/markup/components/SubTab";
+import CategoryLabel from "@/markup/components/CategoryLabel";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -32,26 +34,34 @@ const MonthlyPageView = ({
   handleChangeDate,
 }: MonthlyPageViewProps) => {
   return (
-    <>
-      <MonthlyCalendar
-        year={year}
-        month={month}
-        date={date}
-        onChangeDate={handleChangeDate}
-        onChangeViewMode={handleChangeViewMode}
-      />
-      {/* TODO 마크업 필요 */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          margin: "20px",
-          maxWidth: "100%",
-        }}
-      >
-        <ProgressListView alignment="horizontal" progressList={progressList} />
-      </div>
-    </>
+    <div className="wrap">
+      <main className="main">
+        <div className="contents">
+          <div className="calendar-area">
+            <MonthlyCalendar
+              year={year}
+              month={month}
+              date={date}
+              onChangeDate={handleChangeDate}
+              onChangeViewMode={handleChangeViewMode}
+            />
+          </div>
+        </div>
+        <div className="bottom-area">
+          <div className="inner">
+            {/* TODO 700px 이하 subTab 소거 */}
+            <SubTab title="15.TODAY" hasBorder />
+            <div className="tab-area">
+              <CategoryLabel />
+              <ProgressListView
+                alignment="horizontal"
+                progressList={progressList}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 };
 // Weekly -> Monthly 전환될 때 선택된 날짜를 전달 받는다.

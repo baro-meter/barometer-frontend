@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import "@/styles/base/_reset.scss";
+import "@/styles/barometer.scss";
 import React, { useEffect, useMemo } from "react";
 import {
   HydrationBoundary,
