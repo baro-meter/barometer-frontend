@@ -15,35 +15,30 @@
     width: 26px;
     height: 26px;
     font-family: $font-family-en;
-  }
-
-  .vector {
-    height: 28px;
-    margin: -1px;
-    position: relative;
-    width: 28px;
+    vertical-align: top;
   }
 
   .text-wrapper {
     position: absolute;
-    top: 4px;
-    width: calc(100% - 2px);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     font-size: 12px;
     font-weight: 600;
     color: $color-system-gray-gray30;
-    letter-spacing: 0;
-    line-height: 16px;
-    text-align: center;
+    line-height: 26px;
     white-space: nowrap;
   }
 
   .frame {
-    align-items: flex-start;
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
     display: inline-flex;
-    flex: 0 0 auto;
     gap: 2px;
     justify-content: center;
-    position: relative;
   }
 
   .ellipse {
