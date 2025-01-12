@@ -91,13 +91,25 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     return getFormatDayjs(endDate);
   }, [selectedDate]);
 
-  useCalendar(selectedDate);
+  const { initBaromters, currentGoal, goalCategories } =
+    useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
     enabled: !!accessToken,
     staleTime: 1000 * 60,
   });
+
+  useEffect(() => {
+    if (calendarViewData?.reports) {
+      initBaromters(calendarViewData.reports);
+    }
+  }, [calendarViewData]);
+
+  useEffect(() => {
+    console.log("=======currentGoal========");
+    console.log(currentGoal);
+  }, [currentGoal]);
 
   useEffect(() => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
