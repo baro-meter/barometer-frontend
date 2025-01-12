@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/progress.module.scss";
+import { GoalType } from "@/types/goal";
 
 const cn = classNames.bind(scss);
 
+// TODO 일괄 바뀔 예정 -> goalType을 품고 있는 형태로(DB 데이터 활용)
 export interface ProgressProps {
-  task: string;
-  count: number;
+  task: string; // 삭제 예정
+  count: number; // 삭제 예정
+  goal?: GoalType; // new TODO (optional -> 필수로 변경)
   onClick?: () => void;
   isDone?: boolean;
 }

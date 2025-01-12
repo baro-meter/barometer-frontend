@@ -4,7 +4,7 @@ import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import { GoalCategoryType, GoalTypeId } from "@/types/goal";
 import dayjs from "dayjs";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 
 interface TodoListViewProps {
   activeTabTypeId: GoalTypeId | undefined;
@@ -40,14 +40,25 @@ export default function TodoList({ selectedDate }: TodoListProps) {
     GoalTypeId | undefined
   >();
 
-  const testData = [
-    { task: "일이삼사오육칠팔", count: 5 },
-    { task: "걸어서 회사가기", count: 3 },
-    { task: "우유 한잔 마시기", count: 5 },
-    { task: "근력 운동 하기", count: 4 },
-  ];
-  const [progressList, setProgressList] = useState(testData);
-  const { goalCategories, goalByTypeMapper } = useCalendar(selectedDate);
+  const { currentGoal, goalCategories, goalByTypeMapper } =
+    useCalendar(selectedDate);
+
+  const progressList = useMemo(() => {
+    const list = activeTabTypeId
+      ? goalByTypeMapper.get(activeTabTypeId)
+      : currentGoal;
+    return (
+      list?.map((goal) => {
+        return {
+          task: goal.title, // 삭제 예정
+          count: goal.count, // 삭제 예정
+          goal,
+          onclick: () => console.log(`${goal.title} 클릭됨`),
+          isDone: false,
+        } as ProgressProps;
+      }) ?? []
+    );
+  }, [activeTabTypeId]);
 
   useEffect(() => {
     console.log(`${activeTabTypeId}로 바뀜`);
