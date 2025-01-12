@@ -6,7 +6,7 @@ import { getGoals } from "@/services/calendar/calendarService";
 import { reportState } from "@/recoils/reports";
 import { useSetRecoilState } from "recoil";
 import { ReportType } from "@/types/calendar";
-import { GoalType } from "@/types/goal";
+import { GoalType, GoalTypeId } from "@/types/goal";
 import { useCategory } from "./useCategory";
 
 /**
@@ -66,14 +66,14 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
 
   const goalByTypeMapper = useMemo(() => {
     if (!currentGoal) {
-      return new Map();
+      return new Map<GoalTypeId, GoalType[]>();
     }
 
     return currentGoal.reduce((map, obj) => {
       const { typeId } = obj;
       map.set(typeId, [...(map.get(typeId) ?? []), obj]);
       return map;
-    }, new Map<number, GoalType[]>());
+    }, new Map<GoalTypeId, GoalType[]>());
   }, [currentGoal]);
 
   const goalCategories = useMemo(() => {

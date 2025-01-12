@@ -14,15 +14,14 @@ import { useCalendar } from "@/hooks/useCalendar";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import SubTab from "@/markup/components/SubTab";
-import CategoryLabel from "@/markup/components/CategoryLabel";
+import TodoList from "@/components/todo/TodoList";
 
 interface MonthlyPageViewProps {
   year: number;
   month: number;
   date: number;
-  progressList: ProgressProps[];
   subTabTitle: string;
-  goalCategories: GoalCategoryType[];
+  selectedDate: dayjs.Dayjs;
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -31,9 +30,8 @@ const MonthlyPageView = ({
   year,
   month,
   date,
-  progressList,
   subTabTitle,
-  goalCategories,
+  selectedDate,
   handleChangeViewMode,
   handleChangeDate,
 }: MonthlyPageViewProps) => {
@@ -55,13 +53,7 @@ const MonthlyPageView = ({
           <div className="inner">
             {/* TODO 700px 이하 subTab 소거 */}
             <SubTab title={subTabTitle} hasBorder />
-            <div className="tab-area">
-              <CategoryLabel items={goalCategories} />
-              <ProgressListView
-                alignment="horizontal"
-                progressList={progressList}
-              />
-            </div>
+            <TodoList selectedDate={selectedDate} />
           </div>
         </div>
       </main>
@@ -79,18 +71,10 @@ const MonthlyPage = ({
 }: // calendarViewData,
 // monthlyGoals, // 일단 서버사이드에서 매번 호출할 필요 없을 것 같아서 주석 처리
 MonthlyPageProps) => {
-  const testData = [
-    { task: "일이삼사오육칠팔", count: 5 },
-    { task: "걸어서 회사가기", count: 3 },
-    { task: "우유 한잔 마시기", count: 5 },
-    { task: "근력 운동 하기", count: 4 },
-  ];
-
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(
     initDate ? dayjs(initDate) : dayjs()
   ); // 미선택은 불가능
-  const [progressList, setProgressList] = useState(testData);
 
   // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
   // TODO accessToken이 뒤늦게 설정되어서, prefetch가 정상 동작하지 않음 -> 해결책 강구.
@@ -111,8 +95,7 @@ MonthlyPageProps) => {
     return `${selectedDate.date()}. ${title}`;
   }, [selectedDate]);
 
-  const { initBaromters, currentGoal, goalCategories } =
-    useCalendar(selectedDate);
+  const { initBaromters, currentGoal } = useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
@@ -144,9 +127,8 @@ MonthlyPageProps) => {
     year: selectedDate.year(),
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
-    progressList,
     subTabTitle,
-    goalCategories,
+    selectedDate,
     handleChangeViewMode,
     handleChangeDate,
   };
