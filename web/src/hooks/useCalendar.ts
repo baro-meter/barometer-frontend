@@ -1,9 +1,13 @@
 import { useCurrentGoalState, useGoalState } from "@/recoils/goals";
-import { GoalStateType } from "@/types/goal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDayjsToStr } from "./useDateFormat";
 import dayjs from "dayjs";
 import { getGoals } from "@/services/calendar/calendarService";
+import { reportState } from "@/recoils/reports";
+import { useSetRecoilState } from "recoil";
+import { ReportType } from "@/types/calendar";
+import { GoalType, GoalTypeId } from "@/types/goal";
+import { useCategory } from "./useCategory";
 
 /**
  * TODO calendar View에서 공통적으로 동작하는 로직을 설정
@@ -12,9 +16,12 @@ import { getGoals } from "@/services/calendar/calendarService";
 export const useCalendar = (currentDate: dayjs.Dayjs) => {
   const { getGoalStateKey } = useDayjsToStr();
 
-  const [goal, setGoal] = useGoalState();
+  // const [goal, setGoal] = useGoalState();
   const [goalKey, setGoalKey] = useState(getGoalStateKey(currentDate));
   const [currentGoal, setCurrentGoal] = useCurrentGoalState(goalKey);
+
+  const setCalendarViewData = useSetRecoilState(reportState);
+  const { getCategoryInfo } = useCategory();
 
   /**
    * calendar View 조회 시, goals 데이터 받아서 초기화
@@ -26,15 +33,15 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
    * - 혹은 react-native 연동 시 로컬 데이터 초기에 받도록 설정 할 때 사용
    * @param initGoalState
    */
-  const initGoals = (initGoalState: GoalStateType) => {
-    setGoal((beforeGoal) => {
-      const result = { ...beforeGoal };
-      Object.keys(initGoalState).forEach((key) => {
-        result[key] = initGoalState[key];
-      });
-      return result;
-    });
-  };
+  // const initGoals = (initGoalState: GoalStateType) => {
+  //   setGoal((beforeGoal) => {
+  //     const result = { ...beforeGoal };
+  //     Object.keys(initGoalState).forEach((key) => {
+  //       result[key] = initGoalState[key];
+  //     });
+  //     return result;
+  //   });
+  // };
 
   useEffect(() => {
     const newGoalKey = getGoalStateKey(currentDate);
@@ -57,8 +64,35 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
     }
   }, [currentGoal, currentDate]);
 
+  const goalByTypeMapper = useMemo(() => {
+    if (!currentGoal) {
+      return new Map<GoalTypeId, GoalType[]>();
+    }
+
+    return currentGoal.reduce((map, obj) => {
+      const { typeId } = obj;
+      map.set(typeId, [...(map.get(typeId) ?? []), obj]);
+      return map;
+    }, new Map<GoalTypeId, GoalType[]>());
+  }, [currentGoal]);
+
+  const goalCategories = useMemo(() => {
+    return [
+      { text: "전체", order: 0 },
+      ...Array.from(goalByTypeMapper.keys())
+        .map((typeId) => getCategoryInfo(Number(typeId)))
+        .filter((item) => !!item),
+    ];
+  }, [goalByTypeMapper]);
+
+  const initBaromters = (reports: ReportType[]) => {
+    setCalendarViewData(reports);
+  };
+
   return {
-    initGoals,
     currentGoal,
+    goalByTypeMapper,
+    goalCategories, // 설정된 목표의 goal category 목록
+    initBaromters,
   };
 };

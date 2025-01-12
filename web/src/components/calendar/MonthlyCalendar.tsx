@@ -157,8 +157,7 @@ export default function MonthlyCalendar({
   }, [calendarDates, layoutRef]);
 
   useEffect(() => {
-    const diff = dayjsObject.diff(dayjs(), "days");
-    setIsToday(diff === 0 && dayjsObject.date() === dayjs().date());
+    setIsToday(dayjsObject.isSame(dayjs(), "day"));
   }, [dayjsObject]);
 
   const isSixWeeks = useMemo(() => {
@@ -192,7 +191,11 @@ export default function MonthlyCalendar({
   );
 
   const handleMoveToday = () => {
-    setDayjsObject(dayjs());
+    const today = dayjs();
+    setDayjsObject(today);
+    if (onChangeDate) {
+      onChangeDate(today);
+    }
   };
 
   const handleChangeDate = (year: number, month: number) => {

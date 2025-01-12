@@ -43,6 +43,7 @@ export const currentGoalState = selectorFamily({
 /**
  * for ssr
  * https://github.com/polemius/recoil-persist#server-side-rendering
+ * 안쓰이고 있긴함.
  */
 export function useGoalState() {
   const [isInitial, setIsInitial] = useState(true);

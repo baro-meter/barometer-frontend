@@ -27,8 +27,6 @@ const WeeklyView = ({
         <BaroMeterDate
           key={`bm-${weekIdx * 10 + di}`}
           date={d}
-          score={0}
-          successGoalCount={0}
           isActive={d === activeDate}
           onClick={() => handleClickDate(d)}
         />

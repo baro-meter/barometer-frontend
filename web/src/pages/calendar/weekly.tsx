@@ -91,7 +91,8 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     return getFormatDayjs(endDate);
   }, [selectedDate]);
 
-  useCalendar(selectedDate);
+  const { initBaromters, currentGoal, goalCategories } =
+    useCalendar(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
@@ -100,15 +101,22 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   });
 
   useEffect(() => {
+    if (calendarViewData?.reports) {
+      initBaromters(calendarViewData.reports);
+    }
+  }, [calendarViewData]);
+
+  useEffect(() => {
+    console.log("=======currentGoal========");
+    console.log(currentGoal);
+  }, [currentGoal]);
+
+  useEffect(() => {
     // 날짜가 바뀔 때 마다 달력이 초기화된다.
     if (!!initDate) {
       setSelectedDate(dayjs(initDate));
     }
   }, [initDate]);
-
-  useEffect(() => {
-    console.log(calendarViewData);
-  }, [calendarViewData]);
 
   useEffect(() => {
     const diff = selectedDate.diff(dayjs(), "days");
@@ -120,7 +128,6 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   }, [selectedDate]);
 
   const handleChangeSelectedDate = (dayJs: dayjs.Dayjs) => {
-    console.log("handleChangeSelectedDate: " + dayJs.toString());
     setSelectedDate(dayJs);
   };
 

@@ -7,7 +7,7 @@ import { basePath } from "next.config";
 const cn = classNames.bind(scss);
 
 type scoreType = 0 | 1 | 2 | 3 | 4;
-type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
+export type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
 
 interface BaroMeterDateViewProps {
   date: number;

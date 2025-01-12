@@ -15,7 +15,7 @@ interface LoginPageViewProps {
     type: "nickname" | "password" | "email" | "authCode",
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
-  handleLogin: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleLogin: (event?: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const LoginPageView = ({
@@ -28,7 +28,7 @@ const LoginPageView = ({
   handleLogin,
 }: LoginPageViewProps) => {
   return (
-    <>
+    <div style={{ color: "white" }}>
       <form onSubmit={handleJoin}>
         <h2>join</h2>
         <div>
@@ -71,7 +71,7 @@ const LoginPageView = ({
       </form>
       <div>
         <h1>join 후 바로 login</h1>
-        <button onClick={() => handleLogin}>Login</button>
+        <button onClick={() => handleLogin()}>Login</button>
       </div>
       <form onSubmit={handleLogin}>
         <h2>그냥 로그인</h2>
@@ -97,7 +97,7 @@ const LoginPageView = ({
         <h1>login 후 accessToken 조회</h1>
         <div>{accessTokenStr}</div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -164,8 +164,8 @@ const LoginPage = ({}: LoginPageProps) => {
     }
   };
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleLogin = async (event?: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
 
     loginMutation.mutate(user);
   };

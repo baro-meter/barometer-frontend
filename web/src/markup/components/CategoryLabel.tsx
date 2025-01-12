@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/category.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
-import { CategoryTabContext } from "@/components/tab/CategoryTab";
-import { useCategory } from "@/hooks/useCategory";
+import { GoalCategoryType, GoalTypeId } from "@/types/goal";
+import { TodoListContext } from "@/components/todo/TodoList";
 
 const cn = classNames.bind(scss);
 
-export const CategoryLabel = () => {
-  //  categories 정의 프론트 단에서 const로 들고 있어서 고정값으로 들고옴
-  const { getCategoryLableItems } = useCategory();
+interface CategoryLabelProps {
+  items: GoalCategoryType[];
+}
+
+export const CategoryLabel = ({ items }: CategoryLabelProps) => {
   return (
     <div className={cn("category-list")}>
-      <CategoryTabContext.Consumer>
+      <TodoListContext.Consumer>
         {({ activeTabTypeId, setActiveTabTypeId }) => {
-          return getCategoryLableItems().map((category, index) => {
+          return items.map((category, index) => {
             const handleChange = () => setActiveTabTypeId(category.typeId);
             const id = `category${index}`;
             return (
@@ -43,7 +45,7 @@ export const CategoryLabel = () => {
             );
           });
         }}
-      </CategoryTabContext.Consumer>
+      </TodoListContext.Consumer>
     </div>
   );
 };

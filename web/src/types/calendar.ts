@@ -1,17 +1,12 @@
-interface GoalType {
-  monthlyGoalId: number;
-  title: string;
-  typeId: number;
-  count: number;
-  archivedDates: string[];
-}
-
-interface ReportType {
+export interface ReportType {
+  archivedCount: number;
+  archivedGoalIds: number[];
   date: string;
+  message?: string;
+  photo?: string;
   score: number;
 }
 
 export interface CalendarViewType {
-  goals: GoalType[];
   reports: ReportType[];
 }
