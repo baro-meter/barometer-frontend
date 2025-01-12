@@ -1,6 +1,8 @@
 import type { Preview } from "@storybook/react";
 import "./storybook.css";
 import "../src/styles/barometer.scss";
+import React from "react";
+import { RecoilRoot } from "recoil";
 
 const preview: Preview = {
   parameters: {
@@ -12,6 +14,13 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <RecoilRoot>
+        <Story />
+      </RecoilRoot>
+    ),
+  ],
 };
 
 export default preview;

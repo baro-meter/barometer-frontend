@@ -5,8 +5,10 @@ import SubTab from "@/markup/components/SubTab";
 import dayjs from "dayjs";
 import CategoryLabel from "@/markup/components/CategoryLabel";
 import ProgressListView from "@/markup/components/ProgressListView";
+import { useCalendar } from "@/hooks/useCalendar";
 
 const CalendarMonthly = () => {
+  const { goalCategories } = useCalendar(dayjs());
   return (
     <div className="wrap">
       <main className="main">
@@ -27,7 +29,7 @@ const CalendarMonthly = () => {
           <div className="inner">
             <SubTab title="15.TODAY" hasBorder />
             <div className="tab-area">
-              <CategoryLabel />
+              <CategoryLabel items={goalCategories} />
               <ProgressListView
                 alignment="horizontal"
                 progressList={[
