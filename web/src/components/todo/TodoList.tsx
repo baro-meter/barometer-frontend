@@ -58,7 +58,7 @@ export default function TodoList({ selectedDate }: TodoListProps) {
         } as ProgressProps;
       }) ?? []
     );
-  }, [activeTabTypeId]);
+  }, [activeTabTypeId, currentGoal]);
 
   useEffect(() => {
     console.log(`${activeTabTypeId}로 바뀜`);
