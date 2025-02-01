@@ -19,6 +19,8 @@
   }
 
   &-list {
+    margin-top: 24px;
+
     @at-root .tab-area & {
       margin-right: -24px;
     }
@@ -27,7 +29,6 @@
       display: flex;
       overflow-y: auto;
       max-width: 100%;
-      margin-top: 24px;
 
       #{$block}-item {
         flex: 0 0 calc(50% - 10px);
@@ -59,6 +60,7 @@
   &-info {
     display: flex;
     font-size: 14px;
+    line-height: 18px;
   }
 
   &-title {

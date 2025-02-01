@@ -20,6 +20,34 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  &.weekly-view {
+    .contents {
+      flex: none;
+      overflow-y: initial;
+
+      &::after {
+        display: block;
+        position: relative;
+        left: 20px;
+        right: 20px;
+        width: calc(100% - 40px);
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid $color-system-gray-gray10;
+        content: "";
+      }
+    }
+
+    .bottom-area {
+      flex: 1;
+      overflow: auto;
+
+      .inner {
+        padding-top: 0;
+      }
+    }
+  }
 }
 
 .contents {
@@ -31,4 +59,16 @@
   .inner {
     padding: 20px 20px 24px;
   }
+}
+
+.fixed-area {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  box-sizing: border-box;
 }

@@ -2,15 +2,14 @@ import React from "react";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 import WeeklyCalendarView from "@/markup/components/calendar/WeeklyView";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
-import CategoryLabel from "@/markup/components/CategoryLabel";
-import ProgressListView from "@/markup/components/ProgressListView";
-import Button from "@/markup/components/ButtonView";
+import MissionSummary from "@/markup/components/SummaryView";
+import SubTab from "@/markup/components/SubTab";
 import dayjs from "dayjs";
 import { useCalendar } from "@/hooks/useCalendar";
 
 interface LayoutProps {}
 
-const CalendarWeekly = ({}: LayoutProps) => {
+const CalendarWeeklyMission = ({}: LayoutProps) => {
   const { goalCategories } = useCalendar(dayjs());
   return (
     <div className="wrap">
@@ -36,26 +35,27 @@ const CalendarWeekly = ({}: LayoutProps) => {
         </div>
         <div className="bottom-area">
           <div className="inner">
-            <div className="tab-area">
-              <CategoryLabel items={goalCategories} />
-              <ProgressListView
-                alignment="vertical"
-                progressList={[
-                  { task: "일이삼사오육칠팔", count: 5 },
-                  { task: "걸어서 회사가기", count: 3 },
-                  { task: "우유 한잔 마시기", count: 5 },
-                  { task: "근력 운동 하기", count: 4 },
+            <SubTab title="15.TODAY" />
+            <div className="mission-area">
+              <MissionSummary
+                text="오늘은 필라테스를 1년째 간 날이다. 체지방량이 줄어들었고 근육도 조금 커졌다. 너무 뿌듯하다. 세줄일때 말줄임 세줄일때 말줄임 세줄일때 말줄임 세줄일때 말줄임 세줄일때 말줄임 세줄일때 말줄임 세줄일때 말줄임"
+                typeFull
+                imgSrc="https://picsum.photos/200"
+                missionTexts={[
+                  "일이삼사오육칠팔",
+                  "물 2L 마시기",
+                  "근력 운동 하기",
+                  "책 읽기",
                 ]}
+                status="excellent"
+                statusText="완벽했어요"
               />
             </div>
           </div>
-        </div>
-        <div className="fixed-area">
-          <Button as="a" href="/" label="오늘의 바로미터 작성" />
         </div>
       </main>
     </div>
   );
 };
 
-export default CalendarWeekly;
+export default CalendarWeeklyMission;
