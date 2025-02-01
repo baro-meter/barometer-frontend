@@ -11,6 +11,7 @@ export interface SummaryProps extends BadgeProps {
   text: string;
   typeFull: boolean;
   missionTexts: string[];
+  imgSrc: string;
 }
 
 export const Summary = ({
@@ -18,7 +19,8 @@ export const Summary = ({
   typeFull,
   missionTexts,
   status,
-  statusText
+  statusText,
+  imgSrc,
 }: SummaryProps) => {
   return (
     <div className={cn("summary-wrap", { "type-full": typeFull })}>
@@ -28,8 +30,8 @@ export const Summary = ({
           <p className={cn("text")}>{text}</p>
         </div>
         <div className={cn("image-wrap")}>
-          <Image 
-            src="https://picsum.photos/200" // Dummy Image
+          <Image
+            src={imgSrc}
             alt=""
             {...(typeFull ? { fill: true } : { width: 83, height: 83 })}
           />
@@ -47,17 +49,7 @@ export const Summary = ({
             {mission}
           </em>
         ))}
-      </div> 
-      {typeFull && (
-        <button type="button" className={cn("btn-more")} aria-label="옵션 (수정/삭제)">
-          <Image
-            src={`${basePath}/img/icon-dots.svg`}
-            width={17}
-            height={18}
-            alt=""
-          />
-        </button>
-      )}
+      </div>
     </div>
   );
 };

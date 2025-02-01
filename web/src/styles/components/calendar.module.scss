@@ -69,20 +69,18 @@
 
 .row {
   display: flex;
+  padding: 0 20px;
 }
 
 .day_header {
   flex: 1;
   font-family: $font-family-en;
+  font-size: 12px;
   font-weight: 300;
   text-align: center;
 }
 
 .calendar {
-  height: 310px;
-  overflow: auto;
-  background: var(--surface, #141414);
-
   .calendar-row {
     display: flex;
   }

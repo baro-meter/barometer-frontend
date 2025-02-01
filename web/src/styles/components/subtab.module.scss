@@ -1,10 +1,15 @@
 .subtab {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 
   &.has-border {
     border-bottom: 1px solid $color-system-gray-gray10;
-    margin-bottom: 20px;
     padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    // :global(+ .tab-area) {
+    //   padding-top: 0;
+    //   border-top: 0;
+    // }
   }
 
   .inner {
@@ -17,13 +22,12 @@
     font-family: $font-family-en;
     font-size: 18px;
     font-weight: 700;
-    line-height: 29px;
+    line-height: 22px;
     letter-spacing: -0.03em;
     color: $color-system-gray-gray95;
   }
 
   .btn-more {
     margin-left: auto;
-    padding: 4px 4px 4px 0;
   }
 }
