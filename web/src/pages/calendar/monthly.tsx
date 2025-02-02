@@ -15,6 +15,7 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import SubTab from "@/markup/components/SubTab";
 import TodoList from "@/components/todo/TodoList";
+import MissionList from "@/components/calendar/MissionList";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -49,13 +50,13 @@ const MonthlyPageView = ({
             />
           </div>
         </div>
-        <div className="bottom-area">
+        <MissionList type="monthly" year={year} month={month} date={date} />
+        {/* <div className="bottom-area">
           <div className="inner">
-            {/* TODO 700px 이하 subTab 소거 */}
             <SubTab title={subTabTitle} hasBorder />
             <TodoList selectedDate={selectedDate} />
           </div>
-        </div>
+        </div> */}
       </main>
     </div>
   );

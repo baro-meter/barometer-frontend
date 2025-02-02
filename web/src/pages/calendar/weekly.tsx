@@ -6,7 +6,7 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
-import WeeklyList from "@/components/calendar/WeeklyList";
+import WeeklyList from "@/components/calendar/MissionList";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 import { useCalendar } from "@/hooks/useCalendar";
@@ -62,7 +62,7 @@ const WeeklyPageView = ({
             />
           </div>
         </div>
-        <WeeklyList year={year} month={month} date={date} />
+        <WeeklyList type="weekly" year={year} month={month} date={date} />
       </main>
     </div>
   );

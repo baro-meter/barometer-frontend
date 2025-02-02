@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import React, { useEffect, useMemo } from "react";
-import TodoList from "../todo/TodoList";
+import React, { useMemo } from "react";
+import TodoList, { TodoListAlignmentType } from "../todo/TodoList";
 import Button from "@/markup/components/ButtonView";
 import { useRecoilValue } from "recoil";
 import { currentReportState } from "@/recoils/reports";
@@ -8,17 +8,21 @@ import { ReportType } from "@/types/calendar";
 import BaroMeterReport from "../report/BaroMeterReport";
 import { useCalendar } from "@/hooks/useCalendar";
 
-interface WeeklyListViewProps {
+interface MissionListViewProps {
   selectedDate: dayjs.Dayjs;
   missionTexts: string[];
+  typeFull: boolean;
+  alignment: TodoListAlignmentType;
   report?: ReportType;
 }
 
-const WeeklyListView = ({
+const MissionListView = ({
   selectedDate,
   missionTexts,
+  typeFull,
+  alignment,
   report,
-}: WeeklyListViewProps) => {
+}: MissionListViewProps) => {
   const hasReport = useMemo(() => report !== undefined, [report]);
   return (
     <>
@@ -29,9 +33,10 @@ const WeeklyListView = ({
               report={report!}
               selectedDate={selectedDate}
               missionTexts={missionTexts}
+              typeFull={typeFull}
             />
           ) : (
-            <TodoList selectedDate={selectedDate} alignment="vertical" />
+            <TodoList selectedDate={selectedDate} alignment={alignment} />
           )}
         </div>
       </div>
@@ -44,13 +49,19 @@ const WeeklyListView = ({
   );
 };
 
-interface WeeklyListPageProps {
+interface MissionListPageProps {
+  type: "weekly" | "monthly";
   year: number;
   month: number;
   date: number;
 }
 
-export default function WeeklyList({ year, month, date }: WeeklyListPageProps) {
+export default function MissionList({
+  type,
+  year,
+  month,
+  date,
+}: MissionListPageProps) {
   const selectedDate = useMemo(
     () =>
       dayjs()
@@ -64,8 +75,6 @@ export default function WeeklyList({ year, month, date }: WeeklyListPageProps) {
   const report = useRecoilValue(currentReportState(date));
 
   const missionTexts = useMemo(() => {
-    console.log(goalByIdMapper);
-    console.log(report?.archivedGoalIds);
     const result = report?.archivedGoalIds.map(
       (id) => goalByIdMapper.get(id)?.title
     );
@@ -74,7 +83,15 @@ export default function WeeklyList({ year, month, date }: WeeklyListPageProps) {
       : [];
   }, [report, goalByIdMapper]);
 
-  const viewProps = { selectedDate, report, missionTexts };
+  const viewProps = {
+    selectedDate,
+    report,
+    typeFull: type === "weekly",
+    alignment: (type === "weekly"
+      ? "vertical"
+      : "horizontal") as TodoListAlignmentType,
+    missionTexts,
+  };
 
-  return <WeeklyListView {...viewProps} />;
+  return <MissionListView {...viewProps} />;
 }

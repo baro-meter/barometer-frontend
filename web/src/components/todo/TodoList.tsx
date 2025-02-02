@@ -6,7 +6,7 @@ import { GoalCategoryType, GoalTypeId } from "@/types/goal";
 import dayjs from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 
-type AlignmentType = "horizontal" | "vertical";
+export type TodoListAlignmentType = "horizontal" | "vertical";
 
 interface TodoListViewProps {
   activeTabTypeId: GoalTypeId | undefined;
@@ -15,7 +15,7 @@ interface TodoListViewProps {
   >;
   progressList: ProgressProps[];
   goalCategories: GoalCategoryType[];
-  alignment?: AlignmentType;
+  alignment?: TodoListAlignmentType;
 }
 
 const TodoListView = ({
@@ -37,7 +37,7 @@ const TodoListView = ({
 
 interface TodoListProps {
   selectedDate: dayjs.Dayjs;
-  alignment?: AlignmentType;
+  alignment?: TodoListAlignmentType;
 }
 
 export default function TodoList({ selectedDate, alignment }: TodoListProps) {
