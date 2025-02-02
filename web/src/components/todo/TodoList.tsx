@@ -6,6 +6,8 @@ import { GoalCategoryType, GoalTypeId } from "@/types/goal";
 import dayjs from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 
+type AlignmentType = "horizontal" | "vertical";
+
 interface TodoListViewProps {
   activeTabTypeId: GoalTypeId | undefined;
   setActiveTabTypeId: React.Dispatch<
@@ -13,19 +15,21 @@ interface TodoListViewProps {
   >;
   progressList: ProgressProps[];
   goalCategories: GoalCategoryType[];
+  alignment?: AlignmentType;
 }
 
 const TodoListView = ({
   activeTabTypeId,
-  setActiveTabTypeId,
   progressList,
   goalCategories,
+  alignment = "horizontal",
+  setActiveTabTypeId,
 }: TodoListViewProps) => {
   return (
     <div className="tab-area">
       <TodoListContext.Provider value={{ activeTabTypeId, setActiveTabTypeId }}>
         <CategoryLabel items={goalCategories} />
-        <ProgressListView alignment="horizontal" progressList={progressList} />
+        <ProgressListView alignment={alignment} progressList={progressList} />
       </TodoListContext.Provider>
     </div>
   );
@@ -33,9 +37,10 @@ const TodoListView = ({
 
 interface TodoListProps {
   selectedDate: dayjs.Dayjs;
+  alignment?: AlignmentType;
 }
 
-export default function TodoList({ selectedDate }: TodoListProps) {
+export default function TodoList({ selectedDate, alignment }: TodoListProps) {
   const [activeTabTypeId, setActiveTabTypeId] = useState<
     GoalTypeId | undefined
   >();
@@ -69,9 +74,10 @@ export default function TodoList({ selectedDate }: TodoListProps) {
 
   const viewProps = {
     activeTabTypeId,
-    setActiveTabTypeId,
     progressList,
     goalCategories,
+    alignment,
+    setActiveTabTypeId,
   };
 
   return <TodoListView {...viewProps} />;

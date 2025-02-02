@@ -31,7 +31,7 @@ const WeeklyCalendarView = ({
   handleSwipeWeek,
 }: WeeklyCalendarViewProps) => {
   return (
-    <div className={cn("container")} role="grid">
+    <>
       <DayHeader />
       <Swiper
         onSwiper={setSwiper}
@@ -42,17 +42,15 @@ const WeeklyCalendarView = ({
       >
         <SwiperSlide />
         <SwiperSlide>
-          <div role="rowgroup">
-            <Weekly
-              weekDates={calendarDates}
-              activeDate={activeDate}
-              onClickDate={handleClickDate}
-            />
-          </div>
+          <Weekly
+            weekDates={calendarDates}
+            activeDate={activeDate}
+            onClickDate={handleClickDate}
+          />
         </SwiperSlide>
         <SwiperSlide />
       </Swiper>
-    </div>
+    </>
   );
 };
 
