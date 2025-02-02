@@ -6,15 +6,9 @@ const meta = {
   component: Badge,
   tags: ["autodocs"],
   argTypes: {
-    status: {
+    score: {
       control: {
-        type: 'select',
-        options: ["excellent", "good", "insufficient", "poor"],
-      },
-    },
-    statusText: {
-      control: {
-        type: 'text',
+        type: 1 | 2 | 3 | 4,
       },
     },
   },
@@ -25,28 +19,24 @@ type Story = StoryObj<typeof Badge>;
 
 export const Default: Story = {
   args: {
-    status: "excellent",
-    statusText: "완벽했어요",
+    score: 4,
   },
 };
 
 export const GoodStatus: Story = {
   args: {
-    status: "good",
-    statusText: "적당해요",
+    score: 3,
   },
 };
 
 export const InsufficientStatus: Story = {
   args: {
-    status: "insufficient",
-    statusText: "노력했어요",
+    score: 2,
   },
 };
 
 export const PoorStatus: Story = {
   args: {
-    status: "poor",
-    statusText: "못했어요",
+    score: 1,
   },
 };

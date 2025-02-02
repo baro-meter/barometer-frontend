@@ -18,15 +18,14 @@ export const Summary = ({
   text,
   typeFull,
   missionTexts,
-  status,
-  statusText,
+  score,
   imgSrc,
 }: SummaryProps) => {
   return (
     <div className={cn("summary-wrap", { "type-full": typeFull })}>
       <div className={cn("summary")}>
         <div className={cn("text-wrap")}>
-          <Badge status={status} statusText={statusText} />
+          <Badge score={score} />
           <p className={cn("text")}>{text}</p>
         </div>
         <div className={cn("image-wrap")}>

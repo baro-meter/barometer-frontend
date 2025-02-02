@@ -6,11 +6,11 @@ export enum GoalTypeId {
 }
 
 export interface GoalType {
-  id: number;
+  monthlyGoalId: number;
   title: string;
   typeId: number;
   count: GoalTypeId; // 주별 목표 달성 횟수
-  archived: string[]; // ["2024-12-30", "2024-12-31"];
+  archivedDates: string[]; // ["2024-12-30", "2024-12-31"];
 }
 
 export interface GoalStateType {

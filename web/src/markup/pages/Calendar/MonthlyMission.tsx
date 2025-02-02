@@ -34,8 +34,7 @@ const CalendarMonthlyMission = () => {
                   "일이삼사오육칠팔",
                   "Monthly에서는 한줄로 노출되도록 해주세용",
                 ]}
-                status="excellent"
-                statusText="완벽했어요"
+                score={4}
               />
             </div>
           </div>

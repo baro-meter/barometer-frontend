@@ -47,8 +47,7 @@ const CalendarWeeklyMission = ({}: LayoutProps) => {
                   "근력 운동 하기",
                   "책 읽기",
                 ]}
-                status="excellent"
-                statusText="완벽했어요"
+                score={4}
               />
             </div>
           </div>

@@ -6,7 +6,7 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
-import WeeklyList from "@/components/calendar/WeeklyList";
+import WeeklyList from "@/components/calendar/MissionList";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 import { useCalendar } from "@/hooks/useCalendar";
@@ -40,24 +40,31 @@ const WeeklyPageView = ({
   handleChangeDate,
 }: WeeklyPageViewProps) => {
   return (
-    <>
-      <CalendarHeaderView
-        type="weekly"
-        year={year}
-        month={month}
-        isToday={isToday}
-        onToggleCalendarType={handleChangeMonthlyView}
-        onClickTodayMoveBtn={handleClickTodayMoveBtn}
-        onChangeDate={handleChangeDate}
-      />
-      <WeeklyCalendar
-        year={year}
-        month={month}
-        date={date}
-        onChangeDate={handleChangeSelectedDate}
-      />
-      <WeeklyList year={year} month={month} date={date} />
-    </>
+    <div className="wrap">
+      {/* weekly: main에 weekly-view 클래스 추가 (하단 bottom-area가 스크롤 될 수 있도록) */}
+      <main className="main weekly-view">
+        <div className="contents">
+          <div className="calendar-area">
+            <CalendarHeaderView
+              type="weekly"
+              year={year}
+              month={month}
+              isToday={isToday}
+              onToggleCalendarType={handleChangeMonthlyView}
+              onClickTodayMoveBtn={handleClickTodayMoveBtn}
+              onChangeDate={handleChangeDate}
+            />
+            <WeeklyCalendar
+              year={year}
+              month={month}
+              date={date}
+              onChangeDate={handleChangeSelectedDate}
+            />
+          </div>
+        </div>
+        <WeeklyList type="weekly" year={year} month={month} date={date} />
+      </main>
+    </div>
   );
 };
 

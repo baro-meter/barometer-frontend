@@ -44,6 +44,7 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
   // };
 
   useEffect(() => {
+    console.log("useCalendar useEffect! => " + currentDate);
     const newGoalKey = getGoalStateKey(currentDate);
     if (newGoalKey !== goalKey) {
       setGoalKey(newGoalKey);
@@ -63,6 +64,18 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
       fetchGoal();
     }
   }, [currentGoal, currentDate]);
+
+  const goalByIdMapper = useMemo(() => {
+    if (!currentGoal) {
+      return new Map<number, GoalType>();
+    }
+
+    return currentGoal.reduce((map, obj) => {
+      const { monthlyGoalId } = obj;
+      map.set(monthlyGoalId, obj);
+      return map;
+    }, new Map<GoalTypeId, GoalType>());
+  }, [currentGoal]);
 
   const goalByTypeMapper = useMemo(() => {
     if (!currentGoal) {
@@ -91,7 +104,8 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
 
   return {
     currentGoal,
-    goalByTypeMapper,
+    goalByIdMapper, // goalId 별 goal mapper
+    goalByTypeMapper, // goalCategoryTypeId 별 goals 목록 mapper
     goalCategories, // 설정된 목표의 goal category 목록
     initBaromters,
   };

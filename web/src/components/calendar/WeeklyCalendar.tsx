@@ -13,8 +13,6 @@ import { getWeeklyDateRange } from "@/utils/calendarUtil";
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
-const cn = classNames.bind(scss);
-
 interface WeeklyCalendarViewProps {
   calendarDates: number[];
   activeDate: number;
@@ -31,7 +29,7 @@ const WeeklyCalendarView = ({
   handleSwipeWeek,
 }: WeeklyCalendarViewProps) => {
   return (
-    <div className={cn("container")} role="grid">
+    <>
       <DayHeader />
       <Swiper
         onSwiper={setSwiper}
@@ -42,17 +40,15 @@ const WeeklyCalendarView = ({
       >
         <SwiperSlide />
         <SwiperSlide>
-          <div role="rowgroup">
-            <Weekly
-              weekDates={calendarDates}
-              activeDate={activeDate}
-              onClickDate={handleClickDate}
-            />
-          </div>
+          <Weekly
+            weekDates={calendarDates}
+            activeDate={activeDate}
+            onClickDate={handleClickDate}
+          />
         </SwiperSlide>
         <SwiperSlide />
       </Swiper>
-    </div>
+    </>
   );
 };
 
@@ -97,9 +93,16 @@ export default function WeeklyCalendar({
     setCalendarDates(dates);
   }, [selectedDate]);
 
-  const handleClickDate = (d: number) => {
-    const goalDate = selectedDate.set("date", d);
-
+  const handleClickDate = (newD: number) => {
+    // 기존 날짜와 선택된 날짜가 7일 초과 차이 나면 다른 달
+    const prevD = selectedDate.date();
+    const diff = Math.abs(newD - prevD);
+    let goalDate = selectedDate.set("date", newD);
+    if (diff > 7) {
+      const prevM = selectedDate.month();
+      const newM = prevD > newD ? prevM + 1 : prevM - 1;
+      goalDate = selectedDate.set("month", newM).set("date", newD);
+    }
     if (onChangeDate) {
       onChangeDate(goalDate);
     }

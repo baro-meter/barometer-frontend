@@ -22,6 +22,19 @@ const nextConfig = {
     config.resolve.alias["@images"] = path.resolve(__dirname, "public");
     return config;
   },
+  images: {
+    remotePatterns: [
+      // TODO dev용. 지우기
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
