@@ -7,6 +7,10 @@
   &-list {
     display: flex;
     gap: 12px;
+
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
   }
 
   &-input {
@@ -30,11 +34,12 @@
             width: 100%;
             height: 100%;
             background: rgba($color-system-gray-gray99, 0.04);
-            content: '';
+            content: "";
           }
 
           img {
-            filter: brightness(0) saturate(100%) invert(96%) sepia(5%) saturate(71%) hue-rotate(182deg) brightness(86%) contrast(94%);
+            filter: brightness(0) saturate(100%) invert(96%) sepia(5%)
+              saturate(71%) hue-rotate(182deg) brightness(86%) contrast(94%);
           }
         }
 
@@ -62,7 +67,8 @@
       border-radius: 16px;
 
       img {
-        filter: brightness(0) saturate(100%) invert(25%) sepia(11%) saturate(301%) hue-rotate(169deg) brightness(93%) contrast(93%);
+        filter: brightness(0) saturate(100%) invert(25%) sepia(11%)
+          saturate(301%) hue-rotate(169deg) brightness(93%) contrast(93%);
       }
     }
 

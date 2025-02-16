@@ -20,4 +20,10 @@
   &-secondary {
     background: $color-system-gray-gray10;
   }
+
+  &-full {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 }
