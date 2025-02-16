@@ -1,0 +1,17 @@
+.divider {
+  $block: &;
+  height: 1px;
+  margin: 20px 0;
+  border: 0;
+  color: $color-system-gray-gray10;
+  background-color: $color-system-gray-gray10;
+  font-size: 0;
+
+  &-30 {
+    margin: 30px 0;
+  }
+
+  &-40 {
+    margin: 40px 0;
+  }
+}
