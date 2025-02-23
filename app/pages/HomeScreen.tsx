@@ -2,6 +2,7 @@ import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '../utils/routerType';
 import MonthlyScreen from './tabs/CalendarScreen';
+import TestLoginScreen from './tabs/TestLoginScreen';
 import SvgIcon from '../components/SvgIcon';
 
 function EmptyScreen() {
@@ -34,7 +35,7 @@ export default function HomeScreen() {
       />
       <Tab.Screen
         name="Mission"
-        component={EmptyScreen}
+        component={TestLoginScreen}
         options={{
           tabBarLabel: 'Mission',
           tabBarIcon: ({color}) => <SvgIcon name="Mission" color={color} />,
