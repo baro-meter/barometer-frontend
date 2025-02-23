@@ -1,14 +1,26 @@
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '../utils/routerType';
 import MonthlyScreen from './tabs/CalendarScreen';
 import TestLoginScreen from './tabs/TestLoginScreen';
 import SvgIcon from '../components/SvgIcon';
+import ModalMissionDelete from '../components/modal/ModalMissionDelete';
+import {useState} from 'react';
 
 function EmptyScreen() {
+  const [modalVisible, setModalVisible] = useState<string | undefined>();
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Test!</Text>
+    <View style={styles.container}>
+      <Text>Modal Test!</Text>
+      <TouchableOpacity
+        onPress={() => setModalVisible('modal_mission_delete')}
+        style={styles.button}>
+        <Text style={styles.buttonText}>Open Modal</Text>
+      </TouchableOpacity>
+      <ModalMissionDelete
+        visible={modalVisible === 'modal_mission_delete'}
+        onClose={() => setModalVisible(undefined)}
+      />
     </View>
   );
 }
@@ -60,3 +72,21 @@ export default function HomeScreen() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+});
