@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '../utils/routerType';
 import MonthlyScreen from './tabs/CalendarScreen';
 import TestLoginScreen from './tabs/TestLoginScreen';
-import SvgIcon from '../components/SvgIcon';
+import SvgIcon from '../components/TabSvgIcon';
 import ModalMissionDelete from '../components/modal/ModalMissionDelete';
 import {useState} from 'react';
 
