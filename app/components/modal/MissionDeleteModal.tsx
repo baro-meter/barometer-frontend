@@ -8,22 +8,21 @@ import {
   View,
 } from 'react-native';
 import {CheckboxIcon} from '../../assets/icon';
+import {ModalCommonProps as ModalCommonProps} from '../../types/ModalType';
 
-interface ModalMissionDeleteViewProps {
-  visible: boolean;
+interface MissionDeleteModalViewProps extends ModalCommonProps {
   missions: MissionType[];
-  onClose: () => void;
   toggleSelection: (item: MissionType) => void;
   getMissionStatus: (id: string) => 'checked' | 'unchecked';
 }
 
-const ModalMissionDeleteView = ({
+const MissionDeleteModalView = ({
   visible,
   missions,
   onClose,
   toggleSelection,
   getMissionStatus,
-}: ModalMissionDeleteViewProps) => {
+}: MissionDeleteModalViewProps) => {
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
       <View style={styles.overlay}>
@@ -63,20 +62,17 @@ const ModalMissionDeleteView = ({
   );
 };
 
-interface ModalMissionDeleteProps {
-  visible: boolean;
-  onClose: () => void;
-}
+interface MissionDeleteModalProps extends ModalCommonProps {}
 
 interface MissionType {
   id: string;
   title: string;
 }
 
-export default function ModalMissionDelete({
+export default function MissionDeleteModal({
   visible,
   onClose,
-}: ModalMissionDeleteProps) {
+}: MissionDeleteModalProps) {
   const [selectedMissions, setSelectedMissions] = useState<{
     [key: string]: MissionType;
   }>({});
@@ -113,7 +109,7 @@ export default function ModalMissionDelete({
     getMissionStatus,
   };
 
-  return <ModalMissionDeleteView {...viewProps} />;
+  return <MissionDeleteModalView {...viewProps} />;
 }
 
 const styles = StyleSheet.create({

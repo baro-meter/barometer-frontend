@@ -1,13 +1,14 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '../utils/routerType';
 import MonthlyScreen from './tabs/CalendarScreen';
 import TestLoginScreen from './tabs/TestLoginScreen';
 import SvgIcon from '../components/TabSvgIcon';
-import ModalMissionDelete from '../components/modal/ModalMissionDelete';
+import MissionDeleteModal from '../components/modal/MissionDeleteModal';
+import MissionNameEditModal from '../components/modal/MissionNameEditModal';
 import {useState} from 'react';
 
-function EmptyScreen() {
+function ModalTestScreen() {
   const [modalVisible, setModalVisible] = useState<string | undefined>();
   return (
     <View style={styles.container}>
@@ -15,11 +16,21 @@ function EmptyScreen() {
       <TouchableOpacity
         onPress={() => setModalVisible('modal_mission_delete')}
         style={styles.button}>
-        <Text style={styles.buttonText}>Open Modal</Text>
+        <Text style={styles.buttonText}>미션 삭제 모달</Text>
       </TouchableOpacity>
-      <ModalMissionDelete
+      <MissionDeleteModal
         visible={modalVisible === 'modal_mission_delete'}
         onClose={() => setModalVisible(undefined)}
+      />
+      <TouchableOpacity
+        onPress={() => setModalVisible('modal_mission_edit')}
+        style={styles.button}>
+        <Text style={styles.buttonText}>미션 수정 모달</Text>
+      </TouchableOpacity>
+      <MissionNameEditModal
+        visible={modalVisible === 'modal_mission_edit'}
+        onClose={() => setModalVisible(undefined)}
+        onConfirm={result => console.log(result)}
       />
     </View>
   );
@@ -55,7 +66,7 @@ export default function HomeScreen() {
       />
       <Tab.Screen
         name="Analytics"
-        component={EmptyScreen}
+        component={ModalTestScreen}
         options={{
           tabBarLabel: 'Analytics',
           tabBarIcon: ({color}) => <SvgIcon name="Analytics" color={color} />,
@@ -63,7 +74,7 @@ export default function HomeScreen() {
       />
       <Tab.Screen
         name="Setting"
-        component={EmptyScreen}
+        component={ModalTestScreen}
         options={{
           tabBarLabel: 'Setting',
           tabBarIcon: ({color}) => <SvgIcon name="Setting" color={color} />,
