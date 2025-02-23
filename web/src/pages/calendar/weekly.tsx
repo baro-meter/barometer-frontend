@@ -143,12 +143,13 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
   };
 
   const handleChangeDate = (year: number, month: number) => {
-    setSelectedDate(
-      dayjs()
-        .year(year)
-        .month(month - 1)
-        .set("date", 1)
-    );
+    const date = selectedDate.date();
+    const goalMonth = dayjs()
+      .year(year)
+      .month(month - 1);
+    const lastDayOfMonth = goalMonth.endOf("month").date();
+
+    setSelectedDate(goalMonth.set("date", date > lastDayOfMonth ? 1 : date));
   };
 
   const viewProps = {
