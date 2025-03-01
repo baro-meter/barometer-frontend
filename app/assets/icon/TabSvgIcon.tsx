@@ -1,7 +1,7 @@
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 
-import {TabIcons} from '../assets/icon';
+import {TabIcons} from '.';
 
 type TabIconProps = SvgProps & {
   name: keyof typeof TabIcons;
@@ -11,7 +11,7 @@ type TabIconProps = SvgProps & {
   onPress?: () => void;
 };
 
-function Icon({name, width, height, color, onPress}: TabIconProps) {
+function TabIcon({name, width, height, color, onPress}: TabIconProps) {
   const TabSvgIcon = TabIcons[name];
 
   // svg 아이콘은 정사각형으로 제작했기 때문에 width, height값 둘다 size 적용
@@ -25,4 +25,4 @@ function Icon({name, width, height, color, onPress}: TabIconProps) {
   return <TabSvgIcon {...props} onPress={onPress} />;
 }
 
-export default Icon;
+export default TabIcon;

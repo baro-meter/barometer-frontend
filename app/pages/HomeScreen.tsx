@@ -3,10 +3,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeTabParamList} from '../utils/routerType';
 import MonthlyScreen from './tabs/CalendarScreen';
 import TestLoginScreen from './tabs/TestLoginScreen';
-import SvgIcon from '../components/TabSvgIcon';
+import SvgIcon from '../assets/icon/TabSvgIcon';
 import MissionDeleteModal from '../components/modal/MissionDeleteModal';
 import MissionNameEditModal from '../components/modal/MissionNameEditModal';
 import {useState} from 'react';
+import MissionCategorySelectModal, {
+  CategoryType,
+} from '../components/modal/MissionCategorySelectModal';
 
 function ModalTestScreen() {
   const [modalVisible, setModalVisible] = useState<string | undefined>();
@@ -31,6 +34,18 @@ function ModalTestScreen() {
         visible={modalVisible === 'modal_mission_edit'}
         onClose={() => setModalVisible(undefined)}
         onConfirm={result => console.log(result)}
+      />
+      <TouchableOpacity
+        onPress={() => setModalVisible('modal_mission_category')}
+        style={styles.button}>
+        <Text style={styles.buttonText}>미션 카테고리 선택 모달</Text>
+      </TouchableOpacity>
+      <MissionCategorySelectModal
+        visible={modalVisible === 'modal_mission_category'}
+        onClose={() => setModalVisible(undefined)}
+        onConfirm={(selectedCategory: CategoryType) => {
+          console.log(`${selectedCategory.id} 선택됨`);
+        }}
       />
     </View>
   );
