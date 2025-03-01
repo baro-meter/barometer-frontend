@@ -8,8 +8,8 @@ import CustomWebView from '../../components/CustomWebView';
 import {HomeTabScreenProps} from '../../utils/routerType';
 import React from 'react';
 
-const MonthlyScreen = ({navigation, route}: HomeTabScreenProps<'Calendar'>) => {
-  const uri = 'http://localhost:3000/calendar/weekly';
+const MonthlyScreen = ({navigation, route}: HomeTabScreenProps<'Mission'>) => {
+  const uri = 'http://localhost:3000/test/login';
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <>

@@ -3,6 +3,8 @@ export enum GoalTypeId {
   REGULAR_LIFE,
   PEACE_OF_MIND,
   WEIGHT_MANAGEMENT,
+  CONDITION_IMPROVEMENT,
+  BASIC_STRENGTH,
 }
 
 export interface GoalType {
