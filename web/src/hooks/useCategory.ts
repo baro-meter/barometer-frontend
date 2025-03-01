@@ -1,5 +1,4 @@
 import { GoalCategoryType, GoalTypeId } from "@/types/goal";
-import { useMemo } from "react";
 
 export const CategorieMapper = {
   [GoalTypeId.REGULAR_LIFE]: {
@@ -16,6 +15,16 @@ export const CategorieMapper = {
     typeId: GoalTypeId.WEIGHT_MANAGEMENT,
     text: "체중 관리",
     order: 3,
+  },
+  [GoalTypeId.CONDITION_IMPROVEMENT]: {
+    typeId: GoalTypeId.CONDITION_IMPROVEMENT,
+    text: "컨디션 개선",
+    order: 4,
+  },
+  [GoalTypeId.BASIC_STRENGTH]: {
+    typeId: GoalTypeId.BASIC_STRENGTH,
+    text: "기초체력 향상",
+    order: 5,
   },
   [GoalTypeId.OTHER]: { typeId: GoalTypeId.OTHER, text: "기타", order: 999 },
 } as { [typeId: number]: GoalCategoryType };
