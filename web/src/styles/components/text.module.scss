@@ -1,0 +1,67 @@
+.text {
+  @mixin size($size, $height) {
+    &#{$size} {
+      font-size: #{$size}px;
+      line-height: #{$height}px;
+    }
+  }
+
+  &.light {
+    font-weight: 300;
+  }
+
+  &.medium {
+    font-weight: 500;
+  }
+
+  &.default {
+    font-weight: 400;
+  }
+
+  &.semi-bold {
+    font-weight: 600;
+  }
+
+  &.bold {
+    font-weight: 700;
+  }
+
+  &.extra-bold {
+    font-weight: 800;
+  }
+
+  &.center {
+    text-align: center;
+  }
+
+  &.right {
+    text-align: right;
+  }
+
+  &.size- {
+    @include size(0, 0);
+    @include size(32, 38);
+    @include size(26, 36);
+    @include size(24, 29);
+    @include size(22, 27);
+    @include size(22, 28);
+    @include size(20, 24);
+    @include size(18, 20);
+    @include size(16, 19);
+    @include size(15, 19);
+    @include size(14, 17);
+    @include size(13, 16);
+    @include size(12, 14);
+    @include size(11, 13);
+    @include size(10, 12);
+  }
+
+  &.ellipsis {
+    @include text-ellipsis;
+  }
+  @each $name, $color in $colors {
+    &.#{"" + $name} {
+      @include color(color, $name);
+    }
+  }
+}
