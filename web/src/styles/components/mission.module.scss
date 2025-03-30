@@ -4,30 +4,6 @@
   width: 100%;
   letter-spacing: -0.3px;
 
-  &:nth-child(1) {
-    #{$block}-label {
-      img {
-        filter: brightness(0) saturate(100%) invert(47%) sepia(17%) saturate(2507%) hue-rotate(196deg) brightness(94%) contrast(91%);
-      }
-    }
-  }
-
-  &:nth-child(3) {
-    #{$block}-label {
-      img {
-        filter: brightness(0) saturate(100%) invert(80%) sepia(24%) saturate(7234%) hue-rotate(319deg) brightness(95%) contrast(89%);
-      }
-    }
-  }
-
-  &:nth-child(4) {
-    #{$block}-label {
-      img {
-        filter: brightness(0) saturate(100%) invert(62%) sepia(54%) saturate(1374%) hue-rotate(208deg) brightness(102%) contrast(98%);
-      }
-    }
-  }
-
   &-list {
     display: flex;
     flex-wrap: wrap;
@@ -43,11 +19,62 @@
 
       #{$block}-label {
         .title {
-          font-size: 16px;
           font-weight: 700;
-          line-height: 20px;
         }
       }
+    }
+  }
+
+  &-item {
+    $item: &;
+    padding: 20px;
+    background: $surface-contents-bg;
+    border-radius: 16px;
+    &:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    &-inner {
+      display: flex;
+      gap: 16px;
+      #{$item}-content {
+        flex: 1;
+      }
+    }
+
+    &-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: $color-system-gray-gray95;
+      line-height: 20px;
+    }
+
+    &-description {
+      font-size: 13px;
+      color: $color-system-gray-gray50;
+      line-height: 17px;
+    }
+
+    &-button {
+    }
+  }
+
+  &-sub-list {
+    &-item {
+      gap: 12px;
+      display: flex;
+      font-size: 14px;
+      line-height: 18px;
+      &:not(:first-child) {
+        margin-top: 12px;
+      }
+    }
+    &-title {
+      flex: 1;
+      color: $color-system-gray-gray90;
+    }
+    &-date {
+      color: $color-system-gray-gray40;
     }
   }
 
@@ -72,7 +99,7 @@
           width: 100%;
           height: 100%;
           background: rgba($color-system-gray-gray99, 0.04);
-          content: '';
+          content: "";
         }
       }
     }
@@ -91,10 +118,10 @@
     padding: 20px;
 
     .title {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 500;
       color: $color-system-gray-gray95;
-      line-height: 19px;
+      line-height: 20px;
     }
 
     .description {
