@@ -8,17 +8,17 @@ import MissionSummary from "@/markup/components/SummaryView";
 const CalendarMonthlyMission = () => {
   return (
     <div className="wrap">
-      <main className="main">
+      <main className="main calendar">
+        <CalendarHeaderView
+          type="monthly"
+          year={2024}
+          month={12}
+          onToggleCalendarType={() => {}}
+          onClickTodayMoveBtn={() => {}}
+          onChangeDate={() => {}}
+        />
         <div className="contents">
           <div className="calendar-area">
-            <CalendarHeaderView
-              type="monthly"
-              year={2024}
-              month={12}
-              onToggleCalendarType={() => {}}
-              onClickTodayMoveBtn={() => {}}
-              onChangeDate={() => {}}
-            />
             <MonthlyCalendarView year={2024} month={12} date={dayjs().date()} />
           </div>
         </div>

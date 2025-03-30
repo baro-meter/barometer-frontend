@@ -5,8 +5,47 @@
   text-align: center;
 
   &.is-active {
+    .ellipse {
+      background-color: $color-system-gray-gray99;
+    }
     .text-wrapper {
       color: $color-system-gray-gray99;
+    }
+  }
+
+  &.date-bad {
+    .ellipse {
+      background-color: $color-system-gray-gray40;
+    }
+    .text-wrapper {
+      color: $color-system-gray-gray40;
+    }
+  }
+
+  &.date-notgood {
+    .ellipse {
+      background-color: $color-system-orange-orange60;
+    }
+    .text-wrapper {
+      color: $color-system-orange-orange60;
+    }
+  }
+
+  &.date-good {
+    .ellipse {
+      background-color: $color-system-yellow-yellow90;
+    }
+    .text-wrapper {
+      color: $color-system-yellow-yellow90;
+    }
+  }
+
+  &.date-nice {
+    .ellipse {
+      background-color: $color-system-lime-lime60;
+    }
+    .text-wrapper {
+      color: $color-system-lime-lime60;
     }
   }
 
@@ -19,6 +58,9 @@
   }
 
   .text-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 0;
     left: 0;
@@ -27,7 +69,6 @@
     font-size: 12px;
     font-weight: 600;
     color: $color-system-gray-gray30;
-    line-height: 26px;
     white-space: nowrap;
   }
 

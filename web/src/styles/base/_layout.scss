@@ -25,6 +25,12 @@
   flex-direction: column;
   height: 100%;
 
+  &.calendar {
+    .contents {
+      padding: 0;
+    }
+  }
+
   &.weekly-view {
     .contents {
       flex: none;

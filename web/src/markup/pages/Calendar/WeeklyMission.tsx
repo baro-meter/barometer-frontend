@@ -14,17 +14,17 @@ const CalendarWeeklyMission = ({}: LayoutProps) => {
   return (
     <div className="wrap">
       {/* weekly: main에 weekly-view 클래스 추가 (하단 bottom-area가 스크롤 될 수 있도록) */}
-      <main className="main weekly-view">
+      <main className="main calendar weekly-view">
+        <CalendarHeaderView
+          type="weekly"
+          year={2024}
+          month={12}
+          onToggleCalendarType={() => {}}
+          onClickTodayMoveBtn={() => {}}
+          onChangeDate={() => {}}
+        />
         <div className="contents">
           <div className="calendar-area">
-            <CalendarHeaderView
-              type="weekly"
-              year={2024}
-              month={12}
-              onToggleCalendarType={() => {}}
-              onClickTodayMoveBtn={() => {}}
-              onChangeDate={() => {}}
-            />
             <DayHeader />
             <WeeklyCalendarView
               weekIdx={0}
