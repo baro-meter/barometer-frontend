@@ -15,6 +15,7 @@ interface BaroMeterDateViewProps {
   imageUrl: string;
   hasScore: boolean;
   isActive: boolean;
+  scoreType: scoreType;
 }
 
 const BaroMeterDateView = ({
@@ -23,22 +24,22 @@ const BaroMeterDateView = ({
   imageUrl,
   hasScore,
   isActive,
+  scoreType,
 }: BaroMeterDateViewProps) => {
   return (
     <div
-      className={cn("date", "date-today", "calendar-column", {
+      className={cn("date", "calendar-column", {
         "is-active": isActive,
+        "date-bad": scoreType === 1,
+        "date-notgood": scoreType === 2,
+        "date-good": scoreType === 3,
+        "date-nice": scoreType === 4,
       })}
     >
       <button type="button" className={cn("group")}>
-        <Image
-          className={cn("vector")}
-          style={{ strokeWidth: "0.84px" }}
-          alt="Vector"
-          fill
-          src={imageUrl}
-        />
+        <Image className={cn("vector")} alt="" fill src={imageUrl} />
         {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
+        {isActive && <div className={cn("text-wrapper")}>{date}</div>}
       </button>
       {/* TODO 수정 필요 */}
       <div className={cn("frame")}>
@@ -69,26 +70,26 @@ export default function BaroMeterDate({
     let imageName;
     switch (score) {
       case 1:
-        imageName = "date_bad";
+        imageName = isActive ? "date_bad_active" : "date_bad";
         break;
       case 2:
-        imageName = "date_notgood";
+        imageName = isActive ? "date_notgood_active" : "date_notgood";
         break;
       case 3:
-        imageName = "date_good";
+        imageName = isActive ? "date_good_active" : "date_good";
         break;
       case 4:
-        imageName = "date_nice";
+        imageName = isActive ? "date_nice_active" : "date_nice";
         break;
       default:
-        imageName = isActive ? "date-today" : "date-monthly";
+        imageName = isActive ? "date-today" : "date_monthly";
     }
     return `${basePath}/calendar/${imageName}.svg`;
   }, [isActive, score]);
 
   if (date <= 0) {
     return (
-      <div className={cn("date", "date-today", "calendar-column")}>
+      <div className={cn("date", "date_today", "calendar-column")}>
         <div className={cn("group")}></div>
       </div>
     );
@@ -100,6 +101,7 @@ export default function BaroMeterDate({
     imageUrl,
     hasScore: score > 0,
     isActive,
+    scoreType: score,
   };
 
   return <BaroMeterDateView {...viewProps} />;
