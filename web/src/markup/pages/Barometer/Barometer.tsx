@@ -6,6 +6,7 @@ import Textarea from "@/markup/components/TextareaView";
 import ProgressList from "@/markup/components/ProgressListView";
 import { Button } from "@/markup/components/ButtonView";
 import Divider from "@/markup/components/Divider";
+import HeaderView from "@/markup/components/HeaderView";
 const Barometer = () => {
   const titleInfo = {
     title: "오늘 하루는 어땠나요?",
@@ -37,14 +38,7 @@ const Barometer = () => {
   return (
     <div className="wrap">
       <main className="main">
-        <CalendarHeader
-          type="monthly"
-          year={2024}
-          month={12}
-          onToggleCalendarType={() => {}}
-          onClickTodayMoveBtn={() => {}}
-          onChangeDate={() => {}}
-        />
+        <HeaderView headerType="back" />
         <div className="contents">
           <Title {...titleInfo} />
           <StatusLabel

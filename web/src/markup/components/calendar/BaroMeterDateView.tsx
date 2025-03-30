@@ -70,19 +70,19 @@ export default function BaroMeterDate({
     let imageName;
     switch (score) {
       case 1:
-        imageName = isActive ? "date_bad_active" : "date_bad";
+        imageName = isActive ? "date-bad-active" : "date-bad";
         break;
       case 2:
-        imageName = isActive ? "date_notgood_active" : "date_notgood";
+        imageName = isActive ? "date-notgood-active" : "date-notgood";
         break;
       case 3:
-        imageName = isActive ? "date_good_active" : "date_good";
+        imageName = isActive ? "date-good-active" : "date-good";
         break;
       case 4:
-        imageName = isActive ? "date_nice_active" : "date_nice";
+        imageName = isActive ? "date-nice-active" : "date-nice";
         break;
       default:
-        imageName = isActive ? "date-today" : "date_monthly";
+        imageName = isActive ? "date-today" : "date-monthly";
     }
     return `${basePath}/calendar/${imageName}.svg`;
   }, [isActive, score]);

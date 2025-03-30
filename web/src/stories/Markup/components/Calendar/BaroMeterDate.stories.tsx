@@ -51,9 +51,9 @@ export const Showcase: Story = {
         successGoalCount={4}
         isActive={true}
       />
-      <BaroMeterDateView date={5} score={4} successGoalCount={5} />
+      <BaroMeterDateView date={30} score={4} successGoalCount={5} />
       <BaroMeterDateView
-        date={3}
+        date={30}
         score={4}
         successGoalCount={5}
         isActive={true}
