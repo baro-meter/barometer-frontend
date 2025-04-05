@@ -25,14 +25,14 @@ export const goalState = atom<GoalStateType>({
 export const currentGoalState = selectorFamily({
   key: `currentGoalState/${v1}`,
   get:
-    (goalKey: number) =>
+    (goalKey: string) =>
     ({ get }) => {
       const goalMapper = get(goalState);
 
       return goalMapper[goalKey];
     },
   set:
-    (goalKey: number) =>
+    (goalKey: string) =>
     ({ set }, newValue) => {
       set(goalState, (prevState) => {
         return { ...prevState, [goalKey]: newValue as GoalType[] };
@@ -56,7 +56,7 @@ export function useGoalState() {
   return [isInitial ? defaultValue : value, setValue] as const;
 }
 
-export function useCurrentGoalState(goalKey: number) {
+export function useCurrentGoalState(goalKey: string) {
   const [isInitial, setIsInitial] = useState(true);
   const [currentGoal, setCurrentGoal] = useRecoilState(
     currentGoalState(goalKey)
