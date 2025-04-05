@@ -30,7 +30,11 @@ const BaroMeterDateView = ({
   score,
   handleClick,
 }: BaroMeterDateViewProps) => {
-  const hasScore = useState(!!score && score > 0);
+  const showDate = useMemo(() => {
+    if (isActive) return true;
+    return !(!!score && score > 0);
+  }, [isActive]);
+
   return (
     <div
       className={cn("date", "date-today", "calendar-column", {
@@ -43,15 +47,8 @@ const BaroMeterDateView = ({
       onClick={handleClick}
     >
       <button type="button" className={cn("group")}>
-        <Image
-          className={cn("vector")}
-          style={{ strokeWidth: "0.84px" }}
-          alt="Vector"
-          fill
-          src={imageUrl}
-        />
-        {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
-        {isActive && <div className={cn("text-wrapper")}>{date}</div>}
+        <Image className={cn("vector")} alt="" fill src={imageUrl} />
+        {showDate && <div className={cn("text-wrapper")}>{date}</div>}
       </button>
       {/* TODO 수정 필요 */}
       <div className={cn("frame")}>
