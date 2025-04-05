@@ -8,55 +8,28 @@ import { useSetRecoilState } from "recoil";
 import { ReportType } from "@/types/calendar";
 import { GoalType, GoalTypeId } from "@/types/goal";
 import { useCategory } from "./useCategory";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 
+dayjs.extend(weekOfYear);
 /**
- * TODO calendar View에서 공통적으로 동작하는 로직을 설정
- * - 월이 바뀌고, recoil에 저장된 goals이 없을 때 => fetch (`/goals`)
+ * 04.05 change
+ * calendar View에서 공통적으로 동작하는 로직을 설정
+ * - 선택된 날짜에 따라 goalKey를 자동으로 가져와서 목표 값들을 조회할 수 있음
+ * - 선택된 주가 바뀌고, recoil에 저장된 goals이 없을 때 => fetch (`/goals`)
+ * - TODO 년도 바뀌는 주 테스트 필요
  */
 export const useCalendar = (currentDate: dayjs.Dayjs) => {
-  const { getGoalStateKey } = useDayjsToStr();
-
-  // const [goal, setGoal] = useGoalState();
-  const [goalKey, setGoalKey] = useState(getGoalStateKey(currentDate));
+  const goalKey = useMemo(() => {
+    return `${currentDate.year()}/${currentDate.week()}`;
+  }, [currentDate]);
   const [currentGoal, setCurrentGoal] = useCurrentGoalState(goalKey);
 
   const setCalendarViewData = useSetRecoilState(reportState);
   const { getCategoryInfo } = useCategory();
 
-  /**
-   * calendar View 조회 시, goals 데이터 받아서 초기화
-   * TODO: 굳이 serverSide에서 불러와서 초기화 안시켜도 될 것 같다.
-   * => 밑에서 없을 때만 fetch해서 알아서 잘 불러오기 때문
-   *
-   * - 대신 weekly에서 두 달이 겹치는 경우 두개 동시 초기화가 필요할 수 있을 것 같아서 남겨둠.
-   * - 일단 monthly에서는 없을 때만 호출하게 해두었음 (그래야 불필요하게 새로고침하거나 화면 바뀌어도 호출 안됨)
-   * - 혹은 react-native 연동 시 로컬 데이터 초기에 받도록 설정 할 때 사용
-   * @param initGoalState
-   */
-  // const initGoals = (initGoalState: GoalStateType) => {
-  //   setGoal((beforeGoal) => {
-  //     const result = { ...beforeGoal };
-  //     Object.keys(initGoalState).forEach((key) => {
-  //       result[key] = initGoalState[key];
-  //     });
-  //     return result;
-  //   });
-  // };
-
-  useEffect(() => {
-    console.log("useCalendar useEffect! => " + currentDate);
-    const newGoalKey = getGoalStateKey(currentDate);
-    if (newGoalKey !== goalKey) {
-      setGoalKey(newGoalKey);
-    }
-  }, [currentDate]);
-
   useEffect(() => {
     const fetchGoal = async () => {
-      const newGoals = await getGoals(
-        currentDate.year(),
-        currentDate.month() + 1
-      );
+      const newGoals = await getGoals(currentDate.year(), currentDate.week());
       setCurrentGoal(newGoals);
     };
 
@@ -106,7 +79,7 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
     currentGoal,
     goalByIdMapper, // goalId 별 goal mapper
     goalByTypeMapper, // goalCategoryTypeId 별 goals 목록 mapper
-    goalCategories, // 설정된 목표의 goal category 목록
+    goalCategories, // 설정된 목표의 goal category 목록 - TODO 04.05 week단위로 관리 필요
     initBaromters,
   };
 };

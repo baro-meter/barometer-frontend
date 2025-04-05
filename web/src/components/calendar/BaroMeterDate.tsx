@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/barometerDate.module.scss";
 import Image from "next/image";
@@ -17,8 +17,8 @@ interface BaroMeterDateViewProps {
   date: number;
   successGoalCount: succesGoalCountType;
   imageUrl: string;
-  hasScore: boolean;
   isActive: boolean;
+  score?: number;
   handleClick: () => void;
 }
 
@@ -26,26 +26,29 @@ const BaroMeterDateView = ({
   date,
   successGoalCount,
   imageUrl,
-  hasScore,
   isActive,
+  score,
   handleClick,
 }: BaroMeterDateViewProps) => {
+  const showDate = useMemo(() => {
+    if (isActive) return true;
+    return !(!!score && score > 0);
+  }, [isActive]);
+
   return (
     <div
       className={cn("date", "date-today", "calendar-column", {
         "is-active": isActive,
+        "date-bad": score === 1,
+        "date-notgood": score === 2,
+        "date-good": score === 3,
+        "date-nice": score === 4,
       })}
       onClick={handleClick}
     >
       <button type="button" className={cn("group")}>
-        <Image
-          className={cn("vector")}
-          style={{ strokeWidth: "0.84px" }}
-          alt="Vector"
-          fill
-          src={imageUrl}
-        />
-        {!hasScore && <div className={cn("text-wrapper")}>{date}</div>}
+        <Image className={cn("vector")} alt="" fill src={imageUrl} />
+        {showDate && <div className={cn("text-wrapper")}>{date}</div>}
       </button>
       {/* TODO 수정 필요 */}
       <div className={cn("frame")}>
@@ -76,16 +79,16 @@ export default function BaroMeterDate({
     let imageName;
     switch (report?.score) {
       case 1:
-        imageName = "date_bad";
+        imageName = isActive ? "date-bad-active" : "date-bad";
         break;
       case 2:
-        imageName = "date_notgood";
+        imageName = isActive ? "date-notgood-active" : "date-notgood";
         break;
       case 3:
-        imageName = "date_good";
+        imageName = isActive ? "date-good-active" : "date-good";
         break;
       case 4:
-        imageName = "date_nice";
+        imageName = isActive ? "date-nice-active" : "date-nice";
         break;
       default:
         imageName = isActive ? "date-today" : "date-monthly";
@@ -111,7 +114,7 @@ export default function BaroMeterDate({
     date,
     successGoalCount: (report?.archivedCount ?? 0) as succesGoalCountType,
     imageUrl,
-    hasScore: !!report?.score && report?.score > 0,
+    score: report?.score,
     isActive: !!isActive,
     handleClick,
   };

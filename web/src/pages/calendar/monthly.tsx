@@ -3,18 +3,14 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { getDayText, getFormatDayjs } from "@/utils/calendarUtil";
-import ProgressListView from "@/markup/components/ProgressListView";
-import { ProgressProps } from "@/markup/components/ProgressView";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 import { getCalendarView } from "@/services/calendar/calendarService";
-import { GoalCategoryType, GoalType } from "@/types/goal";
+import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
-import SubTab from "@/markup/components/SubTab";
-import TodoList from "@/components/todo/TodoList";
 import MissionList from "@/components/calendar/MissionList";
 
 interface MonthlyPageViewProps {
