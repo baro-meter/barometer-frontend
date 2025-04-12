@@ -16,12 +16,14 @@ interface MissionItemViewProps {
   mission: MissionItem & { typeIndex: number };
   viewType?: ViewType;
   subMissions?: SubMissionItem[];
+  children?: React.ReactNode;
 }
 
 export const MissionItemView = ({
   mission,
   viewType = "both",
   subMissions = [],
+  children,
 }: MissionItemViewProps) => {
   const missionType = MISSION_TYPES[mission.typeIndex] || "routine";
 
@@ -44,7 +46,16 @@ export const MissionItemView = ({
               {mission.description}
             </p>
           </div>
-          <button className={cn("mission-item-button")}>삭제</button>
+          {children || (
+            <button className={cn("mission-item-button")}>
+              <Image
+                src={`${basePath}/img/icon-trash.svg`}
+                width={20}
+                height={20}
+                alt="삭제"
+              />
+            </button>
+          )}
         </div>
       )}
 
