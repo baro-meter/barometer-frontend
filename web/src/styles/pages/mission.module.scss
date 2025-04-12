@@ -6,3 +6,25 @@
 .mission-text {
   margin-top: 12px;
 }
+
+.mission-progress-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 354px;
+  margin: 0 auto;
+  padding: 54px 0;
+  gap: 14px;
+}
+
+.mission-description {
+  margin-top: 12px;
+}
+
+.mission-complete-image {
+  display: block;
+  margin: 40px auto 0;
+}
+
+.mission-input {
+  padding: 48px 0;
+}

@@ -22,7 +22,23 @@ export const MISSION_TYPES = Object.keys(MISSION_INFO) as Array<
 >;
 export type MissionType = keyof typeof MISSION_INFO;
 
+export type MissionProgressType =
+  | "routine"
+  | "weight"
+  | "calm"
+  | "growth"
+  | "free";
+
+export const MISSION_COLOR_KEYS: Record<MissionProgressType, string> = {
+  routine: "color-system-indigo-indigo70", // 규칙적인 생활
+  weight: "color-system-teal-teal70", // 체중 관리
+  calm: "color-system-yellow-yellow60", // 마음의 여유
+  growth: "color-system-purple-purple70", // 자기 개발
+  free: "color-system-gray-gray70", // 자유 미션
+};
+
 export interface MissionItem {
+  id?: string;
   title: string;
   description?: string;
   iconType?: boolean;

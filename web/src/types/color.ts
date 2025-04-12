@@ -47,4 +47,5 @@ export type Color =
   | "color-system-yellow-yellow90"
   | "surface-contents-bg"
   | "surface-surface"
-  | "surface-text-field";
+  | "surface-text-field"
+  | "white";

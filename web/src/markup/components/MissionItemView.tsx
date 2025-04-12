@@ -1,7 +1,13 @@
 import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/mission.module.scss";
-import { MISSION_TYPES, MissionItem, SubMissionItem } from "@/types/mission";
+import {
+  MISSION_TYPES,
+  MissionItem,
+  SubMissionItem,
+  MissionType,
+} from "@/types/mission";
+// @ts-ignore
 import Image from "next/image";
 import { basePath } from "next.config";
 import Divider from "@/markup/components/Divider";
@@ -13,7 +19,8 @@ const cn = classNames.bind(scss);
 type ViewType = "missionOnly" | "both" | "subMissionOnly";
 
 interface MissionItemViewProps {
-  mission: MissionItem & { typeIndex: number };
+  mission: MissionItem & { missionType?: MissionType };
+  missionType?: MissionType;
   viewType?: ViewType;
   subMissions?: SubMissionItem[];
   children?: React.ReactNode;
@@ -21,19 +28,22 @@ interface MissionItemViewProps {
 
 export const MissionItemView = ({
   mission,
+  missionType = "routine",
   viewType = "both",
   subMissions = [],
   children,
 }: MissionItemViewProps) => {
-  const missionType = MISSION_TYPES[mission.typeIndex] || "routine";
+  // mission 객체에서 missionType이 있으면 사용, 없으면 props의 missionType 사용
+  const actualMissionType = mission.missionType || missionType;
 
   return (
     <div className={cn("mission-item")}>
       {/* 미션 정보 영역 - missionOnly 또는 both일 때만 표시 */}
       {(viewType === "missionOnly" || viewType === "both") && (
         <div className={cn("mission-item-inner")}>
+          {/* @ts-ignore */}
           <Image
-            src={`${basePath}/img/icon-${missionType}.svg`}
+            src={`${basePath}/img/icon-${actualMissionType}.svg`}
             alt=""
             width={36}
             height={36}
@@ -48,6 +58,7 @@ export const MissionItemView = ({
           </div>
           {children || (
             <button className={cn("mission-item-button")}>
+              {/* @ts-ignore */}
               <Image
                 src={`${basePath}/img/icon-trash.svg`}
                 width={20}

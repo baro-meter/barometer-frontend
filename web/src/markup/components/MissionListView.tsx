@@ -30,8 +30,8 @@ export const MissionListView = ({
           mission={{
             title: MISSION_INFO[type].title,
             description: MISSION_INFO[type].description,
-            typeIndex: index,
             iconType: true,
+            missionType: type,
           }}
           viewType={viewType}
           subMissions={subMissions[type] || []}

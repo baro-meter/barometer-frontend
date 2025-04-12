@@ -8,6 +8,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    padding-top: 40px;
 
     &.type-2x {
       #{$block} {
