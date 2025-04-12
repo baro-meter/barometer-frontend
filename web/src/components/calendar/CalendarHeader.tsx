@@ -7,9 +7,10 @@ import Picker from "react-mobile-picker";
 import { selectedDayjsState } from "@/recoils/calendar";
 import { useRecoilState } from "recoil";
 import dayjs from "dayjs";
+import { ReportViewType } from "@/types/calendar";
 
 interface CalendarHeaderProps {
-  type: "monthly" | "weekly";
+  type: ReportViewType;
   year: number;
   month: number;
   onToggleCalendarType: () => void;
@@ -24,7 +25,10 @@ const CalendarHeader = ({
   onToggleCalendarType,
 }: CalendarHeaderProps) => {
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
-  const isToday = useMemo(() => selectedDate.isSame(dayjs()), [selectedDate]);
+  const isCurrentMonth = useMemo(
+    () => selectedDate.isSame(dayjs(), "month"),
+    [selectedDate]
+  );
 
   const [isPickerVisible, setPickerVisible] = useState(false);
 
@@ -82,7 +86,7 @@ const CalendarHeader = ({
             </span>
           </button>
         </div>
-        {type === "weekly" ? (
+        {type === ReportViewType.WEEKLY ? (
           <button
             className={cn("btn-calendar-view")}
             aria-label="Monthly View"
@@ -97,7 +101,7 @@ const CalendarHeader = ({
           </button>
         ) : (
           <>
-            {!isToday && (
+            {!isCurrentMonth && (
               <button
                 className={cn("btn-calendar-today")}
                 aria-label="Today"
@@ -111,18 +115,6 @@ const CalendarHeader = ({
                 />
               </button>
             )}
-            <button
-              className={cn("btn-calendar-view")}
-              aria-label="Weekly View"
-              onClick={onToggleCalendarType}
-            >
-              <Image
-                src={`${basePath}/calendar/icon-weekly.svg`}
-                width={20}
-                height={20}
-                alt={"Weekly 전환"}
-              />
-            </button>
           </>
         )}
       </div>

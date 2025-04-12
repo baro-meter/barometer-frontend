@@ -1,20 +1,21 @@
 import dayjs from "dayjs";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
-import { getDayText, getFormatDayjs } from "@/utils/calendarUtil";
+import { getFormatDayjs } from "@/utils/calendarUtil";
 import MonthlyCalendar from "@/components/calendar/MonthlyCalendar";
 import { getCalendarView } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
-import { CalendarViewType } from "@/types/calendar";
+import { CalendarViewType, ReportViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import MissionList from "@/components/calendar/MissionFiltering";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
-import { selectedDayjsState } from "@/recoils/calendar";
+import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
 import { useRecoilState } from "recoil";
+import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
 
 /**
  * TODO
@@ -26,6 +27,7 @@ interface MonthlyPageViewProps {
   month: number;
   date: number;
   selectedDate: dayjs.Dayjs;
+  selectedViewType: ReportViewType;
   handleChangeViewMode: () => void;
   handleChangeDate: (d: dayjs.Dayjs) => void;
 }
@@ -35,6 +37,7 @@ const MonthlyPageView = ({
   month,
   date,
   selectedDate,
+  selectedViewType,
   handleChangeViewMode,
   handleChangeDate,
 }: MonthlyPageViewProps) => {
@@ -42,19 +45,25 @@ const MonthlyPageView = ({
     <div className="wrap">
       <main className="main calendar">
         <CalendarHeader
-          type="monthly"
+          type={selectedViewType}
           year={year}
           month={month}
           onToggleCalendarType={handleChangeViewMode}
         />
         <div className="contents">
           <div className="calendar-area">
-            <MonthlyCalendar
-              year={year}
-              month={month}
-              date={date}
-              onChangeDate={handleChangeDate}
-            />
+            {selectedViewType === ReportViewType.MONTHLY && (
+              <MonthlyCalendar
+                year={year}
+                month={month}
+                date={date}
+                onChangeDate={handleChangeDate}
+              />
+            )}
+            {selectedViewType === ReportViewType.WEEKLY && (
+              <WeeklyCalendar year={year} month={month} date={date} />
+            )}
+            {selectedViewType === ReportViewType.LIST && <div>LIST</div>}
           </div>
         </div>
         <MissionList type="monthly" year={year} month={month} date={date} />
@@ -70,6 +79,8 @@ interface MonthlyPageProps {
 const MonthlyPage = ({}: MonthlyPageProps) => {
   // new
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
+  const [selectedViewType, setSelectedViewType] =
+    useRecoilState(selectedViewState);
 
   const router = useRouter();
 
@@ -106,11 +117,15 @@ const MonthlyPage = ({}: MonthlyPageProps) => {
   }, [currentGoal]);
 
   const handleChangeViewMode = useCallback(() => {
-    router.push(`/calendar/weekly?initDate=${getFormatDayjs(selectedDate)}`);
-  }, [selectedDate]);
+    if (selectedViewType === ReportViewType.MONTHLY) {
+      setSelectedViewType(ReportViewType.WEEKLY);
+    } else {
+      setSelectedViewType(ReportViewType.MONTHLY);
+    }
+  }, [selectedViewType]);
 
   const handleChangeDate = async (d: dayjs.Dayjs) => {
-    console.log(`handleChangeDate: ${d}`);
+    setSelectedViewType(ReportViewType.WEEKLY);
     setSelectedDate(d);
   };
 
@@ -119,6 +134,7 @@ const MonthlyPage = ({}: MonthlyPageProps) => {
     month: selectedDate.month() + 1, // 월은 0부터 시작
     date: selectedDate.date(),
     selectedDate,
+    selectedViewType,
     handleChangeViewMode,
     handleChangeDate,
   };

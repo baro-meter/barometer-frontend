@@ -3,7 +3,6 @@ import { BaroMeterScoreType } from "./barometerType";
 export enum ReportViewType {
   MONTHLY = "monthly",
   WEEKLY = "weekly",
-  LIST = "list",
 }
 
 export interface ReportType {
