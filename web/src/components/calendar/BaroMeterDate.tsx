@@ -33,7 +33,7 @@ const BaroMeterDateView = ({
   const showDate = useMemo(() => {
     if (isActive) return true;
     return !(!!score && score > 0);
-  }, [isActive]);
+  }, [isActive, score]);
 
   return (
     <div

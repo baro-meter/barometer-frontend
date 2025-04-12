@@ -28,7 +28,8 @@ const MissionListView = ({
     <>
       <div className="bottom-area">
         <div className="inner">
-          {hasReport ? (
+          <TodoList selectedDate={selectedDate} alignment={alignment} />
+          {/* {hasReport ? (
             <BaroMeterReport
               report={report!}
               selectedDate={selectedDate}
@@ -37,14 +38,12 @@ const MissionListView = ({
             />
           ) : (
             <TodoList selectedDate={selectedDate} alignment={alignment} />
-          )}
+          )} */}
         </div>
       </div>
-      {!hasReport && (
-        <div className="fixed-area">
-          <Button as="a" href="/" label="오늘의 바로미터 작성" />
-        </div>
-      )}
+      <div className="fixed-area">
+        <Button as="a" href="/" label="바로미터 채우기 ✏️" />
+      </div>
     </>
   );
 };

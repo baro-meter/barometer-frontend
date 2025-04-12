@@ -40,7 +40,7 @@ interface WeeklyProps {
   weekDates: number[];
   activeDate?: number;
   className?: string;
-  onClickDate: (date: number) => void;
+  onClickDate?: (date: number) => void;
 }
 
 export default function Weekly({
@@ -48,7 +48,7 @@ export default function Weekly({
   weekDates,
   activeDate,
   className,
-  onClickDate,
+  onClickDate = () => {},
 }: WeeklyProps) {
   const viewProps = {
     weekIdx,

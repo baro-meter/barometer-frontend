@@ -2,6 +2,10 @@ import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 
+/**
+ * TODO 삭제
+ * 마크업 컴포넌트만 사용
+ */
 const cn = classNames.bind(scss);
 
 interface DayHeaderViewProps {
