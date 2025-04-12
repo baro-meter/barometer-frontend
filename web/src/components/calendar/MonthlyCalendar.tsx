@@ -9,7 +9,6 @@ import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import Weekly from "./Weekly";
-import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
 
 const cn = classNames.bind(scss);
@@ -22,11 +21,7 @@ interface MonthlyCalendarViewProps {
   calendarDates: number[][];
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
-  isToday: boolean;
   handleClickDate: (date: number) => void;
-  handleChangeWeeklyView: () => void;
-  handleMoveToday: () => void;
-  handleChangeDate: (year: number, month: number) => void;
 }
 
 const MonthlyCalendarView = ({
@@ -34,23 +29,10 @@ const MonthlyCalendarView = ({
   calendarDates,
   layoutRef,
   isSixWeeks,
-  isToday,
   handleClickDate,
-  handleChangeWeeklyView,
-  handleMoveToday,
-  handleChangeDate,
 }: MonthlyCalendarViewProps) => {
   return (
     <>
-      <CalendarHeaderView
-        type="monthly"
-        year={monthlyDayjs.year()}
-        month={monthlyDayjs.month() + 1}
-        isToday={isToday}
-        onToggleCalendarType={handleChangeWeeklyView}
-        onClickTodayMoveBtn={handleMoveToday}
-        onChangeDate={handleChangeDate}
-      />
       <div className={cn("container")} role="grid">
         <DayHeader />
         <div role="rowgroup" className={cn("calendar")} ref={layoutRef}>
@@ -78,7 +60,6 @@ interface MonthlyCalendarProps {
   month: number;
   date: number; // 선택된 날짜가 있을 경우 넘어옴
   onChangeDate?: (d: dayjs.Dayjs) => void;
-  onChangeViewMode: () => void;
 }
 
 export default function MonthlyCalendar({
@@ -86,7 +67,6 @@ export default function MonthlyCalendar({
   month,
   date,
   onChangeDate,
-  onChangeViewMode,
 }: MonthlyCalendarProps) {
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
     dayjs()
@@ -100,7 +80,6 @@ export default function MonthlyCalendar({
   // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
   // 우선은 해당 캘린더 내부에서만 스크롤 될 수 있게 한다.
   const [lastScrollTop, setLastScrollTop] = useState(0);
-  const [isToday, setIsToday] = useState(false);
   const layoutRef = useRef<HTMLDivElement>(null);
 
   // 캘린더 그려주는 부분에 date는 필요없어서 효율성을 위해 별도로 트리거링
@@ -156,10 +135,6 @@ export default function MonthlyCalendar({
     }
   }, [calendarDates, layoutRef]);
 
-  useEffect(() => {
-    setIsToday(dayjsObject.isSame(dayjs(), "day"));
-  }, [dayjsObject]);
-
   const isSixWeeks = useMemo(() => {
     return calendarDates[5][0] > 0;
   }, [calendarDates]);
@@ -190,37 +165,13 @@ export default function MonthlyCalendar({
     [dayjsObject]
   );
 
-  const handleMoveToday = () => {
-    const today = dayjs();
-    setDayjsObject(today);
-    if (onChangeDate) {
-      onChangeDate(today);
-    }
-  };
-
-  const handleChangeDate = (year: number, month: number) => {
-    const changedDate = dayjs()
-      .year(year)
-      .month(month - 1)
-      .set("date", 1);
-
-    setDayjsObject(changedDate);
-    if (onChangeDate) {
-      onChangeDate(changedDate);
-    }
-  };
-
   const viewProps = {
     monthlyDayjs: dayjsObject,
     calendarDates,
     layoutRef,
     isSixWeeks,
-    isToday,
     handleClickDate,
     handleArrowClicked,
-    handleChangeWeeklyView: onChangeViewMode,
-    handleMoveToday,
-    handleChangeDate,
   };
 
   return <MonthlyCalendarView {...viewProps} />;

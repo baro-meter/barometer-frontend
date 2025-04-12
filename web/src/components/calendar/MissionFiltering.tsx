@@ -1,35 +1,39 @@
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
-import TodoList, { TodoListAlignmentType } from "../todo/TodoList";
+import MissionTab, { MissionTabAlignmentType } from "../todo/MissionTab";
 import Button from "@/markup/components/ButtonView";
 import { useRecoilValue } from "recoil";
 import { currentReportState } from "@/recoils/reports";
-import { ReportType } from "@/types/calendar";
+import { ReportType, ReportViewType } from "@/types/calendar";
 import BaroMeterReport from "../report/BaroMeterReport";
 import { useCalendar } from "@/hooks/useCalendar";
+import { selectedViewState } from "@/recoils/calendar";
 
-interface MissionListViewProps {
+interface MissionFilteringViewProps {
   selectedDate: dayjs.Dayjs;
   missionTexts: string[];
   typeFull: boolean;
-  alignment: TodoListAlignmentType;
+  alignment: MissionTabAlignmentType;
+  isShowBaroMeterBtn: boolean;
   report?: ReportType;
 }
 
-const MissionListView = ({
+const MissionFilteringView = ({
   selectedDate,
   missionTexts,
   typeFull,
   alignment,
+  isShowBaroMeterBtn,
   report,
-}: MissionListViewProps) => {
+}: MissionFilteringViewProps) => {
   const hasReport = useMemo(() => report !== undefined, [report]);
   return (
     <>
       <div className="bottom-area">
         <div className="inner">
-          <TodoList selectedDate={selectedDate} alignment={alignment} />
-          {/* {hasReport ? (
+          <div className="tab-area">
+            <MissionTab selectedDate={selectedDate} alignment={alignment} />
+            {/* {hasReport ? (
             <BaroMeterReport
               report={report!}
               selectedDate={selectedDate}
@@ -39,28 +43,32 @@ const MissionListView = ({
           ) : (
             <TodoList selectedDate={selectedDate} alignment={alignment} />
           )} */}
+          </div>
         </div>
       </div>
-      <div className="fixed-area">
-        <Button as="a" href="/" label="바로미터 채우기 ✏️" />
-      </div>
+      {isShowBaroMeterBtn && (
+        <div className="fixed-area">
+          <Button as="a" href="/" label="바로미터 채우기 ✏️" />
+        </div>
+      )}
     </>
   );
 };
 
-interface MissionListPageProps {
+interface MissionFilteringPageProps {
   type: "weekly" | "monthly";
   year: number;
   month: number;
   date: number;
 }
 
-export default function MissionList({
+export default function MissionFiltering({
   type,
   year,
   month,
   date,
-}: MissionListPageProps) {
+}: MissionFilteringPageProps) {
+  const selectedViewType = useRecoilValue(selectedViewState);
   const selectedDate = useMemo(
     () =>
       dayjs()
@@ -88,9 +96,10 @@ export default function MissionList({
     typeFull: type === "weekly",
     alignment: (type === "weekly"
       ? "vertical"
-      : "horizontal") as TodoListAlignmentType,
+      : "horizontal") as MissionTabAlignmentType,
     missionTexts,
+    isShowBaroMeterBtn: selectedViewType === ReportViewType.WEEKLY,
   };
 
-  return <MissionListView {...viewProps} />;
+  return <MissionFilteringView {...viewProps} />;
 }

@@ -1,15 +1,18 @@
+import { ReportViewType } from "@/types/calendar";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { atom, selector, useRecoilState } from "recoil";
+import { atom, selector } from "recoil";
 import { v1 } from "uuid";
 
 const defaultValue = dayjs();
 
 /**
- * TODO 언젠간 리팩토링....
- * 선택된 날짜를 관리하는 값
- * - 컴포넌트에서 다 참조하고 있어서 recoil로 관리함.
- * persist에 저장되지 않습니다. 따라서 weekly <-> monthly 전환 시에는 query를 날려 선택되고자 하는 날짜를 전달해야 합니다.
+ * TODO
+ * 캘린더 -> 이름 변경 /report에서 쓰고 있음
+ */
+
+/**
+ * 선택된 날짜
+ * - 이 값을 기반으로 캘린더가 표시된다.
  */
 export const selectedDayjsState = atom<dayjs.Dayjs>({
   key: `selectedDate/${v1}`,
@@ -19,4 +22,13 @@ export const selectedDayjsState = atom<dayjs.Dayjs>({
 export const selectedDateState = selector({
   key: "selectedDateSelector",
   get: ({ get }) => get(selectedDayjsState).date(),
+});
+
+/**
+ * Tab2에서 아래 view 중 하나의 값 가르킴
+ * - monthly, weekly, list
+ */
+export const selectedViewState = atom<ReportViewType>({
+  key: `selectedViewType/${v1}`,
+  default: ReportViewType.MONTHLY,
 });

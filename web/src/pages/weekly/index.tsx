@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import utc from "dayjs/plugin/utc";
 import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
-import WeeklyList from "@/components/calendar/MissionList";
+import WeeklyList from "@/components/calendar/MissionFiltering";
 import "swiper/css";
 import { useCalendar } from "@/hooks/useCalendar";
 import { useQuery } from "@tanstack/react-query";

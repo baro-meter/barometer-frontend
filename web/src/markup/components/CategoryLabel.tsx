@@ -4,7 +4,7 @@ import scss from "@/styles/components/category.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
 import { GoalCategoryType, GoalTypeId } from "@/types/goal";
-import { TodoListContext } from "@/components/todo/TodoList";
+import { MissionTabContext } from "@/components/todo/MissionTab";
 
 const cn = classNames.bind(scss);
 
@@ -15,7 +15,7 @@ interface CategoryLabelProps {
 export const CategoryLabel = ({ items }: CategoryLabelProps) => {
   return (
     <div className={cn("category-list")}>
-      <TodoListContext.Consumer>
+      <MissionTabContext.Consumer>
         {({ activeTabTypeId, setActiveTabTypeId }) => {
           return items.map((category, index) => {
             const handleChange = () => setActiveTabTypeId(category.typeId);
@@ -45,7 +45,7 @@ export const CategoryLabel = ({ items }: CategoryLabelProps) => {
             );
           });
         }}
-      </TodoListContext.Consumer>
+      </MissionTabContext.Consumer>
     </div>
   );
 };
