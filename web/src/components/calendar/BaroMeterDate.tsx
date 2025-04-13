@@ -5,6 +5,8 @@ import Image from "next/image";
 import { basePath } from "next.config";
 import { currentReportState } from "@/recoils/reports";
 import { useRecoilValue } from "recoil";
+import { selectedTabState } from "@/recoils/tab";
+import { TabEnum } from "@/types/tab";
 
 const cn = classNames.bind(scss);
 
@@ -37,12 +39,13 @@ const BaroMeterDateView = ({
 
   return (
     <div
-      className={cn("date", "date-today", "calendar-column", {
+      className={cn("date", "calendar-column", {
+        // "date-today": isToday,
         "is-active": isActive,
-        "date-bad": score === 1,
-        "date-notgood": score === 2,
-        "date-good": score === 3,
-        "date-nice": score === 4,
+        "date-bad": score === 1, // TODO 미션은 있지만 report가 없는 주 처리
+        // "date-notgood": score === 2,
+        "date-good": !!score && score >= 1,
+        "date-nice": !!score && score >= 3,
       })}
       onClick={handleClick}
     >
@@ -64,37 +67,38 @@ const BaroMeterDateView = ({
 
 interface BaroMeterDateProps {
   date: number;
+  isToday?: boolean;
   isActive?: boolean;
   onClick?: () => void;
 }
 
 export default function BaroMeterDate({
   date,
-  isActive,
+  isToday = false,
+  isActive = false,
   onClick,
 }: BaroMeterDateProps) {
   const report = useRecoilValue(currentReportState(date));
+  const selectedViewType = useRecoilValue(selectedTabState);
 
   const imageUrl = useMemo(() => {
-    let imageName;
-    switch (report?.score) {
-      case 1:
-        imageName = isActive ? "date-bad-active" : "date-bad";
-        break;
-      case 2:
-        imageName = isActive ? "date-notgood-active" : "date-notgood";
-        break;
-      case 3:
-        imageName = isActive ? "date-good-active" : "date-good";
-        break;
-      case 4:
+    let imageName = "date-monthly";
+    // TODO 개수 필드에 따라 표시 변경 필요
+    if (isToday) {
+      imageName = "date-today";
+    } else if (report?.score) {
+      const { score } = report;
+      if (score >= 3) {
         imageName = isActive ? "date-nice-active" : "date-nice";
-        break;
-      default:
-        imageName = isActive ? "date-today" : "date-monthly";
+      } else if (score >= 1) {
+        imageName = isActive ? "date-good-active" : "date-good";
+      }
+    } else if (report) {
+      // TODO 미션 작성 주이지만, 체크가 안된 날 처리 필요
+      imageName = isActive ? "date-bad-active" : "date-bad";
     }
     return `${basePath}/calendar/${imageName}.svg`;
-  }, [isActive, report]);
+  }, [isActive, selectedViewType, report]);
 
   const handleClick = () => {
     if (onClick) {

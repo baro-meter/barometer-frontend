@@ -17,7 +17,6 @@ const cn = classNames.bind(scss);
  * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
  */
 interface MonthlyCalendarViewProps {
-  monthlyDayjs: dayjs.Dayjs;
   calendarDates: number[][];
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
@@ -25,7 +24,6 @@ interface MonthlyCalendarViewProps {
 }
 
 const MonthlyCalendarView = ({
-  monthlyDayjs,
   calendarDates,
   layoutRef,
   isSixWeeks,
@@ -44,7 +42,6 @@ const MonthlyCalendarView = ({
                 key={`w-${i}`}
                 weekIdx={i}
                 weekDates={w}
-                activeDate={monthlyDayjs.date()}
                 onClickDate={handleClickDate}
               />
             )
@@ -166,7 +163,6 @@ export default function MonthlyCalendar({
   );
 
   const viewProps = {
-    monthlyDayjs: dayjsObject,
     calendarDates,
     layoutRef,
     isSixWeeks,

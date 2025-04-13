@@ -43,7 +43,7 @@ const WeeklyCalendarView = ({
         >
           <SwiperSlide />
           <SwiperSlide>
-            <Weekly weekDates={calendarDates} activeDate={activeDate} />
+            <Weekly weekDates={calendarDates} />
           </SwiperSlide>
           <SwiperSlide />
         </Swiper>

@@ -2,6 +2,9 @@ import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import BaroMeterDate from "./BaroMeterDate";
+import { selectedTabState } from "@/recoils/tab";
+import { useRecoilValue } from "recoil";
+import { TabEnum } from "@/types/tab";
 
 const cn = classNames.bind(scss);
 
@@ -11,14 +14,16 @@ const cn = classNames.bind(scss);
 interface WeeklyViewProps {
   weekIdx: number;
   weekDates: number[];
-  activeDate?: number; // TODO today일수도 있어서 작업 안함
+  selectedViewType: TabEnum;
+  today?: number;
   handleClickDate: (date: number) => void;
 }
 
 const WeeklyView = ({
   weekIdx,
   weekDates,
-  activeDate,
+  selectedViewType,
+  today,
   handleClickDate,
 }: WeeklyViewProps) => {
   return (
@@ -27,7 +32,8 @@ const WeeklyView = ({
         <BaroMeterDate
           key={`bm-${weekIdx * 10 + di}`}
           date={d}
-          isActive={d === activeDate}
+          isToday={d === today}
+          isActive={selectedViewType === TabEnum.REPORT}
           onClick={() => handleClickDate(d)}
         />
       ))}
@@ -38,7 +44,7 @@ const WeeklyView = ({
 interface WeeklyProps {
   weekIdx?: number;
   weekDates: number[];
-  activeDate?: number;
+  today?: number;
   className?: string;
   onClickDate?: (date: number) => void;
 }
@@ -46,14 +52,16 @@ interface WeeklyProps {
 export default function Weekly({
   weekIdx = 0,
   weekDates,
-  activeDate,
+  today,
   className,
   onClickDate = () => {},
 }: WeeklyProps) {
+  const selectedViewType = useRecoilValue(selectedTabState);
   const viewProps = {
     weekIdx,
     weekDates,
-    activeDate,
+    today,
+    selectedViewType,
     className,
     handleClickDate: onClickDate,
   };

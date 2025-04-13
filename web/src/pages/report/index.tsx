@@ -22,11 +22,6 @@ import classNames from "classnames";
 import scss from "@/styles/components/calendar.module.scss";
 
 const cn = classNames.bind(scss);
-/**
- * TODO
- * 지금 현재는 monthly이긴 한데,
- * CalendarHeader 하위에 contents 부분만 버튼 누르면 스위칭하기.
- */
 interface MonthlyPageViewProps {
   year: number;
   month: number;

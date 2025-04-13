@@ -20,6 +20,7 @@ export const reportState = atom<ReportType[]>({
 const reportMapState = selector({
   key: `reportMapState/${v1}`,
   get: ({ get }) => {
+    // TODO 주단위로 바뀌면서 데이터 변경 필요
     const reports = get(reportState);
     return reports.reduce((map, obj) => {
       const date = dayjs(obj.date).date();
