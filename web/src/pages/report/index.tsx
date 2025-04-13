@@ -69,7 +69,7 @@ const MonthlyPageView = ({
             {selectedViewType === ReportViewType.WEEKLY && <WeeklyCalendar />}
           </div>
         </div>
-        <MissionList type="monthly" />
+        <MissionList type={selectedViewType} />
       </main>
     </div>
   );
@@ -87,6 +87,7 @@ const MonthlyPage = ({}: MonthlyPageProps) => {
   const setSelectedTab = useSetRecoilState(selectedTabState);
 
   useEffect(() => {
+    setSelectedViewType(ReportViewType.MONTHLY);
     setSelectedTab(TabEnum.REPORT);
   }, []);
 

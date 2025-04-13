@@ -1,10 +1,13 @@
 import { useCalendar } from "@/hooks/useCalendar";
+import { useCategory } from "@/hooks/useCategory";
 import CategoryLabel from "@/markup/components/CategoryLabel";
 import ProgressListView from "@/markup/components/ProgressListView";
 import { ProgressProps } from "@/markup/components/ProgressView";
 import { selectedViewState } from "@/recoils/calendar";
+import { selectedTabState } from "@/recoils/tab";
 import { ReportViewType } from "@/types/calendar";
 import { GoalCategoryType, GoalTypeId } from "@/types/goal";
+import { TabEnum } from "@/types/tab";
 import dayjs from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -57,10 +60,24 @@ export default function MissionTab({
     GoalTypeId | undefined
   >();
 
-  const selectedViewType = useRecoilValue(selectedViewState);
-
+  // TODO calendar monthly 타입일 때는 goalCategories가 모두 표시되어야 함.....
+  const { getAllCategoryLableItems: allCategories } = useCategory();
   const { currentGoal, goalCategories, goalByTypeMapper } =
     useCalendar(selectedDate);
+  const selectedTab = useRecoilValue(selectedTabState);
+  const selectedViewType = useRecoilValue(selectedViewState);
+
+  const showCategories = useMemo(() => {
+    console.log("showCategories");
+    if (
+      selectedTab === TabEnum.REPORT &&
+      selectedViewType === ReportViewType.MONTHLY
+    ) {
+      return allCategories();
+    } else {
+      return goalCategories;
+    }
+  }, [selectedTab, selectedViewType]);
 
   const progressList = useMemo(() => {
     const list = activeTabTypeId
@@ -89,7 +106,7 @@ export default function MissionTab({
   const viewProps = {
     activeTabTypeId,
     progressList,
-    goalCategories,
+    goalCategories: showCategories,
     alignment,
     isShowList: selectedViewType === ReportViewType.WEEKLY,
     setActiveTabTypeId,
