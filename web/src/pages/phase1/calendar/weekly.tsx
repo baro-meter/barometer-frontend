@@ -1,4 +1,4 @@
-import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
+import WeeklyCalendar from "@/components/calendar/WeeklyCalendarOrigin";
 import dayjs from "dayjs";
 import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useMemo, useState } from "react";

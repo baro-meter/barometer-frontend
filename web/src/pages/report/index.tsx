@@ -14,9 +14,14 @@ import { useAccessTokenValue } from "@/recoils/user";
 import MissionList from "@/components/calendar/MissionFiltering";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
 import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
+import { selectedTabState } from "@/recoils/tab";
+import { TabEnum } from "@/types/tab";
+import classNames from "classnames";
+import scss from "@/styles/components/calendar.module.scss";
 
+const cn = classNames.bind(scss);
 /**
  * TODO
  * 지금 현재는 monthly이긴 한데,
@@ -43,7 +48,13 @@ const MonthlyPageView = ({
 }: MonthlyPageViewProps) => {
   return (
     <div className="wrap">
-      <main className="main calendar">
+      <main
+        className={cn(
+          "main",
+          "calendar",
+          selectedViewType === ReportViewType.WEEKLY && "weekly-view"
+        )}
+      >
         <CalendarHeader
           type={selectedViewType}
           year={year}
@@ -63,7 +74,6 @@ const MonthlyPageView = ({
             {selectedViewType === ReportViewType.WEEKLY && (
               <WeeklyCalendar year={year} month={month} date={date} />
             )}
-            {selectedViewType === ReportViewType.LIST && <div>LIST</div>}
           </div>
         </div>
         <MissionList type="monthly" year={year} month={month} date={date} />
@@ -81,20 +91,27 @@ const MonthlyPage = ({}: MonthlyPageProps) => {
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
   const [selectedViewType, setSelectedViewType] =
     useRecoilState(selectedViewState);
+  const setSelectedTab = useSetRecoilState(selectedTabState);
 
-  const router = useRouter();
+  useEffect(() => {
+    setSelectedTab(TabEnum.REPORT);
+  }, []);
 
   // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
   // TODO accessToken이 뒤늦게 설정되어서, prefetch가 정상 동작하지 않음 -> 해결책 강구.
   const accessToken = useAccessTokenValue();
 
-  const startDate = useMemo(
-    () => getFormatDayjs(selectedDate.startOf("month")),
-    [selectedDate]
-  );
+  // const startDate = useMemo(
+  //   () => getFormatDayjs(selectedDate.startOf("month")),
+  //   [selectedDate]
+  // );
+  const startDate = useMemo(() => {
+    console.log(selectedDate);
+    return getFormatDayjs(selectedDate.startOf("month"));
+  }, [selectedDate, selectedViewType]);
   const endDate = useMemo(
     () => getFormatDayjs(selectedDate.endOf("month")),
-    [selectedDate]
+    [selectedDate, selectedViewType]
   );
 
   const { initBaromters, currentGoal } = useCalendar(selectedDate);
@@ -124,6 +141,7 @@ const MonthlyPage = ({}: MonthlyPageProps) => {
     }
   }, [selectedViewType]);
 
+  // TODO click event handler로 변경
   const handleChangeDate = async (d: dayjs.Dayjs) => {
     setSelectedViewType(ReportViewType.WEEKLY);
     setSelectedDate(d);

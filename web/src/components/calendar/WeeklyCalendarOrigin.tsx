@@ -1,55 +1,57 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Weekly from "@/components/calendar/Weekly";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
-import { getWeeklyDateRange } from "@/utils/calendarUtil";
-import { useRecoilValue } from "recoil";
-import { selectedTabState } from "@/recoils/tab";
-import { TabEnum } from "@/types/tab";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";
-import "swiper/css";
+import { getWeeklyDateRange } from "@/utils/calendarUtil";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
 interface WeeklyCalendarViewProps {
-  useSwiper: boolean;
   calendarDates: number[];
   activeDate: number;
   setSwiper: React.Dispatch<React.SetStateAction<SwiperTypes | undefined>>;
+  handleClickDate: (d: number) => void;
   handleSwipeWeek: (activeIdx: number) => void;
 }
 
 const WeeklyCalendarView = ({
-  useSwiper,
   calendarDates,
   activeDate,
   setSwiper,
+  handleClickDate,
   handleSwipeWeek,
 }: WeeklyCalendarViewProps) => {
   return (
     <>
       <DayHeader />
-      {useSwiper ? (
-        <Swiper
-          onSwiper={setSwiper}
-          slidesPerView={1}
-          initialSlide={1}
-          spaceBetween={10}
-          onSlideChange={(s) => handleSwipeWeek(s.activeIndex)}
-        >
-          <SwiperSlide />
-          <SwiperSlide>
-            <Weekly weekDates={calendarDates} activeDate={activeDate} />
-          </SwiperSlide>
-          <SwiperSlide />
-        </Swiper>
-      ) : (
-        <Weekly weekDates={calendarDates} activeDate={activeDate} />
-      )}
+      <Swiper
+        onSwiper={setSwiper}
+        slidesPerView={1}
+        initialSlide={1}
+        spaceBetween={10}
+        onSlideChange={(s) => handleSwipeWeek(s.activeIndex)}
+        onInit={(swiper) => {
+          // 초기화 후 업데이트
+          setTimeout(() => {
+            swiper.update();
+          }, 100);
+        }}
+      >
+        <SwiperSlide />
+        <SwiperSlide>
+          <Weekly
+            weekDates={calendarDates}
+            activeDate={activeDate}
+            onClickDate={handleClickDate}
+          />
+        </SwiperSlide>
+        <SwiperSlide />
+      </Swiper>
     </>
   );
 };
@@ -58,14 +60,16 @@ interface WeeklyCalendarProps {
   year: number;
   month: number;
   date: number;
+  onChangeDate?: (d: dayjs.Dayjs) => void;
 }
 
 export default function WeeklyCalendar({
   year,
   month,
   date,
+  onChangeDate,
 }: WeeklyCalendarProps) {
-  const selectedTab = useRecoilValue(selectedTabState);
+  const [swiper, setSwiper] = useState<SwiperTypes>();
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(
     dayjs()
       .year(year)
@@ -73,7 +77,6 @@ export default function WeeklyCalendar({
       .set("date", date)
   );
   const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
-  const [swiper, setSwiper] = useState<SwiperTypes>();
 
   useEffect(() => {
     setSelectedDate(
@@ -94,32 +97,42 @@ export default function WeeklyCalendar({
     setCalendarDates(dates);
   }, [selectedDate]);
 
+  const handleClickDate = (newD: number) => {
+    // 기존 날짜와 선택된 날짜가 7일 초과 차이 나면 다른 달
+    const prevD = selectedDate.date();
+    const diff = Math.abs(newD - prevD);
+    let goalDate = selectedDate.set("date", newD);
+    if (diff > 7) {
+      const prevM = selectedDate.month();
+      const newM = prevD > newD ? prevM + 1 : prevM - 1;
+      goalDate = selectedDate.set("month", newM).set("date", newD);
+    }
+    if (onChangeDate) {
+      onChangeDate(goalDate);
+    }
+  };
+
   const handleSwipeWeek = (activeIndex: number) => {
-    console.log(`activeIndex: ${activeIndex}`);
     let goalDate;
     if (activeIndex === 0) {
       goalDate = selectedDate.subtract(1, "week").day(0);
     } else if (activeIndex === 2) {
       goalDate = selectedDate.add(1, "week").day(0);
     }
-    console.log(`goalDate: ${goalDate}`);
     if (goalDate && swiper) {
-      console.log(`slide`);
       swiper.slideTo(1);
-      setSelectedDate(goalDate);
+
+      if (onChangeDate) {
+        onChangeDate(goalDate);
+      }
     }
   };
 
-  const useSwiper = useMemo(
-    () => selectedTab === TabEnum.REPORT,
-    [selectedTab]
-  );
-
   const viewProps = {
-    useSwiper,
     calendarDates,
     activeDate: date,
     setSwiper,
+    handleClickDate,
     handleSwipeWeek,
   };
 
