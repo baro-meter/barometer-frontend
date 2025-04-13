@@ -2,6 +2,7 @@ import { ReportType } from "@/types/calendar";
 import dayjs from "dayjs";
 import { atom, selector, selectorFamily } from "recoil";
 import { v1 } from "uuid";
+import { selectedDayjsState } from "./calendar";
 
 /**
  * monthly, weekly view에서 view/calendar api를 호출하여 가져온 reports 정보를
@@ -33,8 +34,17 @@ const reportMapState = selector({
 /**
  * 날짜별 view/calendar info
  */
-export const currentReportState = selectorFamily({
+export const currentReportState = selector({
   key: `currentReportState/${v1}`,
+  get: ({ get }) => {
+    const currentDate = get(selectedDayjsState);
+    const reportMap = get(reportMapState);
+    return reportMap.get(currentDate.date());
+  },
+});
+
+export const baroMeterReportState = selectorFamily({
+  key: `baroMeterReportState/${v1}`,
   get:
     (date: number) =>
     ({ get }) => {

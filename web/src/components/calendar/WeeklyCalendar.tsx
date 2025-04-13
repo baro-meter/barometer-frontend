@@ -5,12 +5,13 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import weekYear from "dayjs/plugin/weekYear";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
 import { getWeeklyDateRange } from "@/utils/calendarUtil";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";
 import "swiper/css";
+import { selectedDayjsState } from "@/recoils/calendar";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
@@ -18,7 +19,7 @@ dayjs.extend(weekYear);
 interface WeeklyCalendarViewProps {
   useSwiper: boolean;
   calendarDates: number[];
-  activeDate: number;
+  today: number;
   setSwiper: React.Dispatch<React.SetStateAction<SwiperTypes | undefined>>;
   handleSwipeWeek: (activeIdx: number) => void;
 }
@@ -26,7 +27,7 @@ interface WeeklyCalendarViewProps {
 const WeeklyCalendarView = ({
   useSwiper,
   calendarDates,
-  activeDate,
+  today,
   setSwiper,
   handleSwipeWeek,
 }: WeeklyCalendarViewProps) => {
@@ -48,41 +49,25 @@ const WeeklyCalendarView = ({
           <SwiperSlide />
         </Swiper>
       ) : (
-        <Weekly weekDates={calendarDates} activeDate={activeDate} />
+        <Weekly weekDates={calendarDates} today={today} />
       )}
     </>
   );
 };
 
-interface WeeklyCalendarProps {
-  year: number;
-  month: number;
-  date: number;
-}
+interface WeeklyCalendarProps {}
 
-export default function WeeklyCalendar({
-  year,
-  month,
-  date,
-}: WeeklyCalendarProps) {
+export default function WeeklyCalendar({}: WeeklyCalendarProps) {
   const selectedTab = useRecoilValue(selectedTabState);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(
-    dayjs()
-      .year(year)
-      .month(month - 1)
-      .set("date", date)
-  );
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
+  // const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(
+  //   dayjs()
+  //     .year(year)
+  //     .month(month - 1)
+  //     .set("date", date)
+  // );
   const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
   const [swiper, setSwiper] = useState<SwiperTypes>();
-
-  useEffect(() => {
-    setSelectedDate(
-      dayjs()
-        .year(year)
-        .month(month - 1)
-        .set("date", date)
-    );
-  }, [year, month, date]);
 
   useEffect(() => {
     // weeklyView는 오늘 기준 일주일만 보여준다. 따라서, 이번주의 weekly date를 구한다.
@@ -95,7 +80,6 @@ export default function WeeklyCalendar({
   }, [selectedDate]);
 
   const handleSwipeWeek = (activeIndex: number) => {
-    console.log(`activeIndex: ${activeIndex}`);
     let goalDate;
     if (activeIndex === 0) {
       goalDate = selectedDate.subtract(1, "week").day(0);
@@ -104,9 +88,9 @@ export default function WeeklyCalendar({
     }
     console.log(`goalDate: ${goalDate}`);
     if (goalDate && swiper) {
-      console.log(`slide`);
       swiper.slideTo(1);
       setSelectedDate(goalDate);
+      // TODO 변경된 날짜에 따른 goals 조회 필요
     }
   };
 
@@ -118,7 +102,7 @@ export default function WeeklyCalendar({
   const viewProps = {
     useSwiper,
     calendarDates,
-    activeDate: date,
+    today: dayjs().date(),
     setSwiper,
     handleSwipeWeek,
   };

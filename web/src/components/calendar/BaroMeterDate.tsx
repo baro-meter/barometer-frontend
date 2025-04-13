@@ -3,10 +3,9 @@ import classNames from "classnames/bind";
 import scss from "@/styles/components/barometerDate.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
-import { currentReportState } from "@/recoils/reports";
+import { baroMeterReportState } from "@/recoils/reports";
 import { useRecoilValue } from "recoil";
 import { selectedTabState } from "@/recoils/tab";
-import { TabEnum } from "@/types/tab";
 
 const cn = classNames.bind(scss);
 
@@ -78,7 +77,7 @@ export default function BaroMeterDate({
   isActive = false,
   onClick,
 }: BaroMeterDateProps) {
-  const report = useRecoilValue(currentReportState(date));
+  const report = useRecoilValue(baroMeterReportState(date));
   const selectedViewType = useRecoilValue(selectedTabState);
 
   const imageUrl = useMemo(() => {

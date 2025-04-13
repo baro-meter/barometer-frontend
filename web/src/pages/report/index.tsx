@@ -66,12 +66,10 @@ const MonthlyPageView = ({
                 onChangeDate={handleChangeDate}
               />
             )}
-            {selectedViewType === ReportViewType.WEEKLY && (
-              <WeeklyCalendar year={year} month={month} date={date} />
-            )}
+            {selectedViewType === ReportViewType.WEEKLY && <WeeklyCalendar />}
           </div>
         </div>
-        <MissionList type="monthly" year={year} month={month} date={date} />
+        <MissionList type="monthly" />
       </main>
     </div>
   );

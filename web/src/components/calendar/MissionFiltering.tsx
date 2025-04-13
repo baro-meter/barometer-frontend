@@ -2,12 +2,11 @@ import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import MissionTab, { MissionTabAlignmentType } from "../todo/MissionTab";
 import Button from "@/markup/components/ButtonView";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { currentReportState } from "@/recoils/reports";
 import { ReportType, ReportViewType } from "@/types/calendar";
-import BaroMeterReport from "../report/BaroMeterReport";
 import { useCalendar } from "@/hooks/useCalendar";
-import { selectedViewState } from "@/recoils/calendar";
+import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
 
 interface MissionFilteringViewProps {
   selectedDate: dayjs.Dayjs;
@@ -57,29 +56,14 @@ const MissionFilteringView = ({
 
 interface MissionFilteringPageProps {
   type: "weekly" | "monthly";
-  year: number;
-  month: number;
-  date: number;
 }
 
-export default function MissionFiltering({
-  type,
-  year,
-  month,
-  date,
-}: MissionFilteringPageProps) {
+export default function MissionFiltering({ type }: MissionFilteringPageProps) {
   const selectedViewType = useRecoilValue(selectedViewState);
-  const selectedDate = useMemo(
-    () =>
-      dayjs()
-        .year(year)
-        .month(month - 1)
-        .date(date),
-    [year, month, date]
-  );
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
 
   const { goalByIdMapper } = useCalendar(selectedDate);
-  const report = useRecoilValue(currentReportState(date));
+  const report = useRecoilValue(currentReportState);
 
   const missionTexts = useMemo(() => {
     const result = report?.archivedGoalIds.map(
