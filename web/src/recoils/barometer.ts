@@ -15,6 +15,6 @@ export const currentBarometerState = selector<BaroMeterType | undefined>({
   key: "currentBarometerState",
   get: ({ get }) => {
     const currentWeeklyCalendarView = get(currentWeeklyCalendarViewState);
-    return currentWeeklyCalendarView.report;
+    return currentWeeklyCalendarView?.report;
   },
 });

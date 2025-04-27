@@ -4,32 +4,27 @@ import { GetServerSidePropsContext } from "next";
 import React, { useEffect, useMemo, useState } from "react";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import utc from "dayjs/plugin/utc";
-import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
+import { getFormatDayjs } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/calendar/MissionFiltering";
 import "swiper/css";
-import { useCalendar } from "@/hooks/useCalendar";
-import { useQuery } from "@tanstack/react-query";
-import { getCalendarView } from "@/services/calendar/calendarService";
-import { CalendarViewType } from "@/types/calendar";
-import { useAccessTokenValue } from "@/recoils/user";
 import Header from "@/markup/components/HeaderView";
+import {
+  LastSavedDateForMissionState,
+  lastSavedDateForMissionState,
+} from "@/recoils/mission";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { selectedTabState } from "@/recoils/tab";
+import { TabEnum } from "@/types/tab";
+import { selectedDayjsState } from "@/recoils/calendar";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(utc);
 
 interface WeeklyPageViewProps {
   isLastWeek: boolean;
-  year: number;
-  month: number;
-  date: number;
 }
 
-const WeeklyPageView = ({
-  isLastWeek,
-  year,
-  month,
-  date,
-}: WeeklyPageViewProps) => {
+const WeeklyPageView = ({ isLastWeek }: WeeklyPageViewProps) => {
   return (
     <div className="wrap">
       {/* weekly: main에 weekly-view 클래스 추가 (하단 bottom-area가 스크롤 될 수 있도록) */}
@@ -40,10 +35,10 @@ const WeeklyPageView = ({
         />
         <div className="contents">
           <div className="calendar-area">
-            <WeeklyCalendar year={year} month={month} date={date} />
+            <WeeklyCalendar />
           </div>
         </div>
-        <WeeklyList type="weekly" year={year} month={month} date={date} />
+        <WeeklyList type="weekly" />
       </main>
     </div>
   );
@@ -59,64 +54,73 @@ interface WeeklyPageProps {
  * - week: weekOfYear(https://day.js.org/docs/en/plugin/week-of-year)
  */
 
-const WeeklyPage = ({ isLastWeek }: WeeklyPageProps) => {
-  //
-  /**
-   * TODO 마지막 접속일자 react-native로 부터 받아와야 함
-   * - 마지막 접속일자가 저번주인 경우에만 api 찔러서 LAST WEEK 표시 여부 확인 필요
-   */
+const WeeklyPage = ({}: WeeklyPageProps) => {
+  const setSelectedTab = useSetRecoilState(selectedTabState);
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
 
-  const [currentDate, setCurrentDate] = useState(dayjs());
-  // const [currentDate, setCurrentDate] = useState(dayjs("2024-10-28"));
+  const [savedDate, setSavedDate] = useRecoilState(
+    lastSavedDateForMissionState
+  );
+  const [hasMission, setHasMission] = useState<Boolean>();
 
-  if (isLastWeek === undefined) {
+  setSelectedTab(TabEnum.MISSION);
+
+  useEffect(() => {
+    let newSavedDate: LastSavedDateForMissionState = {
+      lastAccessDate: getFormatDayjs(dayjs()),
+      savedMissionDate: undefined,
+    };
+    let activeDate = dayjs(); // 캘린더 표시 기준 날짜 설정
+
+    if (savedDate !== undefined) {
+      // 저장된 미션 데이터가 있는 경우
+      if (savedDate.savedMissionDate !== undefined) {
+        // 저장된 데이터가 지난주 이후 데이터인 경우에만 저장된 미션을 사용한다.
+        const today = dayjs();
+        if (
+          today.year() == savedDate.savedMissionDate.year &&
+          today.week() - savedDate.savedMissionDate.week <= 1
+        ) {
+          newSavedDate.savedMissionDate = savedDate.savedMissionDate;
+          setHasMission(true);
+          activeDate = dayjs()
+            .year(savedDate.savedMissionDate.year)
+            .week(savedDate.savedMissionDate.week);
+        } else {
+          setHasMission(false);
+        }
+      } else {
+        setHasMission(false);
+      }
+    }
+
+    setSavedDate(savedDate);
+    setSelectedDate(activeDate);
+  }, [savedDate]);
+
+  const isLastWeek = useMemo(() => {
+    if (selectedDate) {
+      return selectedDate.isBefore(dayjs().subtract(7, "day"));
+    }
+    return false;
+  }, [selectedDate]);
+
+  if (hasMission === undefined) {
+    // TODO 저장된 미션 날짜가 없는 경우 미션 설정 화면 표시
     return <></>;
   }
 
-  useEffect(() => {
-    if (isLastWeek) {
-      setCurrentDate(dayjs().subtract(7, "day"));
-    }
-  }, [isLastWeek]);
-
-  // 이 accessToken이 있을 때만 useQuery를 실행하는 공통함수를 짜야하나?
-  // TODO accessToken이 뒤늦게 설정되어서, prefetch가 정상 동작하지 않음 -> 해결책 강구.
-  const accessToken = useAccessTokenValue();
-
-  const startDate = useMemo(() => {
-    const { startDate } = getWeeklyDateRange(currentDate);
-    return getFormatDayjs(startDate);
-  }, [currentDate]);
-
-  const endDate = useMemo(() => {
-    const { endDate } = getWeeklyDateRange(currentDate);
-    return getFormatDayjs(endDate);
-  }, [currentDate]);
-
-  const { initBaromters, currentGoal } = useCalendar(currentDate);
-  const { data: calendarViewData } = useQuery<CalendarViewType>({
-    queryKey: ["calendarViewData", startDate, endDate],
-    queryFn: () => getCalendarView(startDate, endDate),
-    enabled: !!accessToken,
-    staleTime: 1000 * 60,
-  });
-
-  useEffect(() => {
-    if (calendarViewData?.reports) {
-      initBaromters(calendarViewData.reports);
-    }
-  }, [calendarViewData]);
-
-  useEffect(() => {
-    console.log("=======currentGoal========");
-    console.log(currentGoal);
-  }, [currentGoal]);
+  if (hasMission === false) {
+    // TODO 저장된 미션 날짜가 없는 경우 미션 설정 화면 표시
+    return (
+      <>
+        <div style={{ color: "white" }}>NO MISSON</div>
+      </>
+    );
+  }
 
   const viewProps = {
     isLastWeek,
-    year: currentDate.year(),
-    month: currentDate.month() + 1, // 월은 0부터 시작
-    date: currentDate.date(),
   };
 
   return <WeeklyPageView {...viewProps} />;
@@ -125,25 +129,8 @@ const WeeklyPage = ({ isLastWeek }: WeeklyPageProps) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  /** TODO
-   * react-native로 부터 데이터 가져와서, 저번주인 경우 api 찔러 last week로 가야하는지 여부 보냄
-   */
-  // const queryClient = new QueryClient();
-  // const initDate = (context.query?.initDate ?? "") as string;
-
-  // const current = initDate ? dayjs(initDate) : dayjs();
-  // const { startDate, endDate } = getWeeklyDateRange(current);
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["calendarViewData", startDate, endDate],
-  //   queryFn: () =>
-  //     getCalendarView(getFormatDayjs(startDate), getFormatDayjs(endDate)),
-  // });
-  const isLastWeek = false;
-
   return {
-    props: {
-      isLastWeek,
-    },
+    props: {},
   };
 };
 

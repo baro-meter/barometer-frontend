@@ -60,12 +60,6 @@ interface WeeklyCalendarProps {}
 export default function WeeklyCalendar({}: WeeklyCalendarProps) {
   const selectedTab = useRecoilValue(selectedTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
-  // const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(
-  //   dayjs()
-  //     .year(year)
-  //     .month(month - 1)
-  //     .set("date", date)
-  // );
   const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
   const [swiper, setSwiper] = useState<SwiperTypes>();
 

@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { getGoals } from "@/services/calendar/calendarService";
 import { reportState } from "@/recoils/reports";
 import { useSetRecoilState } from "recoil";
-import { ReportType } from "@/types/calendar";
+import { ReportType, WeeklyCalendarViewType } from "@/types/calendar";
 import { GoalType, GoalTypeId } from "@/types/goal";
 import { useCategory } from "./useCategory";
 import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -71,6 +71,7 @@ export const useCalendar = (currentDate: dayjs.Dayjs) => {
     ];
   }, [goalByTypeMapper]);
 
+  // TODO 삭제
   const initBaromters = (reports: ReportType[]) => {
     setCalendarViewData(reports);
   };

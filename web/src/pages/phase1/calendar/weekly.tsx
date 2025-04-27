@@ -11,7 +11,10 @@ import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
 import { useCalendar } from "@/hooks/useCalendar";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getCalendarView } from "@/services/calendar/calendarService";
+import {
+  getCalendarView,
+  getWeeklyCalendarView,
+} from "@/services/calendar/calendarService";
 import { CalendarViewType } from "@/types/calendar";
 import { useAccessTokenValue } from "@/recoils/user";
 
@@ -173,11 +176,17 @@ export const getServerSideProps = async (
   const initDate = (context.query?.initDate ?? "") as string;
 
   const current = initDate ? dayjs(initDate) : dayjs();
-  const { startDate, endDate } = getWeeklyDateRange(current);
+  const year = current.year();
+  const week = current.week();
+  // const { startDate, endDate } = getWeeklyDateRange(current);
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["calendarViewData", startDate, endDate],
+  //   queryFn: () =>
+  //     getCalendarView(getFormatDayjs(startDate), getFormatDayjs(endDate)),
+  // });
   await queryClient.prefetchQuery({
-    queryKey: ["calendarViewData", startDate, endDate],
-    queryFn: () =>
-      getCalendarView(getFormatDayjs(startDate), getFormatDayjs(endDate)),
+    queryKey: ["getWeeklyCalendarView", year, week],
+    queryFn: () => getWeeklyCalendarView(year, week),
   });
 
   return {
