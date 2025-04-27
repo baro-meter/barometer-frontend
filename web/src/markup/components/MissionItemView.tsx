@@ -1,7 +1,12 @@
 import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/mission.module.scss";
-import { MISSION_TYPES, MissionItem, SubMissionItem } from "@/types/mission";
+import {
+  MISSION_INFO,
+  MissionItem,
+  SubMissionItem,
+  MissionCategoryId,
+} from "@/types/mission";
 import Image from "next/image";
 import { basePath } from "next.config";
 import Divider from "@/markup/components/Divider";
@@ -25,7 +30,8 @@ export const MissionItemView = ({
   subMissions = [],
   children,
 }: MissionItemViewProps) => {
-  const missionType = MISSION_TYPES[mission.typeIndex] || "routine";
+  const missionType =
+    MISSION_INFO[mission.typeIndex as MissionCategoryId].icon || "routine";
 
   return (
     <div className={cn("mission-item")}>

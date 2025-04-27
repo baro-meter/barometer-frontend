@@ -1,4 +1,5 @@
-import { BaroMeterScoreType } from "./barometerType";
+import { BaroMeterScoreType, BaroMeterType } from "./barometerType";
+import { MissionPerType } from "./mission";
 
 export enum ReportViewType {
   MONTHLY = "monthly",
@@ -16,4 +17,11 @@ export interface ReportType {
 
 export interface CalendarViewType {
   reports: ReportType[];
+}
+
+// [new api]
+export interface WeeklyCalendarViewType {
+  dayOfWeekCount: number[];
+  goalsPerTypes: MissionPerType[];
+  report?: BaroMeterType;
 }

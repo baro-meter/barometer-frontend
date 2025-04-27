@@ -5,6 +5,10 @@ import { v1 } from "uuid";
 import { selectedDayjsState } from "./calendar";
 
 /**
+ * 주별 report 정보를 저장하는 atom (캐싱)
+ */
+
+/**
  * monthly, weekly view에서 view/calendar api를 호출하여 가져온 reports 정보를
  * 캘린더에 그려주기 위한 컴포넌트 간 데이터 호출을 위해 사용
  */

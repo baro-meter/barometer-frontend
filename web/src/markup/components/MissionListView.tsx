@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/mission.module.scss";
 import {
-  MISSION_TYPES,
+  MISSION_CATEGORIES,
   MISSION_INFO,
   MissionItem,
   SubMissionItem,
@@ -24,7 +24,7 @@ export const MissionListView = ({
 }: MissionListViewProps) => {
   return (
     <div className={cn("mission-list-category")}>
-      {MISSION_TYPES.map((type, index) => (
+      {MISSION_CATEGORIES.map((type, index) => (
         <MissionItemView
           key={type}
           mission={{
