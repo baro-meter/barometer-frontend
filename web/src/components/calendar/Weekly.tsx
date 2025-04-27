@@ -56,6 +56,10 @@ export default function Weekly({
   className,
   onClickDate = () => {},
 }: WeeklyProps) {
+  // to-be
+  // dlfek
+
+  // as-is
   const selectedViewType = useRecoilValue(selectedTabState);
   const viewProps = {
     weekIdx,

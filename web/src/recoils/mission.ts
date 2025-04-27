@@ -36,7 +36,6 @@ export const lastSavedDateForMissionState = atom<
     ({ setSelf, onSet }) => {
       // 브라우저 환경에서만 localStorage 접근
       if (typeof window !== "undefined") {
-        console.log("lastSavedDateForMissionState");
         const savedDataStr = localStorage.getItem(
           "lastSavedDateForMissionState"
         );

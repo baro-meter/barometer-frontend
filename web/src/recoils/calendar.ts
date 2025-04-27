@@ -46,26 +46,32 @@ export const currentWeeklyCalendarViewState = selector<
 >({
   key: "currentWeeklyCalendarViewState",
   get: ({ get }) => {
-    // 초기 로드 시 API 호출
-    const loadInitialData = async (year: number, week: number) => {
-      try {
-        return await getWeeklyCalendarView(year, week);
-      } catch (error) {
-        console.log("Failed to load weekly calendar data:", error);
-        return undefined;
-      }
-    };
+    // 브라우저 환경에서만 localStorage 접근
+    if (typeof window !== "undefined") {
+      // 초기 로드 시 API 호출
+      const loadInitialData = async (year: number, week: number) => {
+        console.log("loadInitialData: ", year, week);
+        try {
+          return await getWeeklyCalendarView(year, week);
+        } catch (error) {
+          console.log("Failed to load weekly calendar data:", error);
+          return undefined;
+        }
+      };
 
-    const lastSavedDate = get(lastSavedDateForMissionState);
-    const savedData = localStorage.getItem("currentWeeklyCalendarViewState");
-    if (savedData) {
-      return JSON.parse(savedData);
-    } else if (lastSavedDate) {
-      if (lastSavedDate.savedMissionDate) {
-        // 저번주 or 이번주 설정된 미션 데이터 불러옴
-        const { year, week } = lastSavedDate.savedMissionDate;
-        return loadInitialData(year, week);
+      const lastSavedDate = get(lastSavedDateForMissionState);
+      const savedData = localStorage.getItem("currentWeeklyCalendarViewState");
+      if (savedData) {
+        return JSON.parse(savedData);
+      } else if (lastSavedDate) {
+        console.log("lastSavedDate: ", lastSavedDate);
+        if (lastSavedDate.savedMissionDate) {
+          // 저번주 or 이번주 설정된 미션 데이터 불러옴
+          const { year, week } = lastSavedDate.savedMissionDate;
+          return loadInitialData(year, week);
+        }
       }
+      console.log("savedData: ", savedData);
     }
     // 이번주 미션 데이터 아직 미설정됨
     return undefined;

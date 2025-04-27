@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { type Swiper as SwiperTypes } from "swiper";
 import "swiper/css";
 import { selectedDayjsState } from "@/recoils/calendar";
+import { useWeeklyCalendar } from "@/hooks/useWeeklyCalendar";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
