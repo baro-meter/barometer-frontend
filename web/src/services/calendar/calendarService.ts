@@ -1,6 +1,7 @@
 import httpClient from "@/services/httpClient";
 import { CalendarViewType, WeeklyCalendarViewType } from "@/types/calendar";
 import { GoalType } from "@/types/goal";
+import { AxiosHeaderValue } from "axios";
 
 export const getGoals = async (year: number, week: number) => {
   const url = `/goal`;
@@ -17,9 +18,15 @@ export const getCalendarView = async (startDate: string, endDate: string) => {
   return httpClient.get<CalendarViewType>(url, { params });
 };
 
-export const getWeeklyCalendarView = async (year: number, week: number) => {
+export const getWeeklyCalendarView = async (
+  year: number,
+  week: number,
+  headers?: {
+    Authorization: AxiosHeaderValue;
+  }
+) => {
   const url = `/view`;
   const params = { year, week };
 
-  return httpClient.get<WeeklyCalendarViewType>(url, { params });
+  return httpClient.get<WeeklyCalendarViewType>(url, { params, headers });
 };

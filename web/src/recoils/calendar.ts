@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { atom, selector } from "recoil";
 import { v1 } from "uuid";
 import { lastSavedDateForMissionState } from "./mission";
+import { accessTokenState } from "./user";
 
 const defaultValue = dayjs();
 
@@ -49,10 +50,17 @@ export const currentWeeklyCalendarViewState = selector<
     // 브라우저 환경에서만 localStorage 접근
     if (typeof window !== "undefined") {
       // 초기 로드 시 API 호출
+      const accessTokenStr = get(accessTokenState);
+      /**
+       * TODO mission page에서 prefetch 한번만 하고 캐싱된 query 호출하도록 변경
+       * https://velog.io/@day_1226/Next.js-tanstack-query%EB%A1%9C-prefetch-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
+       */
       const loadInitialData = async (year: number, week: number) => {
         console.log("loadInitialData: ", year, week);
         try {
-          return await getWeeklyCalendarView(year, week);
+          return await getWeeklyCalendarView(year, week, {
+            Authorization: accessTokenStr ?? "",
+          });
         } catch (error) {
           console.log("Failed to load weekly calendar data:", error);
           return undefined;

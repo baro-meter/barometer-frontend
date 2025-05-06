@@ -12,19 +12,21 @@ import {
   LastSavedDateForMissionState,
   lastSavedDateForMissionState,
 } from "@/recoils/mission";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
 import { selectedDayjsState } from "@/recoils/calendar";
+import { setHttpClientCredentials } from "@/services/httpClient";
+import { QueryClient } from "@tanstack/react-query";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(utc);
 
-interface WeeklyPageViewProps {
+interface MissionPageViewProps {
   isLastWeek: boolean;
 }
 
-const WeeklyPageView = ({ isLastWeek }: WeeklyPageViewProps) => {
+const MissionPageView = ({ isLastWeek }: MissionPageViewProps) => {
   return (
     <div className="wrap">
       {/* weekly: main에 weekly-view 클래스 추가 (하단 bottom-area가 스크롤 될 수 있도록) */}
@@ -44,7 +46,7 @@ const WeeklyPageView = ({ isLastWeek }: WeeklyPageViewProps) => {
   );
 };
 
-interface WeeklyPageProps {
+interface MissonPageProps {
   isLastWeek?: boolean;
 }
 
@@ -54,7 +56,7 @@ interface WeeklyPageProps {
  * - week: weekOfYear(https://day.js.org/docs/en/plugin/week-of-year)
  */
 
-const WeeklyPage = ({}: WeeklyPageProps) => {
+const MissionPage = ({}: MissonPageProps) => {
   const setSelectedTab = useSetRecoilState(selectedTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
 
@@ -96,7 +98,7 @@ const WeeklyPage = ({}: WeeklyPageProps) => {
 
     setSavedDate(savedDate);
     setSelectedDate(activeDate);
-  }, [savedDate]);
+  }, []);
 
   const isLastWeek = useMemo(() => {
     if (selectedDate) {
@@ -123,7 +125,7 @@ const WeeklyPage = ({}: WeeklyPageProps) => {
     isLastWeek,
   };
 
-  return <WeeklyPageView {...viewProps} />;
+  return <MissionPageView {...viewProps} />;
 };
 
 export const getServerSideProps = async (
@@ -134,4 +136,4 @@ export const getServerSideProps = async (
   };
 };
 
-export default WeeklyPage;
+export default MissionPage;
