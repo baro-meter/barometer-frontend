@@ -13,14 +13,16 @@ import { type Swiper as SwiperTypes } from "swiper";
 import "swiper/css";
 import { selectedDayjsState } from "@/recoils/calendar";
 import { useWeeklyCalendar } from "@/hooks/useWeeklyCalendar";
+import { WeekDateViewItem } from "@/types/calendar";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
 interface WeeklyCalendarViewProps {
   useSwiper: boolean;
-  calendarDates: number[];
+  calendarDates: WeekDateViewItem[];
   today: number;
+  showBaroMeterNumber: boolean; // 바로미터 있는 데이터 중 숫자&색 활성화 => only 2번째 탭 weekly 모드
   setSwiper: React.Dispatch<React.SetStateAction<SwiperTypes | undefined>>;
   handleSwipeWeek: (activeIdx: number) => void;
 }
@@ -29,6 +31,7 @@ const WeeklyCalendarView = ({
   useSwiper,
   calendarDates,
   today,
+  showBaroMeterNumber,
   setSwiper,
   handleSwipeWeek,
 }: WeeklyCalendarViewProps) => {
@@ -45,12 +48,19 @@ const WeeklyCalendarView = ({
         >
           <SwiperSlide />
           <SwiperSlide>
-            <Weekly weekDates={calendarDates} />
+            <Weekly
+              weekDates={calendarDates}
+              showBaroMeterNumber={showBaroMeterNumber}
+            />
           </SwiperSlide>
           <SwiperSlide />
         </Swiper>
       ) : (
-        <Weekly weekDates={calendarDates} today={today} />
+        <Weekly
+          weekDates={calendarDates}
+          today={today}
+          showBaroMeterNumber={showBaroMeterNumber}
+        />
       )}
     </>
   );
@@ -59,9 +69,12 @@ const WeeklyCalendarView = ({
 interface WeeklyCalendarProps {}
 
 export default function WeeklyCalendar({}: WeeklyCalendarProps) {
+  const selectedViewType = useRecoilValue(selectedTabState);
   const selectedTab = useRecoilValue(selectedTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
-  const [calendarDates, setCalendarDates] = useState<number[]>(new Array(7));
+  const [calendarDates, setCalendarDates] = useState<WeekDateViewItem[]>(
+    new Array(7)
+  );
   const [swiper, setSwiper] = useState<SwiperTypes>();
   const { dayOfWeekCount, barometer, missions } = useWeeklyCalendar();
 
@@ -70,10 +83,14 @@ export default function WeeklyCalendar({}: WeeklyCalendarProps) {
     const dates = new Array(7);
     const { startDate } = getWeeklyDateRange(selectedDate);
     for (let i = 0; i < 7; i++) {
-      dates.push(startDate.add(i, "day").date());
+      const target = startDate.add(i, "day");
+      dates.push({
+        date: target.date(),
+        archivedCount: target.isAfter(dayjs()) ? undefined : dayOfWeekCount[i],
+      });
     }
     setCalendarDates(dates);
-  }, [selectedDate]);
+  }, [selectedDate, dayOfWeekCount]);
 
   const handleSwipeWeek = (activeIndex: number) => {
     let goalDate;
@@ -95,10 +112,16 @@ export default function WeeklyCalendar({}: WeeklyCalendarProps) {
     [selectedTab]
   );
 
+  const showBaroMeterNumber = useMemo(
+    () => selectedViewType === TabEnum.REPORT,
+    [selectedViewType]
+  );
+
   const viewProps = {
     useSwiper,
     calendarDates,
     today: dayjs().date(),
+    showBaroMeterNumber,
     setSwiper,
     handleSwipeWeek,
   };

@@ -5,44 +5,37 @@ import Image from "next/image";
 import { basePath } from "next.config";
 import { baroMeterReportState } from "@/recoils/reports";
 import { useRecoilValue } from "recoil";
-import { selectedTabState } from "@/recoils/tab";
 
 const cn = classNames.bind(scss);
 
-type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
-
-/**
- * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
- */
 interface BaroMeterDateViewProps {
   date: number;
-  successGoalCount: succesGoalCountType;
   imageUrl: string;
   isActive: boolean;
+  isToday: boolean;
   score?: number;
   handleClick: () => void;
 }
 
 const BaroMeterDateView = ({
   date,
-  successGoalCount,
   imageUrl,
   isActive,
+  isToday,
   score,
   handleClick,
 }: BaroMeterDateViewProps) => {
   const showDate = useMemo(() => {
     if (isActive) return true;
-    return !(!!score && score > 0);
+    return !score;
   }, [isActive, score]);
 
   return (
     <div
       className={cn("date", "calendar-column", {
-        // "date-today": isToday,
+        "date-today": isToday,
         "is-active": isActive,
-        "date-bad": score === 1, // TODO 미션은 있지만 report가 없는 주 처리
-        // "date-notgood": score === 2,
+        "date-bad": score === 0,
         "date-good": !!score && score >= 1,
         "date-nice": !!score && score >= 3,
       })}
@@ -52,9 +45,8 @@ const BaroMeterDateView = ({
         <Image className={cn("vector")} alt="" fill src={imageUrl} />
         {showDate && <div className={cn("text-wrapper")}>{date}</div>}
       </button>
-      {/* TODO 수정 필요 */}
       <div className={cn("frame")}>
-        {[...Array(successGoalCount)].map((i) => (
+        {[...Array(score)].map((i) => (
           <div className={cn("ellipse")} key={i}>
             {i}
           </div>
@@ -66,6 +58,7 @@ const BaroMeterDateView = ({
 
 interface BaroMeterDateProps {
   date: number;
+  score?: number; // 없으면 그냥 날짜 표시
   isToday?: boolean;
   isActive?: boolean;
   onClick?: () => void;
@@ -73,31 +66,30 @@ interface BaroMeterDateProps {
 
 export default function BaroMeterDate({
   date,
+  score,
   isToday = false,
   isActive = false,
   onClick,
 }: BaroMeterDateProps) {
   const report = useRecoilValue(baroMeterReportState(date));
-  const selectedViewType = useRecoilValue(selectedTabState);
 
   const imageUrl = useMemo(() => {
     let imageName = "date-monthly";
     // TODO 개수 필드에 따라 표시 변경 필요
     if (isToday) {
       imageName = "date-today";
-    } else if (report?.score) {
-      const { score } = report;
+    } else if (!!score && score >= 0) {
       if (score >= 3) {
         imageName = isActive ? "date-nice-active" : "date-nice";
       } else if (score >= 1) {
         imageName = isActive ? "date-good-active" : "date-good";
+      } else if (score === 0) {
+        imageName = isActive ? "date-bad-active" : "date-bad";
       }
-    } else if (report) {
-      // TODO 미션 작성 주이지만, 체크가 안된 날 처리 필요
-      imageName = isActive ? "date-bad-active" : "date-bad";
+      console.log(`${date} -> ${score}`);
     }
     return `${basePath}/calendar/${imageName}.svg`;
-  }, [isActive, selectedViewType, report]);
+  }, [isActive, score]);
 
   const handleClick = () => {
     if (onClick) {
@@ -115,10 +107,10 @@ export default function BaroMeterDate({
 
   const viewProps = {
     date,
-    successGoalCount: (report?.archivedCount ?? 0) as succesGoalCountType,
     imageUrl,
-    score: report?.score,
+    score,
     isActive: !!isActive,
+    isToday,
     handleClick,
   };
 

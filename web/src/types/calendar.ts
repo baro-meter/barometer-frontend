@@ -25,3 +25,9 @@ export interface WeeklyCalendarViewType {
   goalsPerTypes: MissionPerType[];
   report?: BaroMeterType;
 }
+
+type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
+export interface WeekDateViewItem {
+  date: number;
+  archivedCount?: succesGoalCountType; // 없으면 그냥 날짜 표시
+}

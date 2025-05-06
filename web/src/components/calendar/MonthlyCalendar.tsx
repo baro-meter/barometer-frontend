@@ -10,6 +10,7 @@ import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import Weekly from "./Weekly";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
+import { WeekDateViewItem } from "@/types/calendar";
 
 const cn = classNames.bind(scss);
 
@@ -17,18 +18,18 @@ const cn = classNames.bind(scss);
  * 2024.10.26 기준 마크업 컴포넌트 코드로 업데이트 완료
  */
 interface MonthlyCalendarViewProps {
-  calendarDates: number[][];
+  calendarDates: WeekDateViewItem[][];
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
-  handleClickDate: (date: number) => void;
+  // handleClickDate: (date: number) => void;
 }
 
 const MonthlyCalendarView = ({
   calendarDates,
   layoutRef,
   isSixWeeks,
-  handleClickDate,
-}: MonthlyCalendarViewProps) => {
+}: // handleClickDate,
+MonthlyCalendarViewProps) => {
   return (
     <>
       <div className={cn("container")} role="grid">
@@ -42,7 +43,7 @@ const MonthlyCalendarView = ({
                 key={`w-${i}`}
                 weekIdx={i}
                 weekDates={w}
-                onClickDate={handleClickDate}
+                // onClickDate={handleClickDate}
               />
             )
           )}
@@ -71,7 +72,7 @@ export default function MonthlyCalendar({
       .month(month - 1)
       .set("date", date)
   );
-  const [calendarDates, setCalendarDates] = useState<number[][]>(
+  const [calendarDates, setCalendarDates] = useState<WeekDateViewItem[][]>(
     Array.from(Array(6), () => new Array(7))
   );
   // TODO 전체 페이지 스크롤이 되어야 하는 경우 props로 받고 페이지 단위에서 처리 필요
@@ -90,12 +91,20 @@ export default function MonthlyCalendar({
 
     // 첫째 주
     while (day < 7) {
-      dates[0][day++] = ndate++;
+      // dates[0][day++] = ndate++;
+      dates[0][day++] = {
+        date: ndate++,
+        archivedCount: 0, // TODO 셋팅
+      };
     }
     // 나머지
     for (let w = 1; w < 6; w++) {
       for (let d = 0; d < 7; d++) {
-        dates[w][d] = ndate++;
+        // dates[w][d] = ndate++;
+        dates[w][d] = {
+          date: ndate++,
+          archivedCount: 0, // TODO 셋팅
+        };
         if (maxDate < ndate) break;
       }
       if (maxDate < ndate) break;
@@ -114,7 +123,7 @@ export default function MonthlyCalendar({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (calendarDates[5][0] > 0 && layoutRef.current) {
+      if (calendarDates[5][0].date > 0 && layoutRef.current) {
         const scrollTop = layoutRef?.current?.scrollTop;
         if (scrollTop > lastScrollTop) {
           // 아래 방향
@@ -133,16 +142,16 @@ export default function MonthlyCalendar({
   }, [calendarDates, layoutRef]);
 
   const isSixWeeks = useMemo(() => {
-    return calendarDates[5][0] > 0;
+    return calendarDates[5][0].date > 0;
   }, [calendarDates]);
 
-  const handleClickDate = (d: number) => {
-    const changedDate = dayjsObject.set("date", d);
-    setDayjsObject(changedDate);
-    if (onChangeDate) {
-      onChangeDate(changedDate);
-    }
-  };
+  // const handleClickDate = (d: number) => {
+  //   const changedDate = dayjsObject.set("date", d);
+  //   setDayjsObject(changedDate);
+  //   if (onChangeDate) {
+  //     onChangeDate(changedDate);
+  //   }
+  // };
 
   /** deprecated 달 넘기기 기능 (사용 여부 기획 확인 필요) */
   const handleArrowClicked = useCallback(
@@ -166,7 +175,7 @@ export default function MonthlyCalendar({
     calendarDates,
     layoutRef,
     isSixWeeks,
-    handleClickDate,
+    // handleClickDate,
     handleArrowClicked,
   };
 
