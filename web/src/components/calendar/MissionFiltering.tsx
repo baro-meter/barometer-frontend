@@ -7,13 +7,21 @@ import { currentReportState } from "@/recoils/reports";
 import { ReportType, ReportViewType } from "@/types/calendar";
 import { useCalendar } from "@/hooks/useCalendar";
 import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
+import { useWeeklyCalendar } from "@/hooks/useWeeklyCalendar";
+import { selectedTabState } from "@/recoils/tab";
+import { TabEnum } from "@/types/tab";
+
+interface BaroMeterButtonType {
+  text: string;
+  url: string;
+}
 
 interface MissionFilteringViewProps {
   selectedDate: dayjs.Dayjs;
   missionTexts: string[];
   typeFull: boolean;
   alignment: MissionTabAlignmentType;
-  isShowBaroMeterBtn: boolean;
+  baroMeterButton?: BaroMeterButtonType;
   report?: ReportType;
 }
 
@@ -22,7 +30,7 @@ const MissionFilteringView = ({
   missionTexts,
   typeFull,
   alignment,
-  isShowBaroMeterBtn,
+  baroMeterButton,
   report,
 }: MissionFilteringViewProps) => {
   const hasReport = useMemo(() => report !== undefined, [report]);
@@ -45,9 +53,13 @@ const MissionFilteringView = ({
           </div>
         </div>
       </div>
-      {isShowBaroMeterBtn && (
+      {!!baroMeterButton && (
         <div className="fixed-area">
-          <Button as="a" href="/" label="바로미터 채우기 ✏️" />
+          <Button
+            as="a"
+            href={baroMeterButton.url}
+            label={baroMeterButton.text}
+          />
         </div>
       )}
     </>
@@ -59,7 +71,8 @@ interface MissionFilteringPageProps {
 }
 
 export default function MissionFiltering({ type }: MissionFilteringPageProps) {
-  const selectedViewType = useRecoilValue(selectedViewState);
+  const { barometer } = useWeeklyCalendar();
+  const selectedViewType = useRecoilValue(selectedTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
 
   const { goalByIdMapper } = useCalendar(selectedDate);
@@ -74,15 +87,34 @@ export default function MissionFiltering({ type }: MissionFilteringPageProps) {
       : [];
   }, [report, goalByIdMapper]);
 
+  const baroMeterButton = useMemo(() => {
+    if (!!barometer) {
+      return {
+        text: "작성한 바로미터 보기 👀",
+        url: "/barometer", // TODO 바로미터 조회 화면 넘어가기
+      };
+    } else {
+      if (selectedViewType === TabEnum.MISSION) {
+        if (!barometer) {
+          return {
+            text: "바로미터 채우기",
+            url: "/barometer", // TODO 바로미터 작성 화면 넘어가기
+          };
+        }
+      }
+    }
+    return undefined;
+  }, [selectedViewType, barometer]);
+
   const viewProps = {
     selectedDate,
-    report,
     typeFull: type === "weekly",
     alignment: (type === "weekly"
       ? "vertical"
       : "horizontal") as MissionTabAlignmentType,
     missionTexts,
-    isShowBaroMeterBtn: selectedViewType === ReportViewType.WEEKLY,
+    baroMeterButton,
+    report,
   };
 
   return <MissionFilteringView {...viewProps} />;

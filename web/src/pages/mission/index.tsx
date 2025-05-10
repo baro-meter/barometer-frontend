@@ -16,8 +16,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
 import { selectedDayjsState } from "@/recoils/calendar";
-import { setHttpClientCredentials } from "@/services/httpClient";
-import { QueryClient } from "@tanstack/react-query";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(utc);

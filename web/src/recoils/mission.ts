@@ -7,7 +7,10 @@
 
 import { MissionPerType, MissionType } from "@/types/mission";
 import { atom, selector, selectorFamily } from "recoil";
-import { currentWeeklyCalendarViewState } from "./calendar";
+import {
+  missionWeeklyCalendarViewState,
+  weeklyCalendarViewState,
+} from "./calendar";
 import dayjs from "dayjs";
 import { getFormatDayjs } from "@/utils/calendarUtil";
 
@@ -69,40 +72,47 @@ export const lastSavedDateForMissionState = atom<
 });
 
 /**
- * (1) 이번주 mission 저장 관리
+ * mission 저장 관리
  * - 여기는 api 데이터 그대로 저장
  */
-export const currentMissionsState = selector<MissionPerType[]>({
-  key: "currentMissionsState",
-  get: ({ get }) => {
-    const currentWeeklyCalendarView = get(currentWeeklyCalendarViewState);
-    return currentWeeklyCalendarView?.goalsPerTypes ?? [];
-  },
+export const missionsState = selectorFamily({
+  key: "missionsState",
+  get:
+    (isMissionTab: boolean) =>
+    ({ get }) => {
+      let calendarView = isMissionTab
+        ? get(missionWeeklyCalendarViewState)
+        : get(weeklyCalendarViewState);
+
+      return calendarView?.goalsPerTypes ?? [];
+    },
 });
 
-// currentMissionState 에서 특정 카테고리 데이터 조회
-export const currentMissionByCategoryMapState = selector({
-  key: "currentMissionByCategoryMapState",
-  get: ({ get }) => {
-    const currentMissions = get(currentMissionsState);
-    const map = currentMissions.reduce((map, obj) => {
-      map.set(obj.type, obj.goals);
+// MssionState 에서 특정 카테고리 데이터 조회
+export const missionByCategoryMapState = selectorFamily({
+  key: "missionByCategoryMapState",
+  get:
+    (isMissionTab: boolean) =>
+    ({ get }) => {
+      const missions = get(missionsState(isMissionTab));
+      const map = missions.reduce((map, obj) => {
+        map.set(obj.type, obj.goals);
+        return map;
+      }, new Map<number, MissionType[]>());
       return map;
-    }, new Map<number, MissionType[]>());
-    return map;
-  },
+    },
   cachePolicy_UNSTABLE: {
     eviction: "keep-all",
   },
 });
 
-// currentMissionByCategoryMapState 에서 특정 카테고리 데이터 조회
-export const currentMissionByCategoryState = selectorFamily({
-  key: "currentMissionByCategoryState",
+// missionState 에서 특정 카테고리 데이터 조회
+export const missionByCategoryState = selectorFamily({
+  key: "missionByCategoryState",
   get:
-    (categoryId: number) =>
+    (params: { isMissionTab: boolean; categoryId: number }) =>
     ({ get }) => {
-      const map = get(currentMissionByCategoryMapState);
-      return map.get(categoryId);
+      const map = get(missionByCategoryMapState(params.isMissionTab));
+      return map.get(params.categoryId);
     },
 });

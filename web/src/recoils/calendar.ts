@@ -1,7 +1,7 @@
 import { getWeeklyCalendarView } from "@/services/calendar/calendarService";
 import { ReportViewType, WeeklyCalendarViewType } from "@/types/calendar";
 import dayjs from "dayjs";
-import { atom, selector } from "recoil";
+import { atom, selector, selectorFamily } from "recoil";
 import { v1 } from "uuid";
 import { lastSavedDateForMissionState } from "./mission";
 import { accessTokenState } from "./user";
@@ -37,15 +37,15 @@ export const selectedViewState = atom<ReportViewType>({
 });
 
 /**
- * [new api]
+ * [new api] 1탭
  * 이번주 Misson 관리 데이터 총괄
  * - localStorage 에 저장되어 관리
  * - 여기서 각각 파생되어 관리되어짐
  */
-export const currentWeeklyCalendarViewState = selector<
+export const missionWeeklyCalendarViewState = selector<
   WeeklyCalendarViewType | undefined
 >({
-  key: "currentWeeklyCalendarViewState",
+  key: "missiontWeeklyCalendarViewState",
   get: ({ get }) => {
     // 브라우저 환경에서만 localStorage 접근
     if (typeof window !== "undefined") {
@@ -68,7 +68,7 @@ export const currentWeeklyCalendarViewState = selector<
       };
 
       const lastSavedDate = get(lastSavedDateForMissionState);
-      const savedData = localStorage.getItem("currentWeeklyCalendarViewState");
+      const savedData = localStorage.getItem("missionWeeklyCalendarViewState");
       if (savedData) {
         return JSON.parse(savedData);
       } else if (lastSavedDate) {
@@ -88,71 +88,36 @@ export const currentWeeklyCalendarViewState = selector<
     eviction: "keep-all",
   },
 });
-// export const currentWeeklyCalendarViewState = atom<
-//   WeeklyCalendarViewType | undefined
-// >({
-//   key: "currentWeeklyCalendarViewState",
-//   default: undefined,
-//   effects_UNSTABLE: [
-//     ({ setSelf, onSet }) => {
-//       // 초기 로드 시 API 호출
-//       const loadInitialData = async (year: number, week: number) => {
-//         try {
-//           const data = await getWeeklyCalendarView(year, week);
-//           setSelf(data);
-//         } catch (error) {
-//           console.log("Failed to load weekly calendar data:", error);
-//           setSelf(undefined);
-//         }
-//       };
 
-//       // localStorage에서 데이터 확인
-//       const lastSavedDateStr = localStorage.getItem(
-//         "lastSavedDateForMissionState"
-//       ); // TODO 여기 lastSavedDateForMissionState 설정 제대로 갱신된 값 들어오는지 확인 필요, 안되면 api 호출 부분 화면 단에서 해야할듯?
-//       const savedData = localStorage.getItem("currentWeeklyCalendarViewState");
-//       if (savedData) {
-//         setSelf(JSON.parse(savedData));
-//       } else if (lastSavedDateStr) {
-//         const lastSavedDate = JSON.parse(lastSavedDateStr);
-//         if (lastSavedDate.savedMissionDate) {
-//           // 저번주 or 이번주 설정된 미션 데이터 불러옴
-//           const { year, week } = lastSavedDate.savedMissionDate;
-//           loadInitialData(year, week);
-//         } else {
-//           // 이번주 미션 데이터 아직 미설정됨
-//           setSelf(undefined);
-//         }
-//       } else {
-//         setSelf(undefined);
-//       }
+/**
+ * [new api] 2탭 - weekly
+ * 특정 주 weekly view 데이터 화면 단에서 호출하여 이 state에 세팅
+ * 이 데이터로 여러 컴포넌트 및 hook에서 접근해서 관리할 용도
+ */
+export const weeklyCalendarViewState = atom<WeeklyCalendarViewType | undefined>(
+  {
+    key: `WeeklyCalendarViewState/${v1}`,
+    default: undefined,
+  }
+);
 
-//       // 데이터 변경 시 localStorage에 저장
-//       onSet((newValue, _, isReset) => {
-//         if (isReset) {
-//           localStorage.removeItem("currentWeeklyCalendarViewState");
-//         } else if (newValue) {
-//           localStorage.setItem(
-//             "currentWeeklyCalendarViewState",
-//             JSON.stringify(newValue)
-//           );
-//         }
-//       });
-//     },
-//   ],
-// });
 /**
  * [new api]
  * 주별 dayOfWeekCount 정보를 저장하는 atom (weeklyCalendar 아이콘 및 개수 표시 데이터)
+ * - 미션 여부에 따라 바라보는 state가 다르다.
  * (1) 이번주 Mission 달성 현황
  * (2) 캘린더 Weekly 주별 달성 현황
  */
 
-// (1) 이번주 Mission 달성 현황
-export const currentDayOfWeekCountState = selector<number[]>({
-  key: "currentDayOfWeekCountState",
-  get: ({ get }) => {
-    const currentWeeklyCalendarView = get(currentWeeklyCalendarViewState);
-    return currentWeeklyCalendarView?.dayOfWeekCount ?? [0, 0, 0, 0, 0, 0, 0];
-  },
+export const dayOfWeekCountState = selectorFamily({
+  key: `dayOfWeekCountState/${v1}`,
+  get:
+    (isMission: boolean) =>
+    ({ get }) => {
+      let calendarView = isMission
+        ? get(missionWeeklyCalendarViewState)
+        : get(weeklyCalendarViewState);
+
+      return calendarView?.dayOfWeekCount ?? [0, 0, 0, 0, 0, 0, 0];
+    },
 });

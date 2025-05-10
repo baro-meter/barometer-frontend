@@ -76,7 +76,7 @@ export default function WeeklyCalendar({}: WeeklyCalendarProps) {
     new Array(7)
   );
   const [swiper, setSwiper] = useState<SwiperTypes>();
-  const { dayOfWeekCount, barometer, missions } = useWeeklyCalendar();
+  const { dayOfWeekCount } = useWeeklyCalendar();
 
   useEffect(() => {
     // weeklyView는 오늘 기준 일주일만 보여준다. 따라서, 이번주의 weekly date를 구한다.

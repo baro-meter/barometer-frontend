@@ -6,15 +6,22 @@
  * (3) 바로미터 리스트 (최대 20개 항목 유지 LRU, 세션 단위 캐싱)
  */
 
-import { BaroMeterType } from "@/types/barometerType";
-import { selector } from "recoil";
-import { currentWeeklyCalendarViewState } from "./calendar";
+import { selectorFamily } from "recoil";
+import {
+  missionWeeklyCalendarViewState,
+  weeklyCalendarViewState,
+} from "./calendar";
+import { v1 } from "uuid";
 
-// (1) 이번주 BaroMeter
-export const currentBarometerState = selector<BaroMeterType | undefined>({
-  key: "currentBarometerState",
-  get: ({ get }) => {
-    const currentWeeklyCalendarView = get(currentWeeklyCalendarViewState);
-    return currentWeeklyCalendarView?.report;
-  },
+export const barometerState = selectorFamily({
+  key: `barometerState/${v1}`,
+  get:
+    (isMission: boolean) =>
+    ({ get }) => {
+      let calendarView = isMission
+        ? get(missionWeeklyCalendarViewState)
+        : get(weeklyCalendarViewState);
+
+      return calendarView?.report;
+    },
 });
