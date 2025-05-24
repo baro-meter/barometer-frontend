@@ -4,7 +4,6 @@ import { GetServerSidePropsContext } from "next";
 import {
   getCalendarView,
   getMonthlyCalendarView,
-  getWeeklyCalendarView,
 } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
@@ -12,17 +11,12 @@ import {
   CalendarViewType,
   MonthlyCalendarViewType,
   ReportViewType,
-  WeeklyCalendarViewType,
 } from "@/types/calendar";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
 import MissionList from "@/components/calendar/MissionFiltering";
 import CalendarHeader from "@/components/calendar/CalendarHeader";
-import {
-  selectedDayjsState,
-  selectedViewState,
-  weeklyCalendarViewState,
-} from "@/recoils/calendar";
+import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
 import { selectedTabState } from "@/recoils/tab";
@@ -71,14 +65,14 @@ const MonthlyPageView = ({
         />
         <div className="contents">
           <div className="calendar-area">
-            {/* {selectedViewType === ReportViewType.MONTHLY && (
+            {selectedViewType === ReportViewType.MONTHLY && (
               <MonthlyCalendar
                 year={year}
                 month={month}
                 date={date}
                 onChangeDate={handleChangeDate}
               />
-            )} */}
+            )}
             {selectedViewType === ReportViewType.WEEKLY && <WeeklyCalendar />}
           </div>
         </div>
@@ -102,9 +96,6 @@ interface ReportPageProps {
 const ReportPage = ({}: ReportPageProps) => {
   // new
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
-  const [weeklyCalendarView, setWeeklyCalendarView] = useRecoilState(
-    weeklyCalendarViewState
-  );
   const [selectedViewType, setSelectedViewType] =
     useRecoilState(selectedViewState);
   const setSelectedTab = useSetRecoilState(selectedTabState);
@@ -118,17 +109,13 @@ const ReportPage = ({}: ReportPageProps) => {
   // TODO accessToken이 뒤늦게 설정되어서, prefetch가 정상 동작하지 않음 -> 해결책 강구.
   const accessToken = useAccessTokenValue();
 
-  const { data: calendarViewData } = useQuery<WeeklyCalendarViewType>({
-    queryKey: ["weeklyViewData", selectedDate.year(), selectedDate.week()],
-    queryFn: () =>
-      getWeeklyCalendarView(selectedDate.year(), selectedDate.week()),
+  const yearWeek = useMemo(() => getYearWeekText(selectedDate), [selectedDate]);
+  const { data: calendarViewData } = useQuery<MonthlyCalendarViewType>({
+    queryKey: ["monthlyViewData", yearWeek],
+    queryFn: () => getMonthlyCalendarView(yearWeek),
     enabled: !!accessToken,
     staleTime: 1000 * 60,
   });
-
-  useEffect(() => {
-    setWeeklyCalendarView(calendarViewData);
-  }, [calendarViewData]);
 
   const handleChangeViewMode = useCallback(() => {
     if (selectedViewType === ReportViewType.MONTHLY) {
@@ -167,11 +154,10 @@ export const getServerSideProps = async (
   // monthly
   try {
     const current = dayjs();
-    const year = current.year();
-    const week = current.week();
+    const yearWeek = getYearWeekText(current);
     await queryClient.prefetchQuery({
-      queryKey: ["weeklyViewData", year, week],
-      queryFn: () => getWeeklyCalendarView(year, week),
+      queryKey: ["monthlyViewData", yearWeek],
+      queryFn: () => getMonthlyCalendarView(yearWeek),
     });
   } catch (e) {
     console.error(e);

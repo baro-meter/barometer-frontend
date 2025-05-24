@@ -3,7 +3,7 @@ import { dayOfWeekCountState } from "@/recoils/calendar";
 import { missionsState } from "@/recoils/mission";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 
 export const useWeeklyCalendar = () => {
@@ -13,6 +13,10 @@ export const useWeeklyCalendar = () => {
     () => selectedTab === TabEnum.MISSION,
     [selectedTab]
   );
+
+  useEffect(() => {
+    console.log("isMission: ", isMission);
+  }, [isMission]);
 
   const dayOfWeekCount = useRecoilValue(dayOfWeekCountState(isMission));
   const barometer = useRecoilValue(barometerState(isMission));

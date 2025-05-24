@@ -1,5 +1,9 @@
 import httpClient from "@/services/httpClient";
-import { CalendarViewType, WeeklyCalendarViewType } from "@/types/calendar";
+import {
+  CalendarViewType,
+  MonthlyCalendarViewType,
+  WeeklyCalendarViewType,
+} from "@/types/calendar";
 import { GoalType } from "@/types/goal";
 import { AxiosHeaderValue } from "axios";
 
@@ -29,4 +33,16 @@ export const getWeeklyCalendarView = async (
   const params = { year, week };
 
   return httpClient.get<WeeklyCalendarViewType>(url, { params, headers });
+};
+
+export const getMonthlyCalendarView = async (
+  yearWeeks: string, // YYYY-MM
+  headers?: {
+    Authorization: AxiosHeaderValue;
+  }
+) => {
+  const url = `/view`;
+  const params = { yearWeeks };
+
+  return httpClient.get<MonthlyCalendarViewType>(url, { params, headers });
 };

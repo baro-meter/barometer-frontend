@@ -15,7 +15,14 @@ import {
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
-import { selectedDayjsState } from "@/recoils/calendar";
+import {
+  selectedDayjsState,
+  missionWeeklyCalendarViewState,
+} from "@/recoils/calendar";
+import { getWeeklyCalendarView } from "@/services/calendar/calendarService";
+import { useAccessTokenValue } from "@/recoils/user";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
+import { setHttpClientCredentials } from "@/services/httpClient";
 
 dayjs.extend(weekOfYear);
 dayjs.extend(utc);
@@ -57,13 +64,15 @@ interface MissonPageProps {
 const MissionPage = ({}: MissonPageProps) => {
   const setSelectedTab = useSetRecoilState(selectedTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
+  const setMissionWeeklyCalendarView = useSetRecoilState(
+    missionWeeklyCalendarViewState
+  );
+  const accessToken = useAccessTokenValue();
 
   const [savedDate, setSavedDate] = useRecoilState(
     lastSavedDateForMissionState
   );
   const [hasMission, setHasMission] = useState<Boolean>();
-
-  setSelectedTab(TabEnum.MISSION);
 
   useEffect(() => {
     let newSavedDate: LastSavedDateForMissionState = {
@@ -94,9 +103,33 @@ const MissionPage = ({}: MissonPageProps) => {
       }
     }
 
-    setSavedDate(savedDate);
+    setSavedDate(newSavedDate);
     setSelectedDate(activeDate);
+    setSelectedTab(TabEnum.MISSION);
   }, []);
+
+  const { data: calendarViewData } = useQuery({
+    queryKey: [
+      "missionWeeklyViewData",
+      selectedDate?.year(),
+      selectedDate?.week(),
+    ],
+    queryFn: () =>
+      getWeeklyCalendarView(selectedDate.year(), selectedDate.week()),
+    enabled: !!accessToken && !!selectedDate,
+    staleTime: 1000 * 60,
+  });
+
+  useEffect(() => {
+    // 조회된 mission 데이터가 있을 때만 값을 저장함
+    if (calendarViewData) {
+      setMissionWeeklyCalendarView(calendarViewData);
+      localStorage.setItem(
+        "missionWeeklyCalendarViewState",
+        JSON.stringify(calendarViewData)
+      );
+    }
+  }, [calendarViewData]);
 
   const isLastWeek = useMemo(() => {
     if (selectedDate) {
@@ -129,8 +162,25 @@ const MissionPage = ({}: MissonPageProps) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  setHttpClientCredentials(context.req.cookies);
+  const queryClient = new QueryClient();
+
+  try {
+    const current = dayjs();
+    const year = current.year();
+    const week = current.week();
+    await queryClient.prefetchQuery({
+      queryKey: ["missionWeeklyViewData", year, week],
+      queryFn: () => getWeeklyCalendarView(year, week),
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
   return {
-    props: {},
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
   };
 };
 

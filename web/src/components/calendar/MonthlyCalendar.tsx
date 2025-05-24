@@ -110,6 +110,7 @@ export default function MonthlyCalendar({
       if (maxDate < ndate) break;
     }
     setCalendarDates(dates);
+    console.log(dates);
   }, [dayjsObject.year(), dayjsObject.month()]);
 
   useEffect(() => {
@@ -144,14 +145,6 @@ export default function MonthlyCalendar({
   const isSixWeeks = useMemo(() => {
     return calendarDates[5][0].date > 0;
   }, [calendarDates]);
-
-  // const handleClickDate = (d: number) => {
-  //   const changedDate = dayjsObject.set("date", d);
-  //   setDayjsObject(changedDate);
-  //   if (onChangeDate) {
-  //     onChangeDate(changedDate);
-  //   }
-  // };
 
   /** deprecated 달 넘기기 기능 (사용 여부 기획 확인 필요) */
   const handleArrowClicked = useCallback(

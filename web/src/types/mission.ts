@@ -93,3 +93,8 @@ export interface MissionPerType {
   type: MissionCategoryId;
   goals: MissionType[];
 }
+
+export interface ArchivedMissionType {
+  type: MissionCategoryId;
+  archivedDaysOfWeek: number[]; // 실제 미션 달성 날짜 배열
+}

@@ -39,54 +39,14 @@ export const selectedViewState = atom<ReportViewType>({
 /**
  * [new api] 1탭
  * 이번주 Misson 관리 데이터 총괄
- * - localStorage 에 저장되어 관리
- * - 여기서 각각 파생되어 관리되어짐
+ * - 이 값이 없으면 미션 탭에서 데이터 조회 후 저장함
+ * - localStorage에 저장하여 관리할지 고민 중
  */
-export const missionWeeklyCalendarViewState = selector<
+export const missionWeeklyCalendarViewState = atom<
   WeeklyCalendarViewType | undefined
 >({
-  key: "missiontWeeklyCalendarViewState",
-  get: ({ get }) => {
-    // 브라우저 환경에서만 localStorage 접근
-    if (typeof window !== "undefined") {
-      // 초기 로드 시 API 호출
-      const accessTokenStr = get(accessTokenState);
-      /**
-       * TODO mission page에서 prefetch 한번만 하고 캐싱된 query 호출하도록 변경
-       * https://velog.io/@day_1226/Next.js-tanstack-query%EB%A1%9C-prefetch-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
-       */
-      const loadInitialData = async (year: number, week: number) => {
-        console.log("loadInitialData: ", year, week);
-        try {
-          return await getWeeklyCalendarView(year, week, {
-            Authorization: accessTokenStr ?? "",
-          });
-        } catch (error) {
-          console.log("Failed to load weekly calendar data:", error);
-          return undefined;
-        }
-      };
-
-      const lastSavedDate = get(lastSavedDateForMissionState);
-      const savedData = localStorage.getItem("missionWeeklyCalendarViewState");
-      if (savedData) {
-        return JSON.parse(savedData);
-      } else if (lastSavedDate) {
-        console.log("lastSavedDate: ", lastSavedDate);
-        if (lastSavedDate.savedMissionDate) {
-          // 저번주 or 이번주 설정된 미션 데이터 불러옴
-          const { year, week } = lastSavedDate.savedMissionDate;
-          return loadInitialData(year, week);
-        }
-      }
-      console.log("savedData: ", savedData);
-    }
-    // 이번주 미션 데이터 아직 미설정됨
-    return undefined;
-  },
-  cachePolicy_UNSTABLE: {
-    eviction: "keep-all",
-  },
+  key: `missionWeeklyCalendarViewState/${v1}`,
+  default: undefined,
 });
 
 /**
@@ -120,4 +80,7 @@ export const dayOfWeekCountState = selectorFamily({
 
       return calendarView?.dayOfWeekCount ?? [0, 0, 0, 0, 0, 0, 0];
     },
+  cachePolicy_UNSTABLE: {
+    eviction: "keep-all",
+  },
 });

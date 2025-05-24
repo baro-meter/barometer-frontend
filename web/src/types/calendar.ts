@@ -1,5 +1,5 @@
 import { BaroMeterScoreType, BaroMeterType } from "./barometerType";
-import { MissionPerType } from "./mission";
+import { ArchivedMissionType, MissionPerType } from "./mission";
 
 export enum ReportViewType {
   MONTHLY = "monthly",
@@ -24,6 +24,12 @@ export interface WeeklyCalendarViewType {
   dayOfWeekCount: number[];
   goalsPerTypes: MissionPerType[];
   report?: BaroMeterType;
+}
+
+export interface MonthlyCalendarViewType {
+  year: number;
+  week: number;
+  archivedMissions: ArchivedMissionType[];
 }
 
 type succesGoalCountType = 0 | 1 | 2 | 3 | 4 | 5;
