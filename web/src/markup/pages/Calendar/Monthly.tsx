@@ -5,10 +5,10 @@ import SubTab from "@/markup/components/SubTab";
 import dayjs from "dayjs";
 import CategoryLabel from "@/markup/components/CategoryLabel";
 import ProgressListView from "@/markup/components/ProgressListView";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGoal } from "@/hooks/useGoal";
 
 const CalendarMonthly = () => {
-  const { goalCategories } = useCalendar(dayjs());
+  const { goalCategories } = useGoal(dayjs());
   return (
     <div className="wrap">
       <main className="main calendar">

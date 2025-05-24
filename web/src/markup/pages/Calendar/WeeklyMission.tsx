@@ -5,12 +5,12 @@ import DayHeader from "@/markup/components/calendar/DayHeaderView";
 import MissionSummary from "@/markup/components/SummaryView";
 import SubTab from "@/markup/components/SubTab";
 import dayjs from "dayjs";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGoal } from "@/hooks/useGoal";
 
 interface LayoutProps {}
 
 const CalendarWeeklyMission = ({}: LayoutProps) => {
-  const { goalCategories } = useCalendar(dayjs());
+  const { goalCategories } = useGoal(dayjs());
   return (
     <div className="wrap">
       {/* weekly: main에 weekly-view 클래스 추가 (하단 bottom-area가 스크롤 될 수 있도록) */}

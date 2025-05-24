@@ -1,12 +1,9 @@
-import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import MissionTab, { MissionTabAlignmentType } from "../todo/MissionTab";
 import Button from "@/markup/components/ButtonView";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { currentReportState } from "@/recoils/reports";
-import { ReportType, ReportViewType } from "@/types/calendar";
-import { useCalendar } from "@/hooks/useCalendar";
-import { selectedDayjsState, selectedViewState } from "@/recoils/calendar";
+import { ReportType } from "@/types/calendar";
 import { useWeeklyCalendar } from "@/hooks/useWeeklyCalendar";
 import { selectedTabState } from "@/recoils/tab";
 import { TabEnum } from "@/types/tab";
@@ -17,18 +14,12 @@ interface BaroMeterButtonType {
 }
 
 interface MissionFilteringViewProps {
-  selectedDate: dayjs.Dayjs;
-  missionTexts: string[];
-  typeFull: boolean;
   alignment: MissionTabAlignmentType;
   baroMeterButton?: BaroMeterButtonType;
   report?: ReportType;
 }
 
 const MissionFilteringView = ({
-  selectedDate,
-  missionTexts,
-  typeFull,
   alignment,
   baroMeterButton,
   report,
@@ -39,17 +30,7 @@ const MissionFilteringView = ({
       <div className="bottom-area">
         <div className="inner">
           <div className="tab-area">
-            <MissionTab selectedDate={selectedDate} alignment={alignment} />
-            {/* {hasReport ? (
-            <BaroMeterReport
-              report={report!}
-              selectedDate={selectedDate}
-              missionTexts={missionTexts}
-              typeFull={typeFull}
-            />
-          ) : (
-            <TodoList selectedDate={selectedDate} alignment={alignment} />
-          )} */}
+            <MissionTab alignment={alignment} />
           </div>
         </div>
       </div>
@@ -73,19 +54,19 @@ interface MissionFilteringPageProps {
 export default function MissionFiltering({ type }: MissionFilteringPageProps) {
   const { barometer } = useWeeklyCalendar();
   const selectedViewType = useRecoilValue(selectedTabState);
-  const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
+  // const [selectedDate, setSelectedDate] = useRecoilState(selectedDayjsState);
 
-  const { goalByIdMapper } = useCalendar(selectedDate);
+  // const { goalByIdMapper } = useGoal(selectedDate);
   const report = useRecoilValue(currentReportState);
 
-  const missionTexts = useMemo(() => {
-    const result = report?.archivedGoalIds.map(
-      (id) => goalByIdMapper.get(id)?.title
-    );
-    return result !== undefined && result?.length > 0
-      ? (result as string[])
-      : [];
-  }, [report, goalByIdMapper]);
+  // const missionTexts = useMemo(() => {
+  //   const result = report?.archivedGoalIds.map(
+  //     (id) => goalByIdMapper.get(id)?.title
+  //   );
+  //   return result !== undefined && result?.length > 0
+  //     ? (result as string[])
+  //     : [];
+  // }, [report, goalByIdMapper]);
 
   const baroMeterButton = useMemo(() => {
     if (!!barometer) {
@@ -107,12 +88,9 @@ export default function MissionFiltering({ type }: MissionFilteringPageProps) {
   }, [selectedViewType, barometer]);
 
   const viewProps = {
-    selectedDate,
-    typeFull: type === "weekly",
     alignment: (type === "weekly"
       ? "vertical"
       : "horizontal") as MissionTabAlignmentType,
-    missionTexts,
     baroMeterButton,
     report,
   };

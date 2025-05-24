@@ -1,3 +1,6 @@
+/**
+ * 삭제 예정
+ */
 export enum GoalTypeId {
   OTHER = 0,
   REGULAR_LIFE,

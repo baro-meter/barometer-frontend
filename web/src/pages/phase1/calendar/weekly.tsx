@@ -9,7 +9,7 @@ import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
 import WeeklyList from "@/components/calendar/MissionFiltering";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGoal } from "@/hooks/useGoal";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import {
   getCalendarView,
@@ -101,8 +101,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     return getFormatDayjs(endDate);
   }, [selectedDate]);
 
-  const { initBaromters, currentGoal, goalCategories } =
-    useCalendar(selectedDate);
+  const { initBaromters, currentGoal, goalCategories } = useGoal(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),

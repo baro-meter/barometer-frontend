@@ -1,26 +1,25 @@
-import { useCalendar } from "@/hooks/useCalendar";
 import { useCategory } from "@/hooks/useCategory";
 import CategoryLabel from "@/markup/components/CategoryLabel";
-import ProgressListView from "@/markup/components/ProgressListView";
-import { ProgressProps } from "@/markup/components/ProgressView";
 import { selectedViewState } from "@/recoils/calendar";
 import { selectedTabState } from "@/recoils/tab";
 import { ReportViewType } from "@/types/calendar";
-import { GoalCategoryType, GoalTypeId } from "@/types/goal";
 import { TabEnum } from "@/types/tab";
-import dayjs from "dayjs";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { useMission } from "@/hooks/useMission";
+import { MissionCategoryId, MissionCategoryInfo } from "@/types/mission";
+import ProgressList from "@/markup/components/ProgressListView";
+import { ProgressProps } from "@/markup/components/ProgressView";
 
 export type MissionTabAlignmentType = "horizontal" | "vertical";
 
 interface MissionTabViewProps {
-  activeTabTypeId: GoalTypeId | undefined;
+  activeTabTypeId: MissionCategoryId | undefined;
   setActiveTabTypeId: React.Dispatch<
-    React.SetStateAction<GoalTypeId | undefined>
+    React.SetStateAction<MissionCategoryId | undefined>
   >;
   progressList: ProgressProps[];
-  goalCategories: GoalCategoryType[];
+  goalCategories: MissionCategoryInfo[];
   isShowList: boolean;
   alignment?: MissionTabAlignmentType;
 }
@@ -40,7 +39,7 @@ const MissionTabView = ({
       >
         <CategoryLabel items={goalCategories} />
         {isShowList && (
-          <ProgressListView alignment={alignment} progressList={progressList} />
+          <ProgressList alignment={alignment} progressList={progressList} />
         )}
       </MissionTabContext.Provider>
     </div>
@@ -48,67 +47,66 @@ const MissionTabView = ({
 };
 
 interface MissionTabProps {
-  selectedDate: dayjs.Dayjs;
   alignment?: MissionTabAlignmentType;
 }
 
-export default function MissionTab({
-  selectedDate,
-  alignment,
-}: MissionTabProps) {
+export default function MissionTab({ alignment }: MissionTabProps) {
   const [activeTabTypeId, setActiveTabTypeId] = useState<
-    GoalTypeId | undefined
+    MissionCategoryId | undefined
   >();
 
   // TODO calendar monthly 타입일 때는 goalCategories가 모두 표시되어야 함.....
   const { getAllCategoryLableItems: allCategories } = useCategory();
-  const { currentGoal, goalCategories, goalByTypeMapper } =
-    useCalendar(selectedDate);
+  const { allMissions, missionsByTypeId, missionCategories } = useMission();
   const selectedTab = useRecoilValue(selectedTabState);
   const selectedViewType = useRecoilValue(selectedViewState);
 
   const showCategories = useMemo(() => {
-    console.log("showCategories");
     if (
       selectedTab === TabEnum.REPORT &&
       selectedViewType === ReportViewType.MONTHLY
     ) {
       return allCategories();
     } else {
-      return goalCategories;
+      return missionCategories;
     }
   }, [selectedTab, selectedViewType]);
 
   const progressList = useMemo(() => {
-    const list = activeTabTypeId
-      ? goalByTypeMapper.get(activeTabTypeId)
-      : currentGoal;
+    const list =
+      activeTabTypeId !== undefined
+        ? missionsByTypeId.get(activeTabTypeId)
+        : allMissions;
+
     return (
-      list?.map((goal) => {
+      list?.map((mission) => {
+        const checkedList = Array(7).fill(false);
+        mission.archivedDaysOfWeek.forEach((i) => (checkedList[i] = true));
+
         return {
-          task: goal.title, // 삭제 예정
-          count: goal.count, // 삭제 예정
-          goal,
-          onclick: () => console.log(`${goal.title} 클릭됨`),
+          task: mission.name,
+          count: mission.count,
+          checkedList,
+          onclick: () => console.log(`${mission.name} 클릭됨`),
           isDone: false,
         } as ProgressProps;
       }) ?? []
     );
-  }, [activeTabTypeId, currentGoal]);
+  }, [activeTabTypeId, missionsByTypeId, allMissions]);
 
-  useEffect(() => {
-    console.log(`${activeTabTypeId}로 바뀜`);
-    if (activeTabTypeId) {
-      console.log(goalByTypeMapper.get(activeTabTypeId));
-    }
-  }, [activeTabTypeId]);
+  const isShowList = useMemo(() => {
+    return !(
+      selectedTab === TabEnum.REPORT &&
+      selectedViewType === ReportViewType.MONTHLY
+    );
+  }, [selectedViewType]);
 
   const viewProps = {
     activeTabTypeId,
     progressList,
     goalCategories: showCategories,
     alignment,
-    isShowList: selectedViewType === ReportViewType.WEEKLY,
+    isShowList,
     setActiveTabTypeId,
   };
 
@@ -116,8 +114,8 @@ export default function MissionTab({
 }
 
 interface MissionTabContextType {
-  activeTabTypeId: GoalTypeId | undefined;
-  setActiveTabTypeId: (typeId: GoalTypeId | undefined) => void;
+  activeTabTypeId: MissionCategoryId | undefined;
+  setActiveTabTypeId: (typeId: MissionCategoryId | undefined) => void;
 }
 
 export const MissionTabContext = createContext<MissionTabContextType>({

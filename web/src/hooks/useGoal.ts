@@ -12,13 +12,14 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 
 dayjs.extend(weekOfYear);
 /**
+ * TODO 삭제!!!!!!!!!!!
  * 04.05 change
  * calendar View에서 공통적으로 동작하는 로직을 설정
  * - 선택된 날짜에 따라 goalKey를 자동으로 가져와서 목표 값들을 조회할 수 있음
  * - 선택된 주가 바뀌고, recoil에 저장된 goals이 없을 때 => fetch (`/goals`)
  * - TODO 년도 바뀌는 주 테스트 필요
  */
-export const useCalendar = (currentDate: dayjs.Dayjs) => {
+export const useGoal = (currentDate: dayjs.Dayjs) => {
   const goalKey = useMemo(() => {
     return `${currentDate.year()}/${currentDate.week()}`;
   }, [currentDate]);

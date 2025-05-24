@@ -3,20 +3,41 @@ import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView"
 import MonthlyCalendarView from "@/markup/components/calendar/MonthlyCalendarView";
 import dayjs from "dayjs";
 import CategoryLabel from "@/markup/components/CategoryLabel";
-import { useCalendar } from "@/hooks/useCalendar";
-import { GoalCategoryType, GoalTypeId } from "@/types/goal";
 import { DateDataItem } from "@/markup/components/calendar/WeeklyView";
 import { succesGoalCountType } from "@/markup/components/calendar/BaroMeterDateView";
+import { MissionCategoryId, MissionCategoryInfo } from "@/types/mission";
 
 const CalendarMonthly = () => {
-  const { goalCategories } = useCalendar(dayjs());
-
-  const customCategories: GoalCategoryType[] = [
-    { text: "전체", order: 0 },
-    { typeId: GoalTypeId.REGULAR_LIFE, text: "규칙적인 생활", order: 1 },
-    { typeId: GoalTypeId.PEACE_OF_MIND, text: "마음의 안정", order: 2 },
-    { typeId: GoalTypeId.WEIGHT_MANAGEMENT, text: "체중 관리", order: 3 },
-    { typeId: GoalTypeId.CONDITION_IMPROVEMENT, text: "컨디션 개선", order: 4 },
+  const customCategories: MissionCategoryInfo[] = [
+    { icon: "", title: "전체", description: "", order: 0 },
+    {
+      typeId: MissionCategoryId.REGULAR_LIFE,
+      icon: "routine",
+      title: "규칙적인 생활",
+      description: "일상의 규칙을 만들어 건강하게 생활해요.",
+      order: 1,
+    },
+    {
+      typeId: MissionCategoryId.PEACE_OF_MIND,
+      icon: "calm",
+      title: "마음의 안정",
+      description: "평온한 하루를 위해 나에게 시간을 주세요.",
+      order: 2,
+    },
+    {
+      typeId: MissionCategoryId.WEIGHT_MANAGEMENT,
+      icon: "weight",
+      title: "체중 관리",
+      description: "식습관과 운동 관리로 가벼운 몸을 유지해요.",
+      order: 3,
+    },
+    {
+      typeId: MissionCategoryId.CONDITION_IMPROVEMENT,
+      icon: "condition",
+      title: "컨디션 개선",
+      description: "건강한 몸과 마음을 위한 습관을 만들어요.",
+      order: 4,
+    },
   ];
 
   // 확인
