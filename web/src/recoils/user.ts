@@ -13,7 +13,7 @@ export const userState = atom<AuthUserType | undefined>({
   effects_UNSTABLE: [persistAtom],
 });
 
-const accessTokenState = selector({
+export const accessTokenState = selector({
   key: "accessTokenState", // unique ID (with respect to other atoms/selectors)
   get: ({ get }) => {
     // TODO token 만료 시 refreshToken 발급

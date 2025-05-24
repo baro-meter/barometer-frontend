@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import scss from "@/styles/components/mission.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
-import { MISSION_TYPES, MISSION_INFO, MissionItem } from "@/types/mission";
+import { MISSION_CATEGORIES, MISSION_INFO, MissionItem } from "@/types/mission";
 
 const cn = classNames.bind(scss);
 
@@ -24,8 +24,8 @@ export const MissionLabel = ({
     <div className={cn("mission-list", { "type-2x": alignType })}>
       {missions.map((mission, index) => {
         const missionId =
-          index < MISSION_TYPES.length
-            ? MISSION_TYPES[index]
+          index < MISSION_CATEGORIES.length
+            ? MISSION_CATEGORIES[index]
             : `mission${index}`;
         return (
           <span key={index} className={cn("mission")}>

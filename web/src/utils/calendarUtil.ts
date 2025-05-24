@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 
 // TODO 제거 -> useDayjsToStr 사용
 const FORMAT = "YYYY-MM-DD";
+
 export function getFormatDayjs(dayjsObj: dayjs.Dayjs) {
   return dayjsObj.format(FORMAT);
 }
@@ -17,4 +18,10 @@ export function getWeeklyDateRange(date: dayjs.Dayjs) {
 const DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 export function getDayText(dayjsObj: dayjs.Dayjs) {
   return DAYS[dayjsObj.day()];
+}
+
+export function getYearWeekText(dayjsObj: dayjs.Dayjs) {
+  const year = dayjsObj.year();
+  const week = dayjsObj.week();
+  return `${year}-${String(week).padStart(2, "0")}`;
 }

@@ -3,13 +3,15 @@ import classNames from "classnames/bind";
 import scss from "@/styles/components/calendar.module.scss";
 import dayjs from "dayjs";
 import DayHeader from "@/markup/components/calendar/DayHeaderView";
-import Weekly from "@/markup/components/calendar/WeeklyView";
+import Weekly, { DateDataItem } from "@/markup/components/calendar/WeeklyView";
 
 const cn = classNames.bind(scss);
 
 interface MonthlyCalendarViewProps {
   calendarDates: number[][];
   activeDate: number;
+  dateData?: DateDataItem[];
+  allActive?: boolean;
   layoutRef: React.MutableRefObject<HTMLDivElement | null>;
   isSixWeeks: boolean;
 }
@@ -17,6 +19,8 @@ interface MonthlyCalendarViewProps {
 const MonthlyCalendarView = ({
   calendarDates,
   activeDate,
+  dateData,
+  allActive,
   layoutRef,
   isSixWeeks,
 }: MonthlyCalendarViewProps) => {
@@ -34,6 +38,8 @@ const MonthlyCalendarView = ({
                 weekIdx={i}
                 weekDates={w}
                 activeDate={activeDate}
+                dateData={dateData}
+                allActive={allActive}
               />
             </>
           )
@@ -47,12 +53,16 @@ interface MonthlyCalendarProps {
   year: number;
   month: number;
   date: number; // 선택된 날짜
+  dateData?: DateDataItem[];
+  allActive?: boolean;
 }
 
 export default function MonthlyCalendar({
   year,
   month,
   date,
+  dateData,
+  allActive,
 }: MonthlyCalendarProps) {
   const [activeDate, setActiveDate] = useState(1); // TODO 기준을 모르겠어서 일단 오늘로만 작업
   const [dayjsObject, setDayjsObject] = useState<dayjs.Dayjs>(
@@ -158,6 +168,8 @@ export default function MonthlyCalendar({
   const viewProps = {
     calendarDates,
     activeDate,
+    dateData,
+    allActive,
     layoutRef,
     isSixWeeks,
   };

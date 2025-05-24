@@ -1,4 +1,4 @@
-import WeeklyCalendar from "@/components/calendar/WeeklyCalendar";
+import WeeklyCalendar from "@/components/calendar/WeeklyCalendarOrigin";
 import dayjs from "dayjs";
 import { GetServerSidePropsContext } from "next";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -6,12 +6,15 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/router";
 import { getFormatDayjs, getWeeklyDateRange } from "@/utils/calendarUtil";
-import WeeklyList from "@/components/calendar/MissionList";
+import WeeklyList from "@/components/calendar/MissionFiltering";
 import "swiper/css";
 import CalendarHeaderView from "@/markup/components/calendar/CalendarHeaderView";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGoal } from "@/hooks/useGoal";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getCalendarView } from "@/services/calendar/calendarService";
+import {
+  getCalendarView,
+  getWeeklyCalendarView,
+} from "@/services/calendar/calendarService";
 import { CalendarViewType } from "@/types/calendar";
 import { useAccessTokenValue } from "@/recoils/user";
 
@@ -98,8 +101,7 @@ const WeeklyPage = ({ initDate }: WeeklyPageProps) => {
     return getFormatDayjs(endDate);
   }, [selectedDate]);
 
-  const { initBaromters, currentGoal, goalCategories } =
-    useCalendar(selectedDate);
+  const { initBaromters, currentGoal, goalCategories } = useGoal(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),
@@ -173,11 +175,17 @@ export const getServerSideProps = async (
   const initDate = (context.query?.initDate ?? "") as string;
 
   const current = initDate ? dayjs(initDate) : dayjs();
-  const { startDate, endDate } = getWeeklyDateRange(current);
+  const year = current.year();
+  const week = current.week();
+  // const { startDate, endDate } = getWeeklyDateRange(current);
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["calendarViewData", startDate, endDate],
+  //   queryFn: () =>
+  //     getCalendarView(getFormatDayjs(startDate), getFormatDayjs(endDate)),
+  // });
   await queryClient.prefetchQuery({
-    queryKey: ["calendarViewData", startDate, endDate],
-    queryFn: () =>
-      getCalendarView(getFormatDayjs(startDate), getFormatDayjs(endDate)),
+    queryKey: ["getWeeklyCalendarView", year, week],
+    queryFn: () => getWeeklyCalendarView(year, week),
   });
 
   return {

@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames/bind";
 import scss from "@/styles/components/category.module.scss";
 import Image from "next/image";
 import { basePath } from "next.config";
-import { GoalCategoryType, GoalTypeId } from "@/types/goal";
-import { TodoListContext } from "@/components/todo/TodoList";
+import { MissionTabContext } from "@/components/todo/MissionTab";
+import { MissionCategoryInfo } from "@/types/mission";
 
 const cn = classNames.bind(scss);
 
 interface CategoryLabelProps {
-  items: GoalCategoryType[];
+  items: MissionCategoryInfo[];
 }
 
 export const CategoryLabel = ({ items }: CategoryLabelProps) => {
   return (
     <div className={cn("category-list")}>
-      <TodoListContext.Consumer>
+      <MissionTabContext.Consumer>
         {({ activeTabTypeId, setActiveTabTypeId }) => {
           return items.map((category, index) => {
             const handleChange = () => setActiveTabTypeId(category.typeId);
@@ -39,13 +39,13 @@ export const CategoryLabel = ({ items }: CategoryLabelProps) => {
                       alt=""
                     />
                   )}
-                  {category.text}
+                  {category.title}
                 </label>
               </span>
             );
           });
         }}
-      </TodoListContext.Consumer>
+      </MissionTabContext.Consumer>
     </div>
   );
 };

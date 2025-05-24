@@ -8,10 +8,10 @@ import { getCalendarView } from "@/services/calendar/calendarService";
 import { GoalType } from "@/types/goal";
 import { setHttpClientCredentials } from "@/services/httpClient";
 import { CalendarViewType } from "@/types/calendar";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGoal } from "@/hooks/useGoal";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useAccessTokenValue } from "@/recoils/user";
-import MissionList from "@/components/calendar/MissionList";
+import MissionList from "@/components/calendar/MissionFiltering";
 
 interface MonthlyPageViewProps {
   year: number;
@@ -50,7 +50,7 @@ const MonthlyPageView = ({
         {/* <div className="bottom-area">
           <div className="inner">
             <SubTab title={subTabTitle} hasBorder />
-            <TodoList selectedDate={selectedDate} />
+            <MissionTab selectedDate={selectedDate} />
           </div>
         </div> */}
       </main>
@@ -92,7 +92,7 @@ MonthlyPageProps) => {
     return `${selectedDate.date()}. ${title}`;
   }, [selectedDate]);
 
-  const { initBaromters, currentGoal } = useCalendar(selectedDate);
+  const { initBaromters, currentGoal } = useGoal(selectedDate);
   const { data: calendarViewData } = useQuery<CalendarViewType>({
     queryKey: ["calendarViewData", startDate, endDate],
     queryFn: () => getCalendarView(startDate, endDate),

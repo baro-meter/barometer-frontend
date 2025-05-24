@@ -3,7 +3,7 @@ import { useState } from "react";
 import MissionLabel, {
   MissionLabelProps,
 } from "@/markup/components/MissionLabelView";
-import { MISSION_TYPES, MISSION_INFO, MissionItem } from "@/types/mission";
+import { MISSION_CATEGORIES, MISSION_INFO, MissionItem } from "@/types/mission";
 
 const meta = {
   title: "Markup/Components/MissionLabel",
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof MissionLabel>;
 
 // MISSION_INFO를 활용하여 missions 배열 생성
 const missions: MissionItem[] = [
-  ...MISSION_TYPES.map((type) => ({
+  ...MISSION_CATEGORIES.map((type) => ({
     title: MISSION_INFO[type].title,
     description: MISSION_INFO[type].description,
     iconType: true,
